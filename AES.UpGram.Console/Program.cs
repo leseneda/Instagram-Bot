@@ -12,26 +12,33 @@ namespace AES.UpGram.Console
 
             var connector = new Connector(new Configuration()
             {
+                //AccountName = "carolinaseneda", //"acontabate",
+                //Password = "ti57ga05", //"28vegana",
                 AccountName = "acontabate",
                 Password = "28vegana",
                 LogLevel = 1,
                 RequestDelay = 2,
-                MaxPageToLoad = 100
             });
 
             #endregion
 
-            var ret2 = new AccessKey().IsValidKeyDate;
-
-
+            //var access = new AccessKey().IsValidKeyDate;
             var login = connector.Login().Result;
 
             if (login.Succeeded)
             {
-                var ret = connector.User.UnFollowFrom().Result;
-            }
+                //string fromNextId = string.Empty;
 
-            connector.Logout();
+                //do
+                //{
+                //    fromNextId = connector.User.Follow("carolinaseneda", fromNextId).Result;
+
+                //} while (!string.IsNullOrEmpty(fromNextId));
+
+                var ret1 = connector.User.UnFollow().Result;
+
+                connector.Logout();
+            }
         }
     }
 }

@@ -36,8 +36,5 @@ namespace AES.UpGram.Core.Utils
         }
 
         #endregion
-
-
-
     }
 }

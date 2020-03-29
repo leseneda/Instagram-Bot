@@ -16,7 +16,7 @@ namespace AES.UpGram.Core
 
         public User User
         {
-            get { return new User(_apiConnector, _configuration.MaxPageToLoad, _configuration.AccountName); }
+            get { return new User(_apiConnector, _configuration.AccountName); }
         }
 
         #endregion
@@ -47,7 +47,10 @@ namespace AES.UpGram.Core
 
         public async void Logout()
         {
-            await _apiConnector.LogoutAsync();
+            if (_apiConnector.IsUserAuthenticated)
+            {
+                await _apiConnector.LogoutAsync();
+            }
         }
     }
 }
