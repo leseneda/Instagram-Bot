@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Configuration.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="InstagramApiSharp" Version="1.5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AES.UpGram.Model\AES.UpGram.Model.csproj" />
+  </ItemGroup>
+
+</Project>
