@@ -1,5 +1,4 @@
 ﻿using AES.UpGram.Core;
-using AES.UpGram.Core.Utils;
 using AES.UpGram.Model;
 
 namespace AES.UpGram.Console
@@ -18,15 +17,17 @@ namespace AES.UpGram.Console
                 Password = "28vegana",
                 LogLevel = 1,
                 RequestDelay = 2,
+                PagingData = 100
             });
 
             #endregion
 
-            //var access = new AccessKey().IsValidKeyDate;
             var login = connector.Login().Result;
 
             if (login.Succeeded)
             {
+                connector.LoadState();
+
                 //string fromNextId = string.Empty;
 
                 //do
@@ -35,7 +36,7 @@ namespace AES.UpGram.Console
 
                 //} while (!string.IsNullOrEmpty(fromNextId));
 
-                var ret1 = connector.User.UnFollow().Result;
+                var unfollowed = connector.User.UnFollow().Result;
 
                 connector.Logout();
             }

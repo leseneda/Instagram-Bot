@@ -16,4 +16,8 @@
     <ProjectReference Include="..\AES.UpGram.Model\AES.UpGram.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interface\" />
+  </ItemGroup>
+
 </Project>

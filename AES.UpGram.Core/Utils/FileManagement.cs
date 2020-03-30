@@ -5,9 +5,9 @@ namespace AES.UpGram.Core.Utils
 {
     public static class FileManagement
     {
-        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false)
+        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite)
         {
-            using var stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create, FileAccess.ReadWrite);
+            using var stream = File.Open(filePath, FileMode.Create, FileAccess.ReadWrite);
             
             new BinaryFormatter().Serialize(stream, objectToWrite);
         }

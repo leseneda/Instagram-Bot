@@ -3,6 +3,8 @@ using InstagramApiSharp.API;
 using InstagramApiSharp.API.Builder;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Logger;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AES.UpGram.Core
@@ -16,7 +18,7 @@ namespace AES.UpGram.Core
 
         public User User
         {
-            get { return new User(_apiConnector, _configuration.AccountName); }
+            get { return new User(_apiConnector, _configuration); }
         }
 
         #endregion

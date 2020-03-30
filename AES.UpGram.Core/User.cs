@@ -1,11 +1,8 @@
-﻿using AES.UpGram.Core.Utils;
+﻿using AES.UpGram.Model;
 using InstagramApiSharp;
 using InstagramApiSharp.API;
 using InstagramApiSharp.API.Processors;
-using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,79 +10,74 @@ namespace AES.UpGram.Core
 {
     public class User
     {
-        private static IUserProcessor _apiUser;
+        private static IUserProcessor _apiUserProcessor;
         private static PaginationParameters _paginationParameters;
-        string _accountName = string.Empty;
+        private static Configuration _configuration;
 
-        public User(IInstaApi apiConnector, string accountName)
+        public User(IInstaApi apiConnector, Configuration configuration)
         {
-            _apiUser = apiConnector.UserProcessor;
-            _accountName = accountName;
+            _apiUserProcessor = apiConnector.UserProcessor;
+            _configuration = configuration;
+
             _paginationParameters = PaginationParameters.MaxPagesToLoad(1);
         }
 
-        public async Task<string> Follow(string fromAccountName, string fromNextId = null)
+        public async Task<string> Follow(string userName, string fromNextId = null)
         {
             var param = (!string.IsNullOrEmpty(fromNextId) ?
                 _paginationParameters.StartFromMaxId(fromNextId) :
                 _paginationParameters);
 
-            var users = await _apiUser.GetUserFollowersAsync(fromAccountName, param);
+            var result = await _apiUserProcessor.GetUserFollowersAsync(userName, param);
 
-            if (users.Succeeded)
+            if (result.Succeeded)
             {
-                foreach (var user in users.Value)
+                var users = result.Value;
+                
+                foreach (var user in users)
                 {
-                    if ((await _apiUser.FollowUserAsync(user.Pk)).Succeeded)
+                    if ((await _apiUserProcessor.FollowUserAsync(user.Pk)).Succeeded)
                     { 
                     
                     }
+                    else
+                    {
+
+                    }
                 }
+                
+                return users?.NextMaxId ?? string.Empty;
             }
 
-            return users.Value?.NextMaxId ?? string.Empty;
+            return null;
         }
 
-        public async Task<bool> UnFollow()
+        public async Task<InstaUserShortList> UnFollow()
         {
-            var unFollowing = await UnFollowFromSource();
-            var unFollowed = new List<long>();
+            var result = await _apiUserProcessor.GetUserFollowingAsync(_configuration.AccountName, _paginationParameters);
 
-            foreach (var pk in unFollowing)
+            if (result.Succeeded)
             {
-                if ((await _apiUser.UnFollowUserAsync(pk)).Succeeded)
+                result.Value.RemoveRange(_configuration.PagingData - 1, result.Value.Count() - _configuration.PagingData);
+
+                var users = result.Value;
+
+                foreach (var user in users)
                 {
-                    unFollowed.Add(pk);
+                    if ((await _apiUserProcessor.UnFollowUserAsync(user.Pk)).Succeeded)
+                    {
+                        
+                    }
+                    else
+                    {
+
+                    }
                 }
+
+                return users;
             }
 
-            unFollowing.RemoveAll(cmp => unFollowed.Any(pk => pk == cmp));
-
-            FileManagement.WriteToBinaryFile(@"C:\Source Code\following.txt", unFollowing);
-
-            return true;
+            return null;
         }
-
-        private async Task<List<long>> UnFollowFromSource()
-        {
-            FileManagement.CreatePath(@"C:\Source Code\UnFollow\");
-
-            if (FileManagement.FromFile(@"C:\Source Code\UnFollow\following.txt"))
-            {
-                return FileManagement.ReadFromBinaryFile<List<long>>(@"C:\Source Code\following.txt");
-            }
-            else
-            {
-                var following = (await _apiUser.GetUserFollowingAsync(_accountName, _paginationParameters)).Value
-                    .Select(cmp => cmp.Pk)
-                    .ToList();
-
-                FileManagement.WriteToBinaryFile(@"C:\Source Code\UnFollow\following.txt", following);
-
-                return following;
-            }
-        }
-
-       
     }
 }
