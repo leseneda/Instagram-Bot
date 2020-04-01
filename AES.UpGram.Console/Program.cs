@@ -11,13 +11,8 @@ namespace AES.UpGram.Console
 
             var connector = new Connector(new Configuration()
             {
-                //AccountName = "carolinaseneda", //"acontabate",
-                //Password = "ti57ga05", //"28vegana",
-                AccountName = "acontabate",
-                Password = "28vegana",
                 LogLevel = 1,
                 RequestDelay = 2,
-                PagingData = 100
             });
 
             #endregion
@@ -26,17 +21,15 @@ namespace AES.UpGram.Console
 
             if (login.Succeeded)
             {
-                connector.LoadState();
-
-                //string fromNextId = string.Empty;
+                //string fromNextId = "QVFCeElLMjlSWjlJYzRpUWRtX2Qwa0l4NlZjS1c0aVQtZ2Nua2JOZ2hMWFFkV3RrcERyVjlIOEpOQ1c0MGxqOFNWME95NHJpcVRMSUdkVEg5MDRDdGE3dg=="; // alana_rox
 
                 //do
                 //{
-                //    fromNextId = connector.User.Follow("carolinaseneda", fromNextId).Result;
+                //    fromNextId = connector.User.Value.Follow("alana_rox", fromNextId).Result;
 
                 //} while (!string.IsNullOrEmpty(fromNextId));
 
-                var unfollowed = connector.User.UnFollow().Result;
+                var unfollowed = connector.User.Value.UnFollow().Result;
 
                 connector.Logout();
             }

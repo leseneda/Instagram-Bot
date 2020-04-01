@@ -1,6 +1,5 @@
 ﻿using AES.UpGram.Model;
 using InstagramApiSharp;
-using InstagramApiSharp.API;
 using InstagramApiSharp.API.Processors;
 using InstagramApiSharp.Classes.Models;
 using System.Linq;
@@ -10,16 +9,15 @@ namespace AES.UpGram.Core
 {
     public class User
     {
-        private static IUserProcessor _apiUserProcessor;
-        private static PaginationParameters _paginationParameters;
-        private static Configuration _configuration;
+        static IUserProcessor _apiUserProcessor;
+        static PaginationParameters _paginationParameters;
+        static Configuration _configuration;
 
-        public User(IInstaApi apiConnector, Configuration configuration)
+        public User(IUserProcessor apiUserProcessor, Configuration configuration)
         {
-            _apiUserProcessor = apiConnector.UserProcessor;
             _configuration = configuration;
-
-            _paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+            _apiUserProcessor = apiUserProcessor;
+            _paginationParameters = PaginationParameters.MaxPagesToLoad(2);
         }
 
         public async Task<string> Follow(string userName, string fromNextId = null)
