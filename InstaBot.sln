@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AES.UpGram.Core", "AES.UpGram.Core\AES.UpGram.Core.csproj", "{A7ECDE11-05DF-422C-9096-3DA8F0C9DEA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AES.UpGram.Core", "AES.UpGram.Core\AES.UpGram.Core.csproj", "{A7ECDE11-05DF-422C-9096-3DA8F0C9DEA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AES.UpGram.Model", "AES.UpGram.Model\AES.UpGram.Model.csproj", "{9E0EAEAC-09D4-4F7F-82CC-A26D5B1805C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AES.UpGram.Model", "AES.UpGram.Model\AES.UpGram.Model.csproj", "{9E0EAEAC-09D4-4F7F-82CC-A26D5B1805C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AES.UpGram.Console", "AES.UpGram.Console\AES.UpGram.Console.csproj", "{1CCC1B08-C5E3-4ECC-AC04-9A4D4C14D491}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AES.UpGram.Console", "AES.UpGram.Console\AES.UpGram.Console.csproj", "{1CCC1B08-C5E3-4ECC-AC04-9A4D4C14D491}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

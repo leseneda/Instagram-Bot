@@ -17,7 +17,7 @@ namespace AES.UpGram.Core
         {
             _configuration = configuration;
             _apiUserProcessor = apiUserProcessor;
-            _paginationParameters = PaginationParameters.MaxPagesToLoad(2);
+            _paginationParameters = PaginationParameters.MaxPagesToLoad(1);
         }
 
         public async Task<string> Follow(string userName, string fromNextId = null)

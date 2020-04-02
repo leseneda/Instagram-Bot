@@ -19,9 +19,13 @@ namespace AES.UpGram.Console
 
             var login = connector.Login().Result;
 
-            if (login.Succeeded)
+            if (login)
             {
-                //string fromNextId = "QVFCeElLMjlSWjlJYzRpUWRtX2Qwa0l4NlZjS1c0aVQtZ2Nua2JOZ2hMWFFkV3RrcERyVjlIOEpOQ1c0MGxqOFNWME95NHJpcVRMSUdkVEg5MDRDdGE3dg=="; // alana_rox
+                
+
+
+
+                //string fromNextId = "QVFBZ0RGZVZFRm9vclBvcTJOWHRaOEQtUUp2bDBfYkdtWkZXVmktSEVlNDdzSWJBYzRjNGYybnRRaTZqeGdHZm1mZUU3SWhKT3lmZTUzUXFEM0dFSG9GMQ=="; // alana_rox
 
                 //do
                 //{
@@ -29,10 +33,15 @@ namespace AES.UpGram.Console
 
                 //} while (!string.IsNullOrEmpty(fromNextId));
 
-                var unfollowed = connector.User.Value.UnFollow().Result;
+                //var unfollowed = connector.User.Value.UnFollow().Result;
 
-                connector.Logout();
+
             }
+
+
+
+
+            connector.Logout();
         }
     }
 }
