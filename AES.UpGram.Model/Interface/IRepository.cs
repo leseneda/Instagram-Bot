@@ -1,18 +1,14 @@
-﻿using System.Collections.Generic;
-using UpSocial.UpGram.Domain.Entity;
+﻿using UpSocial.UpGram.Domain.Entity;
 
 namespace UpSocial.UpGram.Domain.Interface
 {
-    public interface IRepository<T> where T : BaseEntity
+    public interface IRepository<T> : IRepositoryReadOnly<T> where T : BaseEntity
     {
-        void Insert(T obj);
+        void Insert(T entity);
 
-        void Update(T obj);
+        void Update(T entity);
 
         void Remove(int id);
 
-        T Select(int id);
-
-        IList<T> SelectAll();
     }
 }

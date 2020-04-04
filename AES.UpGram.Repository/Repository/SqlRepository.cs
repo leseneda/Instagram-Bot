@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 
-namespace AES.UpGram.Repository
+namespace UpSocial.UpGram.Infra.Data.Repository
 {
     public class SqlRepository
     {

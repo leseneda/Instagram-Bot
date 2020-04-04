@@ -1,6 +1,6 @@
 ﻿using UpSocial.UpGram.Core;
 using UpSocial.UpGram.Domain.Entity;
-using UpSocial.UpGram.Repository;
+using UpSocial.UpGram.Service;
 
 namespace AES.UpGram.Console
 {
@@ -10,12 +10,13 @@ namespace AES.UpGram.Console
         {
             #region Account Detail
 
-            var account = new DapperAccountRepository().GetById(1);
+            var service = new BaseService<AccountEntity>();
+            var account = service.Get(1);
 
             var connector = new Connector(new AccountEntity()
             {
-                Name = "tpmvegana", //account.Name,
-                Password = "28vegana" //account.Password
+                Name = account.Name,
+                Password = account.Password
             });
 
             #endregion
