@@ -1,4 +1,5 @@
-﻿using UpSocial.UpGram.Core;
+﻿using System;
+using UpSocial.UpGram.Core;
 using UpSocial.UpGram.Domain.Entity;
 using UpSocial.UpGram.Service;
 
@@ -12,6 +13,29 @@ namespace AES.UpGram.Console
 
             var service = new BaseService<AccountEntity>();
             var account = service.Get(1);
+            var accounts = service.Get();
+
+            //var add = service.Post(new AccountEntity()
+            //{
+            //    Name = "carolinaseneda",
+            //    Password = "28vegana",
+            //    IsActive = true,
+            //    CreatedOn = DateTime.UtcNow
+            //});
+
+            //var delete = service.Delete(3);
+
+            //var update = service.Put(new AccountEntity()
+            //{
+            //    Id = 2,
+            //    Name = "carolinaseneda",
+            //    Password = "28vegana",
+            //    IsActive = true,
+            //    CreatedOn = DateTime.UtcNow
+            //});
+
+
+
 
             var connector = new Connector(new AccountEntity()
             {

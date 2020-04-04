@@ -8,22 +8,25 @@ namespace UpSocial.UpGram.Service
     {
         private readonly BaseDapperRepository<T> _repository = new BaseDapperRepository<T>();
 
-        public T Post(T obj)
-        {
-            _repository.Insert(obj);
-            return obj;
-        }
+        #region Changing
 
-        public T Put(T obj)
-        {
-            _repository.Update(obj);
-            return obj;
-        }
+        public long Post(T obj) => _repository.Insert(obj);
 
-        public void Delete(int id) => _repository.Remove(id);
+        public bool Put(T obj) => _repository.Update(obj);
+
+        public bool Delete(int id) => _repository.Remove(id);
+
+        public bool Delete() => _repository.Remove();
+
+        #endregion
+
+        #region Reading
 
         public IEnumerable<T> Get() => _repository.SelectAll();
 
         public T Get(int id) => _repository.Select(id);
+
+        #endregion
+
     }
 }

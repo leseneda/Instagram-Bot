@@ -9,31 +9,34 @@ namespace UpSocial.UpGram.Infra.Data.Repository
 	{
 		#region Changing
 
-		public BaseDapperRepository()
-		{
-		}
-
-		public void Insert(T entity)
+		public long Insert(T entity)
 		{
 			using var conn = Connect();
 
-			conn.Insert(entity);
+			return conn.Insert(entity);
 		}
 
-		public void Update(T entity)
+		public bool Update(T entity)
 		{
 			using var conn = Connect();
 
-			conn.Update(entity);
+			return conn.Update(entity);
 		}
 
-		public void Remove(int id)
+		public bool Remove(int id)
 		{
 			using var conn = Connect();
 
 			var entity = conn.Get<T>(id);
 
-			conn.Update(entity);
+			return conn.Delete(entity);
+		}
+
+		public bool Remove()
+		{
+			using var conn = Connect();
+
+			return conn.DeleteAll<T>();
 		}
 
 		#endregion

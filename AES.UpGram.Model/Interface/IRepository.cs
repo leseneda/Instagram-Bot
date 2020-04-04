@@ -4,11 +4,12 @@ namespace UpSocial.UpGram.Domain.Interface
 {
     public interface IRepository<T> : IRepositoryReadOnly<T> where T : BaseEntity
     {
-        void Insert(T entity);
+        long Insert(T entity);
 
-        void Update(T entity);
+        bool Update(T entity);
 
-        void Remove(int id);
+        bool Remove(int id);
 
+        bool Remove();
     }
 }
