@@ -5,58 +5,58 @@ using UpSocial.UpGram.Domain.Interface;
 
 namespace UpSocial.UpGram.Infra.Data.Repository
 {
-	public class BaseDapperRepository<T> : SqlRepository, IRepository<T> where T : BaseEntity
-	{
-		#region Changing
+    public class BaseDapperRepository<T> : SqlRepository, IRepository<T> where T : BaseEntity
+    {
+        #region Changing
 
-		public long Insert(T entity)
-		{
-			using var conn = Connect();
+        public long Insert(T entity)
+        {
+            using var conn = Connect();
 
-			return conn.Insert(entity);
-		}
+            return conn.Insert(entity);
+        }
 
-		public bool Update(T entity)
-		{
-			using var conn = Connect();
+        public bool Update(T entity)
+        {
+            using var conn = Connect();
 
-			return conn.Update(entity);
-		}
+            return conn.Update(entity);
+        }
 
-		public bool Remove(int id)
-		{
-			using var conn = Connect();
+        public bool Remove(int id)
+        {
+            using var conn = Connect();
 
-			var entity = conn.Get<T>(id);
+            var entity = conn.Get<T>(id);
 
-			return conn.Delete(entity);
-		}
+            return conn.Delete(entity);
+        }
 
-		public bool Remove()
-		{
-			using var conn = Connect();
+        public bool Remove()
+        {
+            using var conn = Connect();
 
-			return conn.DeleteAll<T>();
-		}
+            return conn.DeleteAll<T>();
+        }
 
-		#endregion
+        #endregion
 
-		#region Reading
+        #region Reading
 
-		public T Select(int id)
-		{
-			using var conn = Connect();
+        public T Select(int id)
+        {
+            using var conn = Connect();
 
-			return conn.Get<T>(id);
-		}
+            return conn.Get<T>(id);
+        }
 
-		public IEnumerable<T> SelectAll()
-		{
-			using var conn = Connect();
+        public IEnumerable<T> SelectAll()
+        {
+            using var conn = Connect();
 
-			return conn.GetAll<T>();
-		}
+            return conn.GetAll<T>();
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

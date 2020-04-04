@@ -22,8 +22,8 @@ namespace UpSocial.UpGram.Core
             _apiConnector = InstaApiBuilder.CreateBuilder()
                 .UseLogger(new DebugLogger(_logLevel))
                 .SetRequestDelay(RequestDelay.FromSeconds(_requestDelayFromSec, _requestDelayFromSec))
-                .SetSessionHandler(new FileSessionHandler() 
-                { 
+                .SetSessionHandler(new FileSessionHandler()
+                {
                     FilePath = $"{account.Name.ToLower()}.bin"
                 })
                 .SetUser(new UserSessionData()

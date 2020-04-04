@@ -32,19 +32,19 @@ namespace UpSocial.UpGram.Core
             if (result.Succeeded)
             {
                 var users = result.Value;
-                
+
                 foreach (var user in users)
                 {
                     if ((await _apiUserProcessor.FollowUserAsync(user.Pk)).Succeeded)
-                    { 
-                    
+                    {
+
                     }
                     else
                     {
 
                     }
                 }
-                
+
                 return users?.NextMaxId ?? string.Empty;
             }
 
@@ -65,7 +65,7 @@ namespace UpSocial.UpGram.Core
                 {
                     if ((await _apiUserProcessor.UnFollowUserAsync(user.Pk)).Succeeded)
                     {
-                        
+
                     }
                     else
                     {

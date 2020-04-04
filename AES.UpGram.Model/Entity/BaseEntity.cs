@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UpSocial.UpGram.Domain.Entity
+﻿namespace UpSocial.UpGram.Domain.Entity
 {
     public abstract class BaseEntity
     {
