@@ -1,21 +1,22 @@
-﻿using AES.UpGram.Model;
-using InstagramApiSharp;
+﻿using InstagramApiSharp;
 using InstagramApiSharp.API.Processors;
 using InstagramApiSharp.Classes.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using UpSocial.UpGram.Domain.Entity;
 
-namespace AES.UpGram.Core
+namespace UpSocial.UpGram.Core
 {
     public class User
     {
         static IUserProcessor _apiUserProcessor;
         static PaginationParameters _paginationParameters;
-        static Configuration _configuration;
+        static AccountEntity _account;
+        static readonly int _pagingData = 100;
 
-        public User(IUserProcessor apiUserProcessor, Configuration configuration)
+        public User(IUserProcessor apiUserProcessor, AccountEntity account)
         {
-            _configuration = configuration;
+            _account = account;
             _apiUserProcessor = apiUserProcessor;
             _paginationParameters = PaginationParameters.MaxPagesToLoad(1);
         }
@@ -52,11 +53,11 @@ namespace AES.UpGram.Core
 
         public async Task<InstaUserShortList> UnFollow()
         {
-            var result = await _apiUserProcessor.GetUserFollowingAsync(_configuration.AccountName, _paginationParameters);
+            var result = await _apiUserProcessor.GetUserFollowingAsync(_account.Name, _paginationParameters);
 
             if (result.Succeeded)
             {
-                result.Value.RemoveRange(_configuration.PagingData - 1, result.Value.Count() - _configuration.PagingData);
+                result.Value.RemoveRange(_pagingData - 1, result.Value.Count() - _pagingData);
 
                 var users = result.Value;
 

@@ -1,5 +1,6 @@
-﻿using AES.UpGram.Core;
-using AES.UpGram.Model;
+﻿using UpSocial.UpGram.Core;
+using UpSocial.UpGram.Domain.Entity;
+using UpSocial.UpGram.Repository;
 
 namespace AES.UpGram.Console
 {
@@ -9,10 +10,12 @@ namespace AES.UpGram.Console
         {
             #region Account Detail
 
-            var connector = new Connector(new Configuration()
+            var account = new DapperAccountRepository().GetById(1);
+
+            var connector = new Connector(new AccountEntity()
             {
-                LogLevel = 1,
-                RequestDelay = 2,
+                Name = "tpmvegana", //account.Name,
+                Password = "28vegana" //account.Password
             });
 
             #endregion
@@ -22,7 +25,6 @@ namespace AES.UpGram.Console
             if (login)
             {
                 
-
 
 
                 //string fromNextId = "QVFBZ0RGZVZFRm9vclBvcTJOWHRaOEQtUUp2bDBfYkdtWkZXVmktSEVlNDdzSWJBYzRjNGYybnRRaTZqeGdHZm1mZUU3SWhKT3lmZTUzUXFEM0dFSG9GMQ=="; // alana_rox

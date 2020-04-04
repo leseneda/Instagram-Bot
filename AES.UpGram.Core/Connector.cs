@@ -1,37 +1,42 @@
-﻿using AES.UpGram.Model;
-using InstagramApiSharp.API;
+﻿using InstagramApiSharp.API;
 using InstagramApiSharp.API.Builder;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.SessionHandlers;
 using InstagramApiSharp.Logger;
 using System;
 using System.Threading.Tasks;
+using UpSocial.UpGram.Domain.Entity;
 
-namespace AES.UpGram.Core
+namespace UpSocial.UpGram.Core
 {
     public class Connector
     {
-        static IInstaApi _apiConnector;
         public Lazy<User> User { get; set; }
 
-        public Connector(Configuration configuration)
+        static IInstaApi _apiConnector;
+        static readonly LogLevel _logLevel = LogLevel.Exceptions;
+        static readonly int _requestDelayFromSec = 2;
+
+        public Connector(AccountEntity account)
         {
             _apiConnector = InstaApiBuilder.CreateBuilder()
-                .UseLogger(new DebugLogger((LogLevel)configuration.LogLevel))
-                .SetRequestDelay(RequestDelay.FromSeconds(configuration.RequestDelay, configuration.RequestDelay))
+                .UseLogger(new DebugLogger(_logLevel))
+                .SetRequestDelay(RequestDelay.FromSeconds(_requestDelayFromSec, _requestDelayFromSec))
                 .SetSessionHandler(new FileSessionHandler() 
                 { 
-                    FilePath = $"{configuration.AccountName}.bin"
+                    FilePath = $"{account.Name.ToLower()}.bin"
                 })
                 .SetUser(new UserSessionData()
                 {
-                    UserName = configuration.AccountName,
-                    Password = configuration.Password,
+                    UserName = account.Name,
+                    Password = account.Password,
                 })
                 .Build();
 
-            User = new Lazy<User>(() => new User(_apiConnector.UserProcessor, configuration));
+            User = new Lazy<User>(() => new User(_apiConnector.UserProcessor, account));
         }
+
+        #region Log
 
         public async Task<bool> Login()
         {
@@ -49,7 +54,7 @@ namespace AES.UpGram.Core
                 if (login.Succeeded)
                 {
                     await _apiConnector.SendRequestsAfterLoginAsync();
-                    
+
                     SaveSession();
                 }
                 else
@@ -61,12 +66,12 @@ namespace AES.UpGram.Core
                         result = challenge.Succeeded;
 
                         if (challenge.Succeeded)
-                        { 
-                        
+                        {
+
                         }
                         else
                         {
-
+                            result = false;
                         }
                     }
                     else
@@ -75,6 +80,11 @@ namespace AES.UpGram.Core
                     }
                 }
             }
+            else
+            {
+
+            }
+
             return result;
         }
 
@@ -86,13 +96,18 @@ namespace AES.UpGram.Core
             }
         }
 
+        #endregion
+
+        #region Session
+
         void SaveSession()
         {
-            if (_apiConnector == null || !_apiConnector.IsUserAuthenticated)
+            //if (_apiConnector == null || !_apiConnector.IsUserAuthenticated)
+            if (!_apiConnector?.IsUserAuthenticated ?? false)
             {
                 return;
             }
-            
+
             _apiConnector.SessionHandler.Save();
         }
 
@@ -100,6 +115,8 @@ namespace AES.UpGram.Core
         {
             _apiConnector?.SessionHandler?.Load();
         }
+
+        #endregion
 
         private async Task<IResult<InstaChallengeRequireVerifyMethod>> GetChallenge()
         {
