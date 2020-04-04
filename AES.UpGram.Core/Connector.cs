@@ -17,23 +17,23 @@ namespace UpSocial.UpGram.Core
         static readonly LogLevel _logLevel = LogLevel.Exceptions;
         static readonly int _requestDelayFromSec = 2;
 
-        public Connector(AccountEntity account)
+        public Connector(ConfigurationEntity configuration)
         {
             _apiConnector = InstaApiBuilder.CreateBuilder()
                 .UseLogger(new DebugLogger(_logLevel))
                 .SetRequestDelay(RequestDelay.FromSeconds(_requestDelayFromSec, _requestDelayFromSec))
                 .SetSessionHandler(new FileSessionHandler()
                 {
-                    FilePath = $"{account.Name.ToLower()}.bin"
+                    FilePath = $"{configuration.UserName.ToLower()}.bin"
                 })
                 .SetUser(new UserSessionData()
                 {
-                    UserName = account.Name,
-                    Password = account.Password,
+                    UserName = configuration.UserName,
+                    Password = configuration.Password,
                 })
                 .Build();
 
-            User = new Lazy<User>(() => new User(_apiConnector.UserProcessor, account));
+            User = new Lazy<User>(() => new User(_apiConnector.UserProcessor, configuration));
         }
 
         #region Log

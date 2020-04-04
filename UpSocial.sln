@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.2 - CrossCutting", "4.2 -
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpSocial.UpGram.Service", "UpSocial.UpGram.Service\UpSocial.UpGram.Service.csproj", "{A60AC678-3488-4CBF-B257-C465A078951C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpSocial.UpGram.Infra.CrossCutting", "UpSocial.UpGram.Infra.CrossCutting\UpSocial.UpGram.Infra.CrossCutting.csproj", "{84280E1E-45D1-4596-9CBB-69D29BE2D04D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{A60AC678-3488-4CBF-B257-C465A078951C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A60AC678-3488-4CBF-B257-C465A078951C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A60AC678-3488-4CBF-B257-C465A078951C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84280E1E-45D1-4596-9CBB-69D29BE2D04D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84280E1E-45D1-4596-9CBB-69D29BE2D04D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84280E1E-45D1-4596-9CBB-69D29BE2D04D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84280E1E-45D1-4596-9CBB-69D29BE2D04D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +69,7 @@ Global
 		{AB4F756D-729F-4E62-B643-CDF627D8D19C} = {1AD5E386-3C89-46E0-AA9F-815114390B0A}
 		{2319999B-D299-4B9A-9AE9-916FD5E2E3F7} = {1AD5E386-3C89-46E0-AA9F-815114390B0A}
 		{A60AC678-3488-4CBF-B257-C465A078951C} = {0A367BC1-FD76-4982-95BD-3F0D3D7C6431}
+		{84280E1E-45D1-4596-9CBB-69D29BE2D04D} = {2319999B-D299-4B9A-9AE9-916FD5E2E3F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {839E66DB-2407-4970-A1CA-DE6FC59D3C49}

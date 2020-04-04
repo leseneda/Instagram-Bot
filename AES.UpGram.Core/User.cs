@@ -11,12 +11,12 @@ namespace UpSocial.UpGram.Core
     {
         static IUserProcessor _apiUserProcessor;
         static PaginationParameters _paginationParameters;
-        static AccountEntity _account;
+        static ConfigurationEntity _configuration;
         static readonly int _pagingData = 100;
 
-        public User(IUserProcessor apiUserProcessor, AccountEntity account)
+        public User(IUserProcessor apiUserProcessor, ConfigurationEntity configuration)
         {
-            _account = account;
+            _configuration = configuration;
             _apiUserProcessor = apiUserProcessor;
             _paginationParameters = PaginationParameters.MaxPagesToLoad(1);
         }
@@ -53,7 +53,7 @@ namespace UpSocial.UpGram.Core
 
         public async Task<InstaUserShortList> UnFollow()
         {
-            var result = await _apiUserProcessor.GetUserFollowingAsync(_account.Name, _paginationParameters);
+            var result = await _apiUserProcessor.GetUserFollowingAsync(_configuration.UserName, _paginationParameters);
 
             if (result.Succeeded)
             {

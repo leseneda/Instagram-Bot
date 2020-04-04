@@ -8,20 +8,14 @@ namespace AES.UpGram.Console
     {
         static void Main(string[] args)
         {
-            #region Account Detail
+            var account = new BaseService<AccountEntity>().Get(1);
+            var config = new BaseService<ConfigurationEntity>().Get(1);
 
-            var service = new BaseService<AccountEntity>();
-            var account = service.Get(1);
+            config.UserName = account.Name;
+            config.Password = account.Password;
 
-            var connector = new Connector(new AccountEntity()
-            {
-                Name = account.Name,
-                Password = account.Password
-            });
-
-            #endregion
-
-            var login = connector.Login().Result;
+            var upGramConn = new Connector(config);
+            var login = upGramConn.Login().Result;
 
             if (login)
             {
@@ -44,7 +38,7 @@ namespace AES.UpGram.Console
 
 
 
-            connector.Logout();
+            upGramConn.Logout();
         }
     }
 }
