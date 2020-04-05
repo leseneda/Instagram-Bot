@@ -11,17 +11,14 @@ namespace UpSocial.UpGram.Core
 {
     public class Connector
     {
-        public Lazy<User> User { get; set; }
-
         static IInstaApi _apiConnector;
-        static readonly LogLevel _logLevel = LogLevel.Exceptions;
-        static readonly int _requestDelayFromSec = 2;
+        public Lazy<User> User { get; set; }
 
         public Connector(ConfigurationEntity configuration)
         {
             _apiConnector = InstaApiBuilder.CreateBuilder()
-                .UseLogger(new DebugLogger(_logLevel))
-                .SetRequestDelay(RequestDelay.FromSeconds(_requestDelayFromSec, _requestDelayFromSec))
+                .UseLogger(new DebugLogger((LogLevel)configuration.LogLevel))
+                .SetRequestDelay(RequestDelay.FromSeconds(configuration.RequestDelay, configuration.RequestDelay))
                 .SetSessionHandler(new FileSessionHandler()
                 {
                     FilePath = $"{configuration.UserName.ToLower()}.bin"
@@ -36,9 +33,9 @@ namespace UpSocial.UpGram.Core
             User = new Lazy<User>(() => new User(_apiConnector.UserProcessor, configuration));
         }
 
-        #region Log
+        #region Logging
 
-        public async Task<bool> Login()
+        public async Task<bool> LoginAsync()
         {
             var result = true;
 
@@ -50,7 +47,7 @@ namespace UpSocial.UpGram.Core
                 await Task.Delay(5000);
 
                 var login = await _apiConnector.LoginAsync();
-
+                
                 if (login.Succeeded)
                 {
                     await _apiConnector.SendRequestsAfterLoginAsync();
@@ -88,7 +85,7 @@ namespace UpSocial.UpGram.Core
             return result;
         }
 
-        public async void Logout()
+        public async void LogoutAsync()
         {
             if (_apiConnector.IsUserAuthenticated)
             {
@@ -97,6 +94,8 @@ namespace UpSocial.UpGram.Core
         }
 
         #endregion
+
+        #region Private
 
         #region Session
 
@@ -146,5 +145,7 @@ namespace UpSocial.UpGram.Core
             }
             return challenge;
         }
+
+        #endregion
     }
 }
