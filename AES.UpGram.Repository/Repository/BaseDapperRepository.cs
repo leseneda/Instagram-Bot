@@ -17,45 +17,45 @@ namespace UpSocial.UpGram.Infra.Data.Repository
             return await conn.InsertAsync(entity);
         }
 
-        public Task<bool> UpdateAsync(T entity)
+        public async Task<bool> UpdateAsync(T entity)
         {
             using var conn = Connect();
 
-            return conn.UpdateAsync(entity);
+            return await conn.UpdateAsync(entity);
         }
 
-        public Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(int id)
         {
             using var conn = Connect();
 
-            var entity = conn.GetAsync<T>(id);
+            var entity = await conn.GetAsync<T>(id);
 
-            return conn.DeleteAsync(entity);
+            return await conn.DeleteAsync(entity);
         }
 
-        public Task<bool> RemoveAsync()
+        public async Task<bool> RemoveAsync()
         {
             using var conn = Connect();
 
-            return conn.DeleteAllAsync<T>();
+            return await conn.DeleteAllAsync<T>();
         }
 
         #endregion
 
         #region Reading
 
-        public Task<T> SelectAsync(int id)
+        public async Task<T> SelectAsync(int id)
         {
             using var conn = Connect();
 
-            return conn.GetAsync<T>(id);
+            return await conn.GetAsync<T>(id);
         }
 
-        public Task<IEnumerable<T>> SelectAllAsync()
+        public async Task<IEnumerable<T>> SelectAllAsync()
         {
             using var conn = Connect();
 
-            return conn.GetAllAsync<T>();
+            return await conn.GetAllAsync<T>();
         }
 
         #endregion

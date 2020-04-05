@@ -2,6 +2,7 @@
 using InstagramApiSharp.API.Processors;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UpSocial.UpGram.Domain.Entity;
@@ -13,16 +14,15 @@ namespace UpSocial.UpGram.Core
         static IUserProcessor _apiUserProcessor;
         static PaginationParameters _paginationParameters;
         static ConfigurationEntity _configuration;
-        static readonly int _pagingData = 100;
 
         public User(IUserProcessor apiUserProcessor, ConfigurationEntity configuration)
         {
             _configuration = configuration;
             _apiUserProcessor = apiUserProcessor;
-            _paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+            _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public async Task<ResponseEntity<IResult<InstaFriendshipFullStatus>>> FollowAsync(string userName, string fromNextId = null)
+        public async Task<ResponseEntity<dynamic>> FollowAsync(string userName, string fromNextId = null)
         {
             var param = (!string.IsNullOrEmpty(fromNextId) ?
                 _paginationParameters.StartFromMaxId(fromNextId) :
@@ -30,35 +30,56 @@ namespace UpSocial.UpGram.Core
 
             var result = await _apiUserProcessor.GetUserFollowersAsync(userName, param);
             
-            var response = new ResponseEntity<IResult<InstaFriendshipFullStatus>>()
+            var response = new ResponseEntity<dynamic>()
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,
-                ResponseData = fromNextId
             };
 
             if (result.Succeeded)
             {
-                IResult<InstaFriendshipFullStatus> followResult = null;
+                var RequestingUser = new List<long>();
                 var users = result.Value;
 
                 foreach (var user in users)
                 {
-                    followResult = await _apiUserProcessor.FollowUserAsync(user.Pk);
-                    
-                    if (!followResult.Succeeded)
+                    if ((await _apiUserProcessor.FollowUserAsync(user.Pk)).Succeeded)
                     {
-                        response.Data = followResult;
+                        RequestingUser.Add(user.Pk);
+                    }
+                    else
+                    {
 
-                        return response;
                     }
                 }
 
-                response.Data = followResult;
-                response.ResponseData = users?.NextMaxId ?? string.Empty;
+                response.ResponseData = new
+                {
+                    RequestingUser,
+                    NextMaxId = users?.NextMaxId ?? string.Empty
+                };
             }
 
             return response;
+        }
+
+        public async void UnFollowAsyncNew(long[] FollowerRequesting)
+        {
+            IResult<InstaFriendshipFullStatus> user;
+
+            foreach (var userPk in FollowerRequesting)
+            {
+                user = await _apiUserProcessor.UnFollowUserAsync(userPk);
+
+                if (user.Succeeded)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
         }
 
         public async Task<InstaUserShortList> UnFollowAsync()
@@ -67,7 +88,7 @@ namespace UpSocial.UpGram.Core
 
             if (result.Succeeded)
             {
-                result.Value.RemoveRange(_pagingData - 1, result.Value.Count() - _pagingData);
+                result.Value.RemoveRange(_configuration.PagingData - 1, result.Value.Count() - _configuration.PagingData);
 
                 var users = result.Value;
 

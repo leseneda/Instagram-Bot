@@ -3,14 +3,14 @@ using System;
 
 namespace UpSocial.UpGram.Domain.Entity
 {
-    [Table("FollowersRequesting")]
-    public class FollowersRequestingEntity : BaseEntity
+    [Table("FollowerRequesting")]
+    public class FollowerRequestingEntity : BaseEntity
     {
         public int AccountId { get; set; }
-        public string UserName { get; set; }
+        public long AccountFollowerId { get; set; }
         public string FromMaxId { get; set; }
         public bool Succeeded { get; set; }
         public string Message { get; set; }
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public string ResponseType { get; set; }
     }
 }
