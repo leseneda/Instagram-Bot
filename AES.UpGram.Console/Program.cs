@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using UpSocial.UpGram.Console;
 using UpSocial.UpGram.Core;
 using UpSocial.UpGram.Domain.Entity;
@@ -10,7 +12,7 @@ namespace AES.UpGram.Console
     {
         static void Main(string[] args)
         {
-            var choose = true;
+            var choose = false;
             var accountId = 1;
             var userNameFrom = "alana_rox";
             var account = new BaseService<AccountEntity>().GetAsync(accountId).Result;
@@ -31,8 +33,7 @@ namespace AES.UpGram.Console
                 }
                 else
                 {
-                    //var fromNextId = "QVFER0lDTFJueExzSWMtM0t2YTNfa1EwSk1rWUJxZERFek90Y3JOY2ZuU3czSDVZdGhWMFJqclZRSk50eTBlQlhwRVhGSThlQTRBMXZJUXhPcVpkdUx5Vg==";
-                    //var unfollowed = connector.User.Value.UnFollowAsyncNew(userNameFrom, fromNextId).Result;
+                    new UnFollowRequested().Execute(connector);
                 }
             }
 

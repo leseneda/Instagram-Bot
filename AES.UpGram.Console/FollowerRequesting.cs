@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.Json;
 using UpSocial.UpGram.Core;
 using UpSocial.UpGram.Domain.Entity;
 using UpSocial.UpGram.Service;
@@ -16,8 +17,8 @@ namespace UpSocial.UpGram.Console
                 // Log
             }
 
-            var followerRequesting = new BaseService<FollowerRequestingEntity>();
-            var follower = followerRequesting.GetAsync().Result.LastOrDefault();
+            var followerService = new BaseService<FollowerRequestingEntity>();
+            var follower = followerService.GetAsync().Result.LastOrDefault();
 
             string fromMaxId = follower?.FromMaxId ?? string.Empty;
 
@@ -25,31 +26,18 @@ namespace UpSocial.UpGram.Console
 
             if (result.Succeeded)
             {
-                var response = followerRequesting.PostAsync(
-                    new FollowerRequestingEntity()
-                    {
-                        AccountId = accountId,
-                        AccountFollowerId = 1,
-                        FromMaxId = result.ResponseData.NextMaxId,
-                        Message = result.Message,
-                        Succeeded = result.Succeeded,
-                        ResponseType = result.ResponseType,
-                    })
-                    .Result;
-
-                var requestingUser = result.ResponseData.RequestedUserPk
-                    .Select(pk => new FollowerRequestingUserEntity()
-                    {
-                        FollowerRequestingId = follower.Id,
-                        UserPK = pk
-                    });
-
-                var followerRequested = new BaseService<FollowerRequestingUserEntity>();
-
-                foreach (var user in requestingUser)
+                var followerRequesting = new FollowerRequestingEntity()
                 {
-                    var ret = followerRequested.PostAsync(user).Result;
-                }
+                    AccountId = accountId,
+                    AccountFollowerId = 1,
+                    FromMaxId = result.ResponseData.NextMaxId,
+                    Message = result.Message,
+                    Succeeded = result.Succeeded,
+                    ResponseType = result.ResponseType,
+                    RequestedUserId = JsonSerializer.Serialize(result.ResponseData.RequestedUserId)
+                };
+
+                var response = followerService.PostAsync(followerRequesting).Result;
             }
             else
             {

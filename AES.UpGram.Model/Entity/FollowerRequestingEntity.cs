@@ -12,5 +12,6 @@ namespace UpSocial.UpGram.Domain.Entity
         public bool Succeeded { get; set; }
         public string Message { get; set; }
         public string ResponseType { get; set; }
+        public string RequestedUserId { get; set; }
     }
 }

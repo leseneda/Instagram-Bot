@@ -2,6 +2,7 @@
 using InstagramApiSharp.API.Processors;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UpSocial.UpGram.Domain.Entity;
@@ -50,7 +51,7 @@ namespace UpSocial.UpGram.Core
 
                     if (request.Succeeded)
                     {
-                        responseFollower.RequestedUserPk.Add(user.Pk);
+                        responseFollower.RequestedUserId.Add(user.Pk);
                     }
                     else
                     {
@@ -71,20 +72,25 @@ namespace UpSocial.UpGram.Core
             return responseBase;
         }
 
-        public async Task<ResponseBaseEntity<IResult<InstaFriendshipFullStatus>>> UnFollowAsync(long[] FollowerRequesting)
+        public async Task<ResponseBaseEntity<IList<long>>> UnFollowAsync(long[] followerRequesting)
         {
-            var responseBase = new ResponseBaseEntity<IResult<InstaFriendshipFullStatus>>();
+            var responseBase = new ResponseBaseEntity<IList<long>>();
 
             IResult<InstaFriendshipFullStatus> user;
+            IList<long> unFollowedUser = new List<long>();
 
-            foreach (var userPk in FollowerRequesting)
+            foreach (var userPk in followerRequesting)
             {
                 user = await _apiUserProcessor.UnFollowUserAsync(userPk);
 
-                if (!user.Succeeded)
+                if (user.Succeeded)
+                {
+                    unFollowedUser.Add(userPk);
+                }
+                else 
                 {
                     responseBase.Succeeded = user.Succeeded;
-                    responseBase.ResponseData = user;
+                    responseBase.ResponseData = unFollowedUser;
 
                     break;
                 }

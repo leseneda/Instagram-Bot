@@ -6,10 +6,10 @@ namespace UpSocial.UpGram.Domain.Entity
     {
         public ResponseFollowerEntity()
         {
-            RequestedUserPk = new List<long>();
+            RequestedUserId = new List<long>();
         }
 
-        public IList<long> RequestedUserPk { get; set; } 
+        public IList<long> RequestedUserId { get; set; } 
         public string NextMaxId { get; set; }
     }
 }
