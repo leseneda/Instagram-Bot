@@ -1,15 +1,16 @@
-﻿using UpSocial.UpGram.Domain.Entity;
+﻿using System.Threading.Tasks;
+using UpSocial.UpGram.Domain.Entity;
 
 namespace UpSocial.UpGram.Domain.Interface
 {
     public interface IRepository<T> : IRepositoryReadOnly<T> where T : BaseEntity
     {
-        long Insert(T entity);
+        Task<long> InsertAsync(T entity);
 
-        bool Update(T entity);
+        Task<bool> UpdateAsync(T entity);
 
-        bool Remove(int id);
+        Task<bool> RemoveAsync(int id);
 
-        bool Remove();
+        Task<bool> RemoveAsync();
     }
 }

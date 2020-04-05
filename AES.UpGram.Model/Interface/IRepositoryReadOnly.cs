@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UpSocial.UpGram.Domain.Entity;
 
 namespace UpSocial.UpGram.Domain.Interface
 {
     public interface IRepositoryReadOnly<T> where T : BaseEntity
     {
-        T Select(int id);
+        Task<T> SelectAsync(int id);
 
-        IEnumerable<T> SelectAll();
+        Task<IEnumerable<T>> SelectAllAsync();
     }
 }

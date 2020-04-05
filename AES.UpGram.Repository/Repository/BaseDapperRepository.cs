@@ -1,5 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UpSocial.UpGram.Domain.Entity;
 using UpSocial.UpGram.Domain.Interface;
 
@@ -9,52 +10,52 @@ namespace UpSocial.UpGram.Infra.Data.Repository
     {
         #region Changing
 
-        public long Insert(T entity)
+        public async Task<long> InsertAsync(T entity)
         {
             using var conn = Connect();
 
-            return conn.Insert(entity);
+            return await conn.InsertAsync(entity);
         }
 
-        public bool Update(T entity)
+        public Task<bool> UpdateAsync(T entity)
         {
             using var conn = Connect();
 
-            return conn.Update(entity);
+            return conn.UpdateAsync(entity);
         }
 
-        public bool Remove(int id)
+        public Task<bool> RemoveAsync(int id)
         {
             using var conn = Connect();
 
-            var entity = conn.Get<T>(id);
+            var entity = conn.GetAsync<T>(id);
 
-            return conn.Delete(entity);
+            return conn.DeleteAsync(entity);
         }
 
-        public bool Remove()
+        public Task<bool> RemoveAsync()
         {
             using var conn = Connect();
 
-            return conn.DeleteAll<T>();
+            return conn.DeleteAllAsync<T>();
         }
 
         #endregion
 
         #region Reading
 
-        public T Select(int id)
+        public Task<T> SelectAsync(int id)
         {
             using var conn = Connect();
 
-            return conn.Get<T>(id);
+            return conn.GetAsync<T>(id);
         }
 
-        public IEnumerable<T> SelectAll()
+        public Task<IEnumerable<T>> SelectAllAsync()
         {
             using var conn = Connect();
 
-            return conn.GetAll<T>();
+            return conn.GetAllAsync<T>();
         }
 
         #endregion

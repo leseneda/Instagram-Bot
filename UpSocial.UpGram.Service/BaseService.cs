@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UpSocial.UpGram.Domain.Entity;
 using UpSocial.UpGram.Infra.Data.Repository;
 
@@ -10,21 +11,21 @@ namespace UpSocial.UpGram.Service
 
         #region Changing
 
-        public long Post(T obj) => _repository.Insert(obj);
+        public async Task<long> PostAsync(T entity) => await _repository.InsertAsync(entity);
 
-        public bool Put(T obj) => _repository.Update(obj);
+        public async Task<bool> PutAsync(T entity) => await _repository.UpdateAsync(entity);
 
-        public bool Delete(int id) => _repository.Remove(id);
+        public async Task<bool> DeleteAsync(int id) => await _repository.RemoveAsync(id);
 
-        public bool Delete() => _repository.Remove();
+        public async Task<bool> DeleteAsync() => await _repository.RemoveAsync();
 
         #endregion
 
         #region Reading
 
-        public IEnumerable<T> Get() => _repository.SelectAll();
+        public async Task<IEnumerable<T>> GetAsync() => await _repository.SelectAllAsync();
 
-        public T Get(int id) => _repository.Select(id);
+        public async Task<T> GetAsync(int id) => await _repository.SelectAsync(id);
 
         #endregion
 

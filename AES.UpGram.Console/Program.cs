@@ -10,8 +10,8 @@ namespace AES.UpGram.Console
         static void Main(string[] args)
         {
             var userNameFrom = "alana_rox12";
-            var account = new BaseService<AccountEntity>().Get(1);
-            var config = new BaseService<ConfigurationEntity>().Get(1);
+            var account = new BaseService<AccountEntity>().GetAsync(1).Result;
+            var config = new BaseService<ConfigurationEntity>().GetAsync(1).Result;
 
             config.UserName = account.Name;
             config.Password = account.Password;
@@ -29,7 +29,7 @@ namespace AES.UpGram.Console
                 }
 
                 var followersResponse = new BaseService<FollowersRequestingEntity>();
-                var follower = followersResponse.Get()
+                var follower = followersResponse.GetAsync().Result
                     .LastOrDefault(cmp => cmp.UserName == userNameFrom);
 
                 string fromMaxId = follower?.FromMaxId ?? string.Empty;
@@ -38,20 +38,19 @@ namespace AES.UpGram.Console
 
                 if (result.Succeeded || (result.Data?.Succeeded ?? true))
                 {
-                    followersResponse.Post(new FollowersRequestingEntity()
+                    var response = followersResponse.PostAsync(new FollowersRequestingEntity()
                     {
                         AccountId = account.Id,
                         UserName = userNameFrom,
                         FromMaxId = result.ResponseData.ToString(),
                         Message = result.Data.Info.Message,
                         Succeeded = result.Data.Succeeded,
-                    });
+                    }).Result;
                 }
                 else
                 {
 
                 }
-                
                 
                 //var unfollowed = connector.User.Value.UnFollow().Result;
             }
