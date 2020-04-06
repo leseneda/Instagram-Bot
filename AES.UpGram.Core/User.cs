@@ -3,7 +3,6 @@ using InstagramApiSharp.API.Processors;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UpSocial.UpGram.Domain.Entity;
 

@@ -13,6 +13,7 @@ namespace UpSocial.UpGram.Core
     {
         static IInstaApi _apiConnector;
         public Lazy<User> User { get; set; }
+        public Lazy<Message> Message { get; set; }
 
         public Connector(ConfigurationEntity configuration)
         {
@@ -31,13 +32,14 @@ namespace UpSocial.UpGram.Core
                 .Build();
 
             User = new Lazy<User>(() => new User(_apiConnector.UserProcessor, configuration));
+            Message = new Lazy<Message>(() => new Message(_apiConnector));
         }
 
         #region Logging
 
         public async Task<bool> LoginAsync()
         {
-            var result = true;
+            var result = false;
 
             LoadSession();
 
@@ -47,12 +49,14 @@ namespace UpSocial.UpGram.Core
                 await Task.Delay(5000);
 
                 var login = await _apiConnector.LoginAsync();
-                
+
                 if (login.Succeeded)
                 {
                     await _apiConnector.SendRequestsAfterLoginAsync();
 
                     SaveSession();
+
+                    result = true;
                 }
                 else
                 {
@@ -60,26 +64,24 @@ namespace UpSocial.UpGram.Core
                     {
                         var challenge = await GetChallenge();
 
-                        result = challenge.Succeeded;
-
                         if (challenge.Succeeded)
                         {
 
                         }
                         else
                         {
-                            result = false;
+                            
                         }
                     }
                     else
                     {
-                        result = false;
+                        
                     }
                 }
             }
             else
             {
-
+                result = true;
             }
 
             return result;

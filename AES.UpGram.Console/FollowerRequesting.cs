@@ -18,7 +18,7 @@ namespace UpSocial.UpGram.Console
             }
 
             var followerService = new BaseService<FollowerRequestingEntity>();
-            var follower = followerService.GetAsync().Result.LastOrDefault();
+            var follower = followerService.GetAsync().Result.FirstOrDefault(cmp => cmp.AccountId == accountId);
 
             string fromMaxId = follower?.FromMaxId ?? string.Empty;
 
@@ -29,7 +29,7 @@ namespace UpSocial.UpGram.Console
                 var followerRequesting = new FollowerRequestingEntity()
                 {
                     AccountId = accountId,
-                    AccountFollowerId = 1,
+                    AccountFollowerId = 1, /// ARRUMA ISSO!!!!
                     FromMaxId = result.ResponseData.NextMaxId,
                     Message = result.Message,
                     Succeeded = result.Succeeded,
