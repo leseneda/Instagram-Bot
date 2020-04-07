@@ -18,7 +18,7 @@ namespace UpSocial.UpGram.Console
             }
 
             var followerService = new BaseService<FollowerRequestingEntity>();
-            var follower = followerService.GetAsync().Result.FirstOrDefault(cmp => cmp.AccountId == accountId);
+            var follower = followerService.GetAsync().Result.LastOrDefault(cmp => cmp.AccountId == accountId);
 
             string fromMaxId = follower?.FromMaxId ?? string.Empty;
 
