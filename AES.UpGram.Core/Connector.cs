@@ -103,18 +103,15 @@ namespace UpSocial.UpGram.Core
 
         void SaveSession()
         {
-            //if (_apiConnector == null || !_apiConnector.IsUserAuthenticated)
-            if (!_apiConnector?.IsUserAuthenticated ?? false)
+            if (_apiConnector.IsUserAuthenticated)
             {
-                return;
+                _apiConnector.SessionHandler.Save();
             }
-
-            _apiConnector.SessionHandler.Save();
         }
 
         void LoadSession()
         {
-            _apiConnector?.SessionHandler?.Load();
+            _apiConnector.SessionHandler.Load();
         }
 
         #endregion

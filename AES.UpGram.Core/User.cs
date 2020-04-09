@@ -12,11 +12,9 @@ namespace UpSocial.UpGram.Core
     {
         static IUserProcessor _apiUserProcessor;
         static PaginationParameters _paginationParameters;
-        static ConfigurationEntity _configuration;
 
         public User(IUserProcessor apiUserProcessor, ConfigurationEntity configuration)
         {
-            _configuration = configuration;
             _apiUserProcessor = apiUserProcessor;
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }

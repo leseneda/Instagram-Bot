@@ -10,7 +10,7 @@ namespace AES.UpGram.Console
     {
         static void Main(string[] args)
         {
-            var accountId = 3;
+            var accountId = 1;
             var choose = 1;
 
             var userNameFrom = string.Empty;
@@ -30,6 +30,9 @@ namespace AES.UpGram.Console
 
             if (login)
             {
+                var eee = connector.User2.UserAsync("leseneda").Result;
+               
+
                 switch (choose)
                 {
                     case 1:
