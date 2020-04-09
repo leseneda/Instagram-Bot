@@ -30,9 +30,6 @@ namespace AES.UpGram.Console
 
             if (login)
             {
-                var eee = connector.User2.UserAsync("leseneda").Result;
-               
-
                 switch (choose)
                 {
                     case 1:

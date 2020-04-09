@@ -12,8 +12,8 @@ namespace UpSocial.UpGram.Core
     public class Connector
     {
         static IInstaApi _apiConnector;
-        public Lazy<User> User { get; set; }
-        public Lazy<Message> Message { get; set; }
+        public Lazy<User> User { get; }
+        public Lazy<Message> Message { get ; }
 
         public Connector(ConfigurationEntity configuration)
         {
