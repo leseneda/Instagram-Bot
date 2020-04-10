@@ -16,7 +16,7 @@ namespace MeConecta.Gram.Console
                 .LastOrDefault();
 
             var followerRequesting = JsonSerializer.Deserialize<IList<long>>(follower.RequestedUserId);
-            var unfollowed = connector.User.UnFollowAsync(followerRequesting.ToArray()).Result;
+            var unfollowed = connector.User.UnfollowAsync(followerRequesting.ToArray()).Result;
 
             if (unfollowed.ResponseData.Count > 0)
             {

@@ -25,7 +25,7 @@ namespace MeConecta.Gram.Core
             return new User(apiUserProcessor, configuration);
         }
 
-        public async Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null)
+        public async Task<ResponseEntity<ResponseFollowerEntity>> RequestFollowersAsync(string userName, string nextMaxId = null)
         {
             var param = (!string.IsNullOrEmpty(nextMaxId) ?
                 _paginationParameters.StartFromMaxId(nextMaxId) :
@@ -73,7 +73,7 @@ namespace MeConecta.Gram.Core
             return responseBase;
         }
 
-        public async Task<ResponseEntity<IList<long>>> UnFollowAsync(long[] followerRequesting)
+        public async Task<ResponseEntity<IList<long>>> UnfollowAsync(long[] followerRequesting)
         {
             var responseBase = new ResponseEntity<IList<long>>();
 
@@ -100,7 +100,7 @@ namespace MeConecta.Gram.Core
             return responseBase;
         }
 
-        public async Task<IResult<InstaUserInfo>> UserAsync(string userName)
+        public async Task<IResult<InstaUserInfo>> GetUserAsync(string userName)
         {
             return await _apiUserProcessor.GetUserInfoByUsernameAsync(userName);
         }

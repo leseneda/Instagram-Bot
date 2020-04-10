@@ -32,7 +32,7 @@ namespace MeConecta.Gram.Core
 
         #region Messaging
 
-        public async Task<ResponseEntity<IResult<InstaDirectInboxThreadList>>> DirectMessage(string userName, string message)
+        public async Task<ResponseEntity<IResult<InstaDirectInboxThreadList>>> SendDirectMessage(string userName, string message)
         {
             var user = await _apiUserProcessor.GetUserAsync(userName);
 
@@ -50,7 +50,7 @@ namespace MeConecta.Gram.Core
             };
         }
 
-        public async Task<ResponseEntity<IResult<InstaDirectInboxThreadList>>> DirectMessage(string[] usersName, string message)
+        public async Task<ResponseEntity<IResult<InstaDirectInboxThreadList>>> SendDirectMessage(string[] usersName, string message)
         {
             IResult<InstaUser> user;
             var recipients = string.Empty;
@@ -74,7 +74,7 @@ namespace MeConecta.Gram.Core
             };
         }
 
-        public async Task<ResponseEntity<IResult<bool>>> DirectMessageLink(string userName, string link, string message)
+        public async Task<ResponseEntity<IResult<bool>>> SendDirectMessageLink(string userName, string link, string message)
         {
             var inbox = await _apiMessagingProcessor.GetDirectInboxAsync(PaginationParameters.MaxPagesToLoad(1));
             var thread = inbox.Value.Inbox.Threads

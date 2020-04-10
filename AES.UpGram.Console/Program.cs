@@ -9,7 +9,7 @@ namespace MeConecta.Gram.Console
     {
         static void Main(string[] args)
         {
-            var accountId = 2;
+            var accountId = 3;
             var choose = 1;
 
             var userNameFrom = string.Empty;

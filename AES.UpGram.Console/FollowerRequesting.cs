@@ -10,7 +10,7 @@ namespace MeConecta.Gram.Console
     {
         public void Execute(IInstaConnector connector, string userNameFrom, int accountId)
         {
-            var userResponse = connector.User.UserAsync(userNameFrom).Result;
+            var userResponse = connector.User.GetUserAsync(userNameFrom).Result;
 
             if (!userResponse.Succeeded)
             {
@@ -23,7 +23,7 @@ namespace MeConecta.Gram.Console
 
             string fromMaxId = follower?.FromMaxId ?? string.Empty;
 
-            var result = connector.User.FollowAsync(userNameFrom, fromMaxId).Result;
+            var result = connector.User.RequestFollowersAsync(userNameFrom, fromMaxId).Result;
 
             if (result.Succeeded)
             {
