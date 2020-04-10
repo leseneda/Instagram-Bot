@@ -17,8 +17,9 @@ namespace UpSocial.UpGram.Console
                 // Log
             }
 
-            var followerService = new BaseService<FollowerRequestingEntity>();
-            var follower = followerService.GetAsync().Result.LastOrDefault(cmp => cmp.AccountId == accountId);
+            var basefollower = BaseService<FollowerRequestingEntity>.Builder();
+            var follower = basefollower.GetAsync().Result
+                .LastOrDefault(cmp => cmp.AccountId == accountId);
 
             string fromMaxId = follower?.FromMaxId ?? string.Empty;
 
@@ -37,7 +38,7 @@ namespace UpSocial.UpGram.Console
                     RequestedUserId = JsonSerializer.Serialize(result.ResponseData.RequestedUserId)
                 };
 
-                var response = followerService.PostAsync(followerRequesting).Result;
+                var response = basefollower.PostAsync(followerRequesting).Result;
             }
             else
             {

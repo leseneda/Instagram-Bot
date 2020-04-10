@@ -14,13 +14,19 @@ namespace AES.UpGram.Console
             var choose = 1;
 
             var userNameFrom = string.Empty;
-            var config = new BaseService<ConfigurationEntity>().GetAsync().Result.FirstOrDefault();
-            var account = new BaseService<AccountEntity>().GetAsync(accountId).Result;
-            var accountFollower = new BaseService<AccountFollowerEntity>().GetAsync()
-                .Result.FirstOrDefault(cmp => cmp.AccountId == accountId);
+
+            var baseConfig = BaseServiceReadOnly<ConfigurationEntity>.Builder();
+            var config = baseConfig.GetAsync().Result.FirstOrDefault();
+            
+            var baseAccount = BaseServiceReadOnly<AccountEntity>.Builder();
+            var account = baseAccount.GetAsync(accountId).Result;
 
             config.UserName = account.Name;
             config.Password = account.Password;
+
+            var baseAccountFollower = BaseService<AccountFollowerEntity>.Builder();
+            var accountFollower = baseAccountFollower.GetAsync().Result
+                .FirstOrDefault(cmp => cmp.AccountId == accountId);
 
             userNameFrom = accountFollower.UserName;
 

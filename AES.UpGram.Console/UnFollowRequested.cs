@@ -11,8 +11,9 @@ namespace UpSocial.UpGram.Console
     {
         public void Execute(Connector connector)
         {
-            var followerService = new BaseService<FollowerRequestingEntity>();
-            var follower = followerService.GetAsync().Result.LastOrDefault();
+            var basefollower = BaseService<FollowerRequestingEntity>.Builder();
+            var follower = basefollower.GetAsync().Result
+                .LastOrDefault();
 
             var followerRequesting = JsonSerializer.Deserialize<IList<long>>(follower.RequestedUserId);
             var unfollowed = connector.User.Value.UnFollowAsync(followerRequesting.ToArray()).Result;
@@ -23,7 +24,7 @@ namespace UpSocial.UpGram.Console
 
                 follower.RequestedUserId = (remained.Count() > 0) ? JsonSerializer.Serialize(remained) : null;
 
-                var ret = followerService.PutAsync(follower).Result;
+                var ret = basefollower.PutAsync(follower).Result;
             }
         }
     }

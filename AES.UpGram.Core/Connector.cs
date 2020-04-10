@@ -124,7 +124,16 @@ namespace UpSocial.UpGram.Core
             {
                 if (challenge.Value.SubmitPhoneRequired)
                 {
+                    var result = await _apiConnector.SubmitPhoneNumberForChallengeRequireAsync("numero do telefone da conta...");
 
+                    if (result.Succeeded)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
                 }
                 else
                 {

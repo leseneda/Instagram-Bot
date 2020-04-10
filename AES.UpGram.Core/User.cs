@@ -34,7 +34,7 @@ namespace UpSocial.UpGram.Core
                 ResponseType = result.Info.ResponseType.ToString()
             };
 
-            var responseFollower = new ResponseFollowerEntity();
+            var responseFollow = new ResponseFollowerEntity();
 
             if (result.Succeeded)
             {
@@ -48,22 +48,22 @@ namespace UpSocial.UpGram.Core
 
                     if (request.Succeeded)
                     {
-                        responseFollower.RequestedUserId.Add(user.Pk);
+                        responseFollow.RequestedUserId.Add(user.Pk);
                     }
                     else
                     {
-                        responseFollower.NextMaxId = nextMaxId;
+                        responseFollow.NextMaxId = nextMaxId;
 
                         responseBase.Succeeded = request.Succeeded;
                         responseBase.Message = request.Info.Message;
                         responseBase.ResponseType = request.Info.ResponseType.ToString();
-                        responseBase.ResponseData = responseFollower;
+                        responseBase.ResponseData = responseFollow;
 
                         return responseBase;
                     }
                 }
-                responseFollower.NextMaxId = users?.NextMaxId ?? string.Empty;
-                responseBase.ResponseData = responseFollower;
+                responseFollow.NextMaxId = users?.NextMaxId ?? string.Empty;
+                responseBase.ResponseData = responseFollow;
             }
 
             return responseBase;
@@ -74,7 +74,7 @@ namespace UpSocial.UpGram.Core
             var responseBase = new ResponseBaseEntity<IList<long>>();
 
             IResult<InstaFriendshipFullStatus> user;
-            IList<long> unFollowedUser = new List<long>();
+            var unFollowed = new List<long>();
 
             foreach (var userPk in followerRequesting)
             {
@@ -82,12 +82,12 @@ namespace UpSocial.UpGram.Core
 
                 if (user.Succeeded)
                 {
-                    unFollowedUser.Add(userPk);
+                    unFollowed.Add(userPk);
                 }
                 else 
                 {
                     responseBase.Succeeded = user.Succeeded;
-                    responseBase.ResponseData = unFollowedUser;
+                    responseBase.ResponseData = unFollowed;
 
                     break;
                 }

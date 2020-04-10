@@ -1,13 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UpSocial.UpGram.Domain.Entity;
+using UpSocial.UpGram.Domain.Interface;
 using UpSocial.UpGram.Infra.Data.Repository;
 
 namespace UpSocial.UpGram.Service
 {
-    public class BaseService<T> where T : BaseEntity
+    public class BaseService<T> : IBaseService<T> where T : BaseEntity
     {
-        private readonly BaseDapperRepository<T> _repository = new BaseDapperRepository<T>();
+        private static BaseDapperRepository<T> _repository;
+
+        private BaseService()
+        {
+        }
+
+        public static IBaseService<T> Builder()
+        {
+            _repository = new BaseDapperRepository<T>();
+
+            return new BaseService<T>();
+        }
 
         #region Changing
 
@@ -28,6 +40,14 @@ namespace UpSocial.UpGram.Service
         public async Task<T> GetAsync(int id) => await _repository.SelectAsync(id);
 
         #endregion
+
+
+
+
+
+
+
+
 
     }
 }
