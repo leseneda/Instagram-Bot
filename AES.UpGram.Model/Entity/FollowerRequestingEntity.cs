@@ -1,7 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
-using System;
 
-namespace UpSocial.UpGram.Domain.Entity
+namespace MeConecta.Gram.Domain.Entity
 {
     [Table("FollowerRequesting")]
     public class FollowerRequestingEntity : BaseEntity

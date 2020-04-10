@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AES.UpGram.Model\UpSocial.UpGram.Domain.csproj" />
+    <ProjectReference Include="..\AES.UpGram.Model\MeConecta.Gram.Domain.csproj" />
   </ItemGroup>
 
 </Project>

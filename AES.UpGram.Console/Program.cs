@@ -1,10 +1,9 @@
 ﻿using System.Linq;
-using UpSocial.UpGram.Console;
-using UpSocial.UpGram.Core;
-using UpSocial.UpGram.Domain.Entity;
-using UpSocial.UpGram.Service;
+using MeConect.Gram.Core;
+using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Service;
 
-namespace AES.UpGram.Console
+namespace MeConecta.Gram.Console
 {
     class Program
     {

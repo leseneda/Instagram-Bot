@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Text.Json;
-using UpSocial.UpGram.Domain.Entity;
-using UpSocial.UpGram.Domain.Interface;
-using UpSocial.UpGram.Service;
+using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Interface;
+using MeConecta.Gram.Service;
 
-namespace UpSocial.UpGram.Console
+namespace MeConecta.Gram.Console
 {
     public class FollowerRequesting
     {

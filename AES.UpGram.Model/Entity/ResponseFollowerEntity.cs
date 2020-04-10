@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace UpSocial.UpGram.Domain.Entity
+namespace MeConecta.Gram.Domain.Entity
 {
     public class ResponseFollowerEntity
     {

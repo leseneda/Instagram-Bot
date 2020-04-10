@@ -1,4 +1,4 @@
-﻿namespace UpSocial.UpGram.Domain.Interface
+﻿namespace MeConecta.Gram.Domain.Interface
 {
     public interface IInstaBuild
     {

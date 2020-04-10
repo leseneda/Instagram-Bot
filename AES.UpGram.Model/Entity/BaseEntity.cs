@@ -1,7 +1,7 @@
 ﻿using Dapper.Contrib.Extensions;
 using System;
 
-namespace UpSocial.UpGram.Domain.Entity
+namespace MeConecta.Gram.Domain.Entity
 {
     public abstract class BaseEntity
     {

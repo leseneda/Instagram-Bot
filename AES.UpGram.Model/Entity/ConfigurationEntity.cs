@@ -1,6 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 
-namespace UpSocial.UpGram.Domain.Entity
+namespace MeConecta.Gram.Domain.Entity
 {
     [Table("Configuration")]
     public class ConfigurationEntity : BaseEntity

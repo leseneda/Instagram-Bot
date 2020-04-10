@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UpSocial.UpGram.Core", "AES.UpGram.Core\UpSocial.UpGram.Core.csproj", "{A7ECDE11-05DF-422C-9096-3DA8F0C9DEA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeConect.Gram.Core", "AES.UpGram.Core\MeConect.Gram.Core.csproj", "{A7ECDE11-05DF-422C-9096-3DA8F0C9DEA8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UpSocial.UpGram.Domain", "AES.UpGram.Model\UpSocial.UpGram.Domain.csproj", "{9E0EAEAC-09D4-4F7F-82CC-A26D5B1805C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeConecta.Gram.Domain", "AES.UpGram.Model\MeConecta.Gram.Domain.csproj", "{9E0EAEAC-09D4-4F7F-82CC-A26D5B1805C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UpSocial.UpGram.Console", "AES.UpGram.Console\UpSocial.UpGram.Console.csproj", "{1CCC1B08-C5E3-4ECC-AC04-9A4D4C14D491}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeConecta.Gram.Console", "AES.UpGram.Console\MeConecta.Gram.Console.csproj", "{1CCC1B08-C5E3-4ECC-AC04-9A4D4C14D491}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UpSocial.UpGram.Infra.Data", "AES.UpGram.Repository\UpSocial.UpGram.Infra.Data.csproj", "{30F4FFFF-C09A-4446-AFCD-3D639BAEDE7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeConecta.Gram.Infra.Data", "AES.UpGram.Repository\MeConecta.Gram.Infra.Data.csproj", "{30F4FFFF-C09A-4446-AFCD-3D639BAEDE7E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Application", "1 - Application", "{EB61C1CA-C72E-45E4-889B-A6D3CCFAFB19}"
 EndProject
@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.1 - Data", "4.1 - Data", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.2 - CrossCutting", "4.2 - CrossCutting", "{2319999B-D299-4B9A-9AE9-916FD5E2E3F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UpSocial.UpGram.Service", "UpSocial.UpGram.Service\UpSocial.UpGram.Service.csproj", "{A60AC678-3488-4CBF-B257-C465A078951C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeConecta.Gram.Service", "UpSocial.UpGram.Service\MeConecta.Gram.Service.csproj", "{A60AC678-3488-4CBF-B257-C465A078951C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

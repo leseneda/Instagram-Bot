@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 
-namespace UpSocial.UpGram.Infra.Data.Repository
+namespace MeConecta.Gram.Infra.Data.Repository
 {
     public class SqlRepository
     {

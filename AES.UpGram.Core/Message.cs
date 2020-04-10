@@ -5,15 +5,19 @@ using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using System.Linq;
 using System.Threading.Tasks;
-using UpSocial.UpGram.Domain.Entity;
-using UpSocial.UpGram.Domain.Interface;
+using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Interface;
 
-namespace UpSocial.UpGram.Core
+namespace MeConect.Gram.Core
 {
     public class Message : IInstaMessage
     {
+        #region Field
+
         static IUserProcessor _apiUserProcessor;
         static IMessagingProcessor _apiMessagingProcessor;
+
+        #endregion
 
         private Message(IInstaApi apiConnector)
         {
@@ -26,12 +30,14 @@ namespace UpSocial.UpGram.Core
             return new Message(apiConnector);
         }
 
+        #region Messaging
+
         public async Task<ResponseBaseEntity<IResult<InstaDirectInboxThreadList>>> DirectMessage(string userName, string message)
         {
             var user = await _apiUserProcessor.GetUserAsync(userName);
 
-            var userPk = (user?.Succeeded ?? false) ? 
-                user?.Value?.Pk.ToString() ?? string.Empty : 
+            var userPk = (user?.Succeeded ?? false) ?
+                user?.Value?.Pk.ToString() ?? string.Empty :
                 string.Empty;
 
             var result = await _apiMessagingProcessor.SendDirectTextAsync(userPk, null, message);
@@ -53,8 +59,8 @@ namespace UpSocial.UpGram.Core
             {
                 user = await _apiUserProcessor.GetUserAsync(userName);
 
-                recipients = (user?.Succeeded ?? false) ? 
-                    string.Concat(recipients, user?.Value?.Pk.ToString() ?? string.Empty, ",") : 
+                recipients = (user?.Succeeded ?? false) ?
+                    string.Concat(recipients, user?.Value?.Pk.ToString() ?? string.Empty, ",") :
                     recipients;
             }
 
@@ -83,5 +89,7 @@ namespace UpSocial.UpGram.Core
                 ResponseData = result
             };
         }
+
+        #endregion
     }
 }

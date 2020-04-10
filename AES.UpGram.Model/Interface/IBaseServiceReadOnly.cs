@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace UpSocial.UpGram.Domain.Interface
+namespace MeConecta.Gram.Domain.Interface
 {
     public interface IBaseServiceReadOnly<T>
     {

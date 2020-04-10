@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using UpSocial.UpGram.Domain.Entity;
-using UpSocial.UpGram.Domain.Interface;
-using UpSocial.UpGram.Infra.Data.Repository;
+using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Interface;
+using MeConecta.Gram.Infra.Data.Repository;
 
-namespace UpSocial.UpGram.Service
+namespace MeConecta.Gram.Service
 {
     public class BaseService<T> : IBaseService<T> where T : BaseEntity
     {

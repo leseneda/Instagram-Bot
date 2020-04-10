@@ -2,9 +2,9 @@
 using InstagramApiSharp.Classes.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UpSocial.UpGram.Domain.Entity;
+using MeConecta.Gram.Domain.Entity;
 
-namespace UpSocial.UpGram.Domain.Interface
+namespace MeConecta.Gram.Domain.Interface
 {
     public interface IInstaUser : IInstaBuild
     {

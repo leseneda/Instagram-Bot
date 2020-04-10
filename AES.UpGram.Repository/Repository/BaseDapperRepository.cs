@@ -1,10 +1,10 @@
 ﻿using Dapper.Contrib.Extensions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UpSocial.UpGram.Domain.Entity;
-using UpSocial.UpGram.Domain.Interface;
+using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Interface;
 
-namespace UpSocial.UpGram.Infra.Data.Repository
+namespace MeConecta.Gram.Infra.Data.Repository
 {
     public class BaseDapperRepository<T> : SqlRepository, IRepository<T> where T : BaseEntity
     {

@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
-using UpSocial.UpGram.Domain.Entity;
+using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Interface;
 
-namespace UpSocial.UpGram.Domain.Interface
+namespace MeConecta.Gram.Domain.Interface
 {
     public interface IRepository<T> : IRepositoryReadOnly<T> where T : BaseEntity
     {

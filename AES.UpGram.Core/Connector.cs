@@ -5,40 +5,27 @@ using InstagramApiSharp.Classes.SessionHandlers;
 using InstagramApiSharp.Logger;
 using System;
 using System.Threading.Tasks;
-using UpSocial.UpGram.Domain.Entity;
-using UpSocial.UpGram.Domain.Interface;
+using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Interface;
 
-namespace UpSocial.UpGram.Core
+namespace MeConect.Gram.Core
 {
     public class Connector : IInstaConnector
     {
+        #region Field
+
         static IInstaApi _apiConnector { get; set; }
-
         Lazy<IInstaUser> _user { get; }
-        public IInstaUser User { get { return _user.Value; }}
-
         Lazy<IInstaMessage> _message { get; }
-        public IInstaMessage Message { get { return _message.Value; }}
-        
-        private Connector(ConfigurationEntity configuration)
-        {
-            _apiConnector = InstaApiBuilder.CreateBuilder()
-                .UseLogger(new DebugLogger((LogLevel)configuration.LogLevel))
-                .SetRequestDelay(RequestDelay.FromSeconds(configuration.RequestDelay, configuration.RequestDelay))
-                .SetSessionHandler(new FileSessionHandler()
-                {
-                    FilePath = $"{configuration.UserName.ToLower()}.bin"
-                })
-                .SetUser(new UserSessionData()
-                {
-                    UserName = configuration.UserName,
-                    Password = configuration.Password,
-                })
-                .Build();
 
-            _user = new Lazy<IInstaUser>(() => Core.User.Builder(_apiConnector.UserProcessor, configuration));
-            _message = new Lazy<IInstaMessage>(() => Core.Message.Builder(_apiConnector));
-        }
+        #endregion
+
+        #region Property
+
+        public IInstaUser User { get { return _user.Value; } }
+        public IInstaMessage Message { get { return _message.Value; } }
+
+        #endregion
 
         public static IInstaConnector Builder(ConfigurationEntity configuration)
         {
@@ -108,6 +95,26 @@ namespace UpSocial.UpGram.Core
         #endregion
 
         #region Private
+
+        private Connector(ConfigurationEntity configuration)
+        {
+            _apiConnector = InstaApiBuilder.CreateBuilder()
+                .UseLogger(new DebugLogger((LogLevel)configuration.LogLevel))
+                .SetRequestDelay(RequestDelay.FromSeconds(configuration.RequestDelay, configuration.RequestDelay))
+                .SetSessionHandler(new FileSessionHandler()
+                {
+                    FilePath = $"{configuration.UserName.ToLower()}.bin"
+                })
+                .SetUser(new UserSessionData()
+                {
+                    UserName = configuration.UserName,
+                    Password = configuration.Password,
+                })
+                .Build();
+
+            _user = new Lazy<IInstaUser>(() => Core.User.Builder(_apiConnector.UserProcessor, configuration));
+            _message = new Lazy<IInstaMessage>(() => Core.Message.Builder(_apiConnector));
+        }
 
         #region Session
 

@@ -4,10 +4,10 @@ using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UpSocial.UpGram.Domain.Entity;
-using UpSocial.UpGram.Domain.Interface;
+using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Interface;
 
-namespace UpSocial.UpGram.Core
+namespace MeConect.Gram.Core
 {
     public class User : IInstaUser
     {
@@ -24,12 +24,6 @@ namespace UpSocial.UpGram.Core
         {
             return new User(apiUserProcessor, configuration);
         }
-
-        //public User(IUserProcessor apiUserProcessor, ConfigurationEntity configuration)
-        //{
-        //    _apiUserProcessor = apiUserProcessor;
-        //    _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
-        //}
 
         public async Task<ResponseBaseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null)
         {

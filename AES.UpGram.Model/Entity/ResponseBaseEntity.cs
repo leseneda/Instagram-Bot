@@ -1,4 +1,4 @@
-﻿namespace UpSocial.UpGram.Domain.Entity
+﻿namespace MeConecta.Gram.Domain.Entity
 {
     public class ResponseBaseEntity<T>
     {
