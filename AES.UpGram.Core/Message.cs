@@ -32,7 +32,7 @@ namespace MeConecta.Gram.Core
 
         #region Messaging
 
-        public async Task<ResponseBaseEntity<IResult<InstaDirectInboxThreadList>>> DirectMessage(string userName, string message)
+        public async Task<ResponseEntity<IResult<InstaDirectInboxThreadList>>> DirectMessage(string userName, string message)
         {
             var user = await _apiUserProcessor.GetUserAsync(userName);
 
@@ -42,7 +42,7 @@ namespace MeConecta.Gram.Core
 
             var result = await _apiMessagingProcessor.SendDirectTextAsync(userPk, null, message);
 
-            return new ResponseBaseEntity<IResult<InstaDirectInboxThreadList>>()
+            return new ResponseEntity<IResult<InstaDirectInboxThreadList>>()
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,
@@ -50,7 +50,7 @@ namespace MeConecta.Gram.Core
             };
         }
 
-        public async Task<ResponseBaseEntity<IResult<InstaDirectInboxThreadList>>> DirectMessage(string[] usersName, string message)
+        public async Task<ResponseEntity<IResult<InstaDirectInboxThreadList>>> DirectMessage(string[] usersName, string message)
         {
             IResult<InstaUser> user;
             var recipients = string.Empty;
@@ -66,7 +66,7 @@ namespace MeConecta.Gram.Core
 
             var result = await _apiMessagingProcessor.SendDirectTextAsync(recipients, null, message);
 
-            return new ResponseBaseEntity<IResult<InstaDirectInboxThreadList>>()
+            return new ResponseEntity<IResult<InstaDirectInboxThreadList>>()
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,
@@ -74,7 +74,7 @@ namespace MeConecta.Gram.Core
             };
         }
 
-        public async Task<ResponseBaseEntity<IResult<bool>>> DirectMessageLink(string userName, string link, string message)
+        public async Task<ResponseEntity<IResult<bool>>> DirectMessageLink(string userName, string link, string message)
         {
             var inbox = await _apiMessagingProcessor.GetDirectInboxAsync(PaginationParameters.MaxPagesToLoad(1));
             var thread = inbox.Value.Inbox.Threads
@@ -82,7 +82,7 @@ namespace MeConecta.Gram.Core
 
             var result = await _apiMessagingProcessor.SendDirectLinkAsync(message, link, thread?.ThreadId);
 
-            return new ResponseBaseEntity<IResult<bool>>()
+            return new ResponseEntity<IResult<bool>>()
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,

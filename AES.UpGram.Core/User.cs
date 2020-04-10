@@ -25,7 +25,7 @@ namespace MeConecta.Gram.Core
             return new User(apiUserProcessor, configuration);
         }
 
-        public async Task<ResponseBaseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null)
+        public async Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null)
         {
             var param = (!string.IsNullOrEmpty(nextMaxId) ?
                 _paginationParameters.StartFromMaxId(nextMaxId) :
@@ -33,7 +33,7 @@ namespace MeConecta.Gram.Core
 
             var result = await _apiUserProcessor.GetUserFollowersAsync(userName, param);
             
-            var responseBase = new ResponseBaseEntity<ResponseFollowerEntity>()
+            var responseBase = new ResponseEntity<ResponseFollowerEntity>()
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,
@@ -73,9 +73,9 @@ namespace MeConecta.Gram.Core
             return responseBase;
         }
 
-        public async Task<ResponseBaseEntity<IList<long>>> UnFollowAsync(long[] followerRequesting)
+        public async Task<ResponseEntity<IList<long>>> UnFollowAsync(long[] followerRequesting)
         {
-            var responseBase = new ResponseBaseEntity<IList<long>>();
+            var responseBase = new ResponseEntity<IList<long>>();
 
             IResult<InstaFriendshipFullStatus> user;
             var unFollowed = new List<long>();

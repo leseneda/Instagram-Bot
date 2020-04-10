@@ -8,8 +8,8 @@ namespace MeConecta.Gram.Domain.Interface
 {
     public interface IInstaUser : IInstaBuild
     {
-        Task<ResponseBaseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null);
-        Task<ResponseBaseEntity<IList<long>>> UnFollowAsync(long[] followerRequesting);
+        Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null);
+        Task<ResponseEntity<IList<long>>> UnFollowAsync(long[] followerRequesting);
         Task<IResult<InstaUserInfo>> UserAsync(string userName);
     }
 }
