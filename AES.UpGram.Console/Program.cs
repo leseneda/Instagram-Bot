@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using MeConect.Gram.Core;
+using MeConecta.Gram.Core;
 using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Service;
 
@@ -9,8 +9,8 @@ namespace MeConecta.Gram.Console
     {
         static void Main(string[] args)
         {
-            var accountId = 1;
-            var choose = 4;
+            var accountId = 2;
+            var choose = 1;
 
             var userNameFrom = string.Empty;
 
@@ -31,8 +31,6 @@ namespace MeConecta.Gram.Console
 
             var connector = Connector.Builder(config);
             var login = connector.LoginAsync().Result;
-
-            var ret = connector.User.UserAsync("leseneda").Result;
 
             if (login)
             {

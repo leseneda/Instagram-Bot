@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
 
-namespace MeConect.Gram.Core
+namespace MeConecta.Gram.Core
 {
     public class Connector : IInstaConnector
     {
