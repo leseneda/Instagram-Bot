@@ -8,5 +8,6 @@ namespace MeConecta.Gram.Domain.Interface
         void LogoutAsync();
         public IInstaMessage Message { get; }
         public IInstaUser User { get; }
+        public IInstaHashTag HashTag { get; }
     }
 }

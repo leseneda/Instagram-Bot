@@ -34,6 +34,7 @@ namespace MeConecta.Gram.Console
                     FromMaxId = result.ResponseData.NextMaxId,
                     Message = result.Message,
                     Succeeded = result.Succeeded,
+                    ResponseType = "OK",  /// ARRUMA ISSO!!!!
                     RequestedUserId = JsonSerializer.Serialize(result.ResponseData.RequestedUserId)
                 };
 

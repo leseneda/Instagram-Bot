@@ -1,12 +1,12 @@
 ﻿using InstagramApiSharp;
+using InstagramApiSharp.API;
 using InstagramApiSharp.API.Processors;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
-using InstagramApiSharp.API;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
@@ -76,41 +76,49 @@ namespace MeConecta.Gram.Core
             return responseBase;
         }
 
-        public async Task<ResponseEntity<IList<long>>> UnfollowAsync(long[] followerRequesting)
+        public async Task<ResponseEntity<IList<long>>> UnfollowAsync(long[] requestedUsersPk)
         {
             var responseBase = new ResponseEntity<IList<long>>();
 
             IResult<InstaFriendshipFullStatus> user;
-            var unFollowed = new List<long>();
 
-            foreach (var userPk in followerRequesting)
+            var unfollowedUserFail = new List<long>();
+
+            foreach (var userPk in requestedUsersPk)
             {
                 user = await _apiUserProcessor.UnFollowUserAsync(userPk);
 
-                if (user.Succeeded)
+                if (!user.Succeeded)
                 {
-                    unFollowed.Add(userPk);
-                }
-                else 
-                {
-                    responseBase.Succeeded = user.Succeeded;
-                    responseBase.ResponseData = unFollowed;
-
-                    break;
+                    unfollowedUserFail.Add(userPk);
                 }
             }
 
             return responseBase;
         }
 
-        public async Task<IResult<InstaUserInfo>> GetUserAsync(string userName)
+        public async Task<ResponseEntity<IResult<InstaUserInfo>>> GetUserAsync(string userName)
         {
-            return await _apiUserProcessor.GetUserInfoByUsernameAsync(userName);
+            var result = await _apiUserProcessor.GetUserInfoByUsernameAsync(userName);
+
+            return new ResponseEntity<IResult<InstaUserInfo>>()
+            {
+                Succeeded = result.Succeeded,
+                Message = result.Info.Message,
+                ResponseData = result
+            };
         }
 
-        public async Task<IResult<InstaDiscoverSearchResult>> GetSearchUser(string search, int counterData)
+        public async Task<ResponseEntity<IResult<InstaDiscoverSearchResult>>> GetSearchUser(string search, int counterData)
         {
-            return await _discoverProcessor.SearchPeopleAsync(search, counterData);
+            var result = await _discoverProcessor.SearchPeopleAsync(search, counterData);
+
+            return new ResponseEntity<IResult<InstaDiscoverSearchResult>>()
+            {
+                Succeeded = result.Succeeded,
+                Message = result.Info.Message,
+                ResponseData = result
+            };
         }
     }
 }

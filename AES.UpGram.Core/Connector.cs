@@ -17,6 +17,7 @@ namespace MeConecta.Gram.Core
         static IInstaApi _apiConnector { get; set; }
         Lazy<IInstaUser> _user { get; }
         Lazy<IInstaMessage> _message { get; }
+        Lazy<IInstaHashTag> _hashTag { get; }
 
         #endregion
 
@@ -24,6 +25,7 @@ namespace MeConecta.Gram.Core
 
         public IInstaUser User { get { return _user.Value; } }
         public IInstaMessage Message { get { return _message.Value; } }
+        public IInstaHashTag HashTag { get { return _hashTag.Value; } }
 
         #endregion
 
@@ -113,7 +115,8 @@ namespace MeConecta.Gram.Core
                 .Build();
 
             _user = new Lazy<IInstaUser>(() => Core.User.Builder(_apiConnector, configuration));
-            _message = new Lazy<IInstaMessage>(() => Core.Message.Builder(_apiConnector));
+            _message = new Lazy<IInstaMessage>(() => Core.Message.Builder(_apiConnector, configuration));
+            _hashTag = new Lazy<IInstaHashTag>(() => Core.HashTag.Builder(_apiConnector.HashtagProcessor, configuration));
         }
 
         #region Session

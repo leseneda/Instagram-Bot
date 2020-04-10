@@ -16,18 +16,20 @@ namespace MeConecta.Gram.Core
 
         static IUserProcessor _apiUserProcessor;
         static IMessagingProcessor _apiMessagingProcessor;
+        static PaginationParameters _paginationParameters;
 
         #endregion
 
-        private Message(IInstaApi apiConnector)
+        private Message(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
             _apiUserProcessor = apiConnector.UserProcessor;
             _apiMessagingProcessor = apiConnector.MessagingProcessor;
+            _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static IInstaMessage Builder(IInstaApi apiConnector)
+        public static IInstaMessage Builder(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
-            return new Message(apiConnector);
+            return new Message(apiConnector, configuration);
         }
 
         #region Messaging
@@ -76,7 +78,7 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<bool>>> SendDirectMessageLink(string userName, string link, string message)
         {
-            var inbox = await _apiMessagingProcessor.GetDirectInboxAsync(PaginationParameters.MaxPagesToLoad(1));
+            var inbox = await _apiMessagingProcessor.GetDirectInboxAsync(_paginationParameters);
             var thread = inbox.Value.Inbox.Threads
                 .FirstOrDefault(u => u.Users.FirstOrDefault().UserName.ToLower() == userName.ToLower());
 

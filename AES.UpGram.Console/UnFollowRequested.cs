@@ -11,21 +11,16 @@ namespace MeConecta.Gram.Console
     {
         public void Execute(IInstaConnector connector)
         {
-            var basefollower = BaseService<FollowerRequestingEntity>.Builder();
-            var follower = basefollower.GetAsync().Result
-                .LastOrDefault();
+            var baseFollow = BaseService<FollowerRequestingEntity>.Builder();
+            var follow = baseFollow.GetAsync().Result.LastOrDefault();
+            var followRequesting = JsonSerializer.Deserialize<IList<long>>(follow.RequestedUserId);
+            
+            var unfollowedUsersFail = connector.User.UnfollowAsync(followRequesting.ToArray()).Result;
+            var remainedUsers = followRequesting.Except(unfollowedUsersFail.ResponseData);
 
-            var followerRequesting = JsonSerializer.Deserialize<IList<long>>(follower.RequestedUserId);
-            var unfollowed = connector.User.UnfollowAsync(followerRequesting.ToArray()).Result;
+            follow.RequestedUserId = (remainedUsers.Count() > 0) ? JsonSerializer.Serialize(remainedUsers) : null;
 
-            if (unfollowed.ResponseData.Count > 0)
-            {
-                var remained = followerRequesting.Except(unfollowed.ResponseData);
-
-                follower.RequestedUserId = (remained.Count() > 0) ? JsonSerializer.Serialize(remained) : null;
-
-                var ret = basefollower.PutAsync(follower).Result;
-            }
+            var ret = baseFollow.PutAsync(follow).Result;
         }
     }
 }

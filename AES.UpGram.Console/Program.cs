@@ -32,6 +32,10 @@ namespace MeConecta.Gram.Console
             var connector = Connector.Builder(config);
             var login = connector.LoginAsync().Result;
 
+            //var ret = connector.HashTag.SearchHashtagAsync("acontabate").Result;
+            var ret = connector.HashTag.GetTopHashtagListAsync("tmpvegana").Result;
+
+
             if (login)
             {
                 switch (choose)
