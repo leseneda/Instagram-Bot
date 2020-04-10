@@ -5,19 +5,31 @@ using InstagramApiSharp.Classes.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UpSocial.UpGram.Domain.Entity;
+using UpSocial.UpGram.Domain.Interface;
 
 namespace UpSocial.UpGram.Core
 {
-    public class User
+    public class User : IInstaUser
     {
         static IUserProcessor _apiUserProcessor;
         static PaginationParameters _paginationParameters;
 
-        public User(IUserProcessor apiUserProcessor, ConfigurationEntity configuration)
+        private User(IUserProcessor apiUserProcessor, ConfigurationEntity configuration)
         {
             _apiUserProcessor = apiUserProcessor;
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
+
+        public static IInstaUser Builder(IUserProcessor apiUserProcessor, ConfigurationEntity configuration)
+        {
+            return new User(apiUserProcessor, configuration);
+        }
+
+        //public User(IUserProcessor apiUserProcessor, ConfigurationEntity configuration)
+        //{
+        //    _apiUserProcessor = apiUserProcessor;
+        //    _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
+        //}
 
         public async Task<ResponseBaseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null)
         {
@@ -31,7 +43,6 @@ namespace UpSocial.UpGram.Core
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,
-                ResponseType = result.Info.ResponseType.ToString()
             };
 
             var responseFollow = new ResponseFollowerEntity();
@@ -56,7 +67,6 @@ namespace UpSocial.UpGram.Core
 
                         responseBase.Succeeded = request.Succeeded;
                         responseBase.Message = request.Info.Message;
-                        responseBase.ResponseType = request.Info.ResponseType.ToString();
                         responseBase.ResponseData = responseFollow;
 
                         return responseBase;

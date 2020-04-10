@@ -1,16 +1,16 @@
 ﻿using System.Linq;
 using System.Text.Json;
-using UpSocial.UpGram.Core;
 using UpSocial.UpGram.Domain.Entity;
+using UpSocial.UpGram.Domain.Interface;
 using UpSocial.UpGram.Service;
 
 namespace UpSocial.UpGram.Console
 {
     public class FollowerRequesting
     {
-        public void Execute(Connector connector, string userNameFrom, int accountId)
+        public void Execute(IInstaConnector connector, string userNameFrom, int accountId)
         {
-            var userResponse = connector.User.Value.UserAsync(userNameFrom).Result;
+            var userResponse = connector.User.UserAsync(userNameFrom).Result;
 
             if (!userResponse.Succeeded)
             {
@@ -23,7 +23,7 @@ namespace UpSocial.UpGram.Console
 
             string fromMaxId = follower?.FromMaxId ?? string.Empty;
 
-            var result = connector.User.Value.FollowAsync(userNameFrom, fromMaxId).Result;
+            var result = connector.User.FollowAsync(userNameFrom, fromMaxId).Result;
 
             if (result.Succeeded)
             {
@@ -34,7 +34,6 @@ namespace UpSocial.UpGram.Console
                     FromMaxId = result.ResponseData.NextMaxId,
                     Message = result.Message,
                     Succeeded = result.Succeeded,
-                    ResponseType = result.ResponseType,
                     RequestedUserId = JsonSerializer.Serialize(result.ResponseData.RequestedUserId)
                 };
 

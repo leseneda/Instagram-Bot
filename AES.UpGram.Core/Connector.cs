@@ -6,16 +6,21 @@ using InstagramApiSharp.Logger;
 using System;
 using System.Threading.Tasks;
 using UpSocial.UpGram.Domain.Entity;
+using UpSocial.UpGram.Domain.Interface;
 
 namespace UpSocial.UpGram.Core
 {
-    public class Connector
+    public class Connector : IInstaConnector
     {
-        static IInstaApi _apiConnector;
-        public Lazy<User> User { get; }
-        public Lazy<Message> Message { get ; }
+        static IInstaApi _apiConnector { get; set; }
 
-        public Connector(ConfigurationEntity configuration)
+        Lazy<IInstaUser> _user { get; }
+        public IInstaUser User { get { return _user.Value; }}
+
+        Lazy<IInstaMessage> _message { get; }
+        public IInstaMessage Message { get { return _message.Value; }}
+        
+        private Connector(ConfigurationEntity configuration)
         {
             _apiConnector = InstaApiBuilder.CreateBuilder()
                 .UseLogger(new DebugLogger((LogLevel)configuration.LogLevel))
@@ -31,8 +36,13 @@ namespace UpSocial.UpGram.Core
                 })
                 .Build();
 
-            User = new Lazy<User>(() => new User(_apiConnector.UserProcessor, configuration));
-            Message = new Lazy<Message>(() => new Message(_apiConnector));
+            _user = new Lazy<IInstaUser>(() => Core.User.Builder(_apiConnector.UserProcessor, configuration));
+            _message = new Lazy<IInstaMessage>(() => Core.Message.Builder(_apiConnector));
+        }
+
+        public static IInstaConnector Builder(ConfigurationEntity configuration)
+        {
+            return new Connector(configuration);
         }
 
         #region Logging
@@ -116,7 +126,7 @@ namespace UpSocial.UpGram.Core
 
         #endregion
 
-        private async Task<IResult<InstaChallengeRequireVerifyMethod>> GetChallenge()
+        async Task<IResult<InstaChallengeRequireVerifyMethod>> GetChallenge()
         {
             var challenge = await _apiConnector.GetChallengeRequireVerifyMethodAsync();
 

@@ -5,8 +5,6 @@ namespace UpSocial.UpGram.Domain.Interface
 {
     public interface IBaseService<T> : IBaseServiceReadOnly<T>
     {
-        static IBaseService<T> Builder;
-
         Task<long> PostAsync(T entity);
 
         Task<bool> PutAsync(T entity);

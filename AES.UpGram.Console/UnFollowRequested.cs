@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using UpSocial.UpGram.Core;
 using UpSocial.UpGram.Domain.Entity;
+using UpSocial.UpGram.Domain.Interface;
 using UpSocial.UpGram.Service;
 
 namespace UpSocial.UpGram.Console
 {
     public class UnFollowRequested
     {
-        public void Execute(Connector connector)
+        public void Execute(IInstaConnector connector)
         {
             var basefollower = BaseService<FollowerRequestingEntity>.Builder();
             var follower = basefollower.GetAsync().Result
                 .LastOrDefault();
 
             var followerRequesting = JsonSerializer.Deserialize<IList<long>>(follower.RequestedUserId);
-            var unfollowed = connector.User.Value.UnFollowAsync(followerRequesting.ToArray()).Result;
+            var unfollowed = connector.User.UnFollowAsync(followerRequesting.ToArray()).Result;
 
             if (unfollowed.ResponseData.Count > 0)
             {

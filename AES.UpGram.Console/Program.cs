@@ -11,7 +11,7 @@ namespace AES.UpGram.Console
         static void Main(string[] args)
         {
             var accountId = 1;
-            var choose = 1;
+            var choose = 4;
 
             var userNameFrom = string.Empty;
 
@@ -24,15 +24,16 @@ namespace AES.UpGram.Console
             config.UserName = account.Name;
             config.Password = account.Password;
 
-            var baseAccountFollower = BaseService<AccountFollowerEntity>.Builder();
+            var baseAccountFollower = BaseServiceReadOnly<AccountFollowerEntity>.Builder();
             var accountFollower = baseAccountFollower.GetAsync().Result
                 .FirstOrDefault(cmp => cmp.AccountId == accountId);
 
             userNameFrom = accountFollower.UserName;
 
-            var connector = new Connector(config);
-            
+            var connector = Connector.Builder(config);
             var login = connector.LoginAsync().Result;
+
+            var ret = connector.User.UserAsync("leseneda").Result;
 
             if (login)
             {
