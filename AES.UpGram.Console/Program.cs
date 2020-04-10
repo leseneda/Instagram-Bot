@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using MeConecta.Gram.Core;
 using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Service;
@@ -7,33 +8,31 @@ namespace MeConecta.Gram.Console
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var accountId = 1;
             var choose = 1;
-
-            var userNameFrom = string.Empty;
-
-            var baseConfig = BaseServiceReadOnly<ConfigurationEntity>.Builder();
-            var config = baseConfig.GetAsync().Result.FirstOrDefault();
             
+            var baseConfig = BaseServiceReadOnly<ConfigurationEntity>.Builder();
             var baseAccount = BaseServiceReadOnly<AccountEntity>.Builder();
-            var account = baseAccount.GetAsync(accountId).Result;
+            var baseAccountFollower = BaseServiceReadOnly<AccountFollowerEntity>.Builder();
+
+            var config = await baseConfig.GetAsync(1);
+            var account = await baseAccount.GetAsync(accountId);
 
             config.UserName = account.Name;
             config.Password = account.Password;
 
-            var baseAccountFollower = BaseServiceReadOnly<AccountFollowerEntity>.Builder();
-            var accountFollower = baseAccountFollower.GetAsync().Result
-                .FirstOrDefault(cmp => cmp.AccountId == accountId);
+            var accountFollower = (await baseAccountFollower.GetAsync())
+                .FirstOrDefault(cmp => cmp.AccountId == accountId && cmp.IsActive);
 
-            userNameFrom = accountFollower.UserName;
+            var userNameFrom = accountFollower.UserName;
 
             var connector = Connector.Builder(config);
-            var login = connector.LoginAsync().Result;
+            var login = await connector.LoginAsync();
 
-            var ret = connector.HashTag.GetRecentHashtagListAsync("spaldginasios").Result;
-
+            var ret = await connector.HashTag.GetRecentHashtagListAsync("spaldginasios");
+            
             if (login)
             {
                 switch (choose)
