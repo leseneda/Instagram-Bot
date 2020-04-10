@@ -6,23 +6,26 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
+using InstagramApiSharp.API;
 
 namespace MeConecta.Gram.Core
 {
     public class User : IInstaUser
     {
         static IUserProcessor _apiUserProcessor;
+        static IDiscoverProcessor _discoverProcessor;
         static PaginationParameters _paginationParameters;
 
-        private User(IUserProcessor apiUserProcessor, ConfigurationEntity configuration)
+        private User(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
-            _apiUserProcessor = apiUserProcessor;
+            _apiUserProcessor = apiConnector.UserProcessor;
+            _discoverProcessor = apiConnector.DiscoverProcessor;
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static IInstaUser Builder(IUserProcessor apiUserProcessor, ConfigurationEntity configuration)
+        public static IInstaUser Builder(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
-            return new User(apiUserProcessor, configuration);
+            return new User(apiConnector, configuration);
         }
 
         public async Task<ResponseEntity<ResponseFollowerEntity>> RequestFollowersAsync(string userName, string nextMaxId = null)
@@ -103,6 +106,11 @@ namespace MeConecta.Gram.Core
         public async Task<IResult<InstaUserInfo>> GetUserAsync(string userName)
         {
             return await _apiUserProcessor.GetUserInfoByUsernameAsync(userName);
+        }
+
+        public async Task<IResult<InstaDiscoverSearchResult>> GetSearchUser(string search, int counterData)
+        {
+            return await _discoverProcessor.SearchPeopleAsync(search, counterData);
         }
     }
 }

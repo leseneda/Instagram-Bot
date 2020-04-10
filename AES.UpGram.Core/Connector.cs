@@ -112,7 +112,7 @@ namespace MeConecta.Gram.Core
                 })
                 .Build();
 
-            _user = new Lazy<IInstaUser>(() => Core.User.Builder(_apiConnector.UserProcessor, configuration));
+            _user = new Lazy<IInstaUser>(() => Core.User.Builder(_apiConnector, configuration));
             _message = new Lazy<IInstaMessage>(() => Core.Message.Builder(_apiConnector));
         }
 
