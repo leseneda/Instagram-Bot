@@ -35,5 +35,17 @@ namespace MeConecta.Gram.Core
                 ResponseData = result
             };
         }
+
+        public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetRecentHashtagListAsync(string tagName)
+        {
+            var result = await _hashtagProcessor.GetRecentHashtagMediaListAsync(tagName, _paginationParameters);
+
+            return new ResponseEntity<IResult<InstaSectionMedia>>()
+            {
+                Succeeded = result.Succeeded,
+                Message = result.Info.Message,
+                ResponseData = result
+            };
+        }
     }
 }

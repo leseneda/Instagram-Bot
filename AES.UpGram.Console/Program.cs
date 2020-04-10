@@ -9,7 +9,7 @@ namespace MeConecta.Gram.Console
     {
         static void Main(string[] args)
         {
-            var accountId = 3;
+            var accountId = 1;
             var choose = 1;
 
             var userNameFrom = string.Empty;
@@ -32,9 +32,7 @@ namespace MeConecta.Gram.Console
             var connector = Connector.Builder(config);
             var login = connector.LoginAsync().Result;
 
-            //var ret = connector.HashTag.SearchHashtagAsync("acontabate").Result;
-            var ret = connector.HashTag.GetTopHashtagListAsync("tmpvegana").Result;
-
+            var ret = connector.HashTag.GetRecentHashtagListAsync("spaldginasios").Result;
 
             if (login)
             {
