@@ -14,8 +14,8 @@ namespace MeConecta.Gram.Console
             var userNameFrom = (await BaseServiceReadOnly<AccountFollowerEntity>.Build()
                 .GetAsync()).FirstOrDefault(cmp => cmp.AccountId == accountId && cmp.IsActive).UserName;
 
-            config.UserName = account.Name;
-            config.Password = account.Password;
+            config.Account.Name = account.Name;
+            config.Account.Password = account.Password;
 
             var connector = Connector.Build(config);
             var login = await connector.LoginAsync();

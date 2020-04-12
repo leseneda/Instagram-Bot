@@ -107,12 +107,12 @@ namespace MeConecta.Gram.Core
                 .SetRequestDelay(RequestDelay.FromSeconds(configuration.RequestDelay, configuration.RequestDelay))
                 .SetSessionHandler(new FileSessionHandler()
                 {
-                    FilePath = $"{configuration.UserName.ToLower()}.bin"
+                    FilePath = $"{configuration.Account.Name.ToLower()}.bin"
                 })
                 .SetUser(new UserSessionData()
                 {
-                    UserName = configuration.UserName,
-                    Password = configuration.Password,
+                    UserName = configuration.Account.Name,
+                    Password = configuration.Account.Password,
                 })
                 .Build();
 
