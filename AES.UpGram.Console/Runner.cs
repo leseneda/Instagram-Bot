@@ -20,6 +20,8 @@ namespace MeConecta.Gram.Console
             var connector = Connector.Build(config);
             var login = await connector.LoginAsync();
 
+            //var ret = connector.Location.SearchLocationAsync(config.Account.Latitude, config.Account.Longitude, "igreja");
+
             if (login)
             {
                 switch (choose)

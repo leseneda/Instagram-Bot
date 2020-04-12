@@ -36,7 +36,7 @@ namespace MeConecta.Gram.Core
             };
         }
 
-        public async Task<ResponseEntity<IResult<InstaPlaceList>>> SearchPlacesAsync(double latitude, double longitude, string search)
+        public async Task<ResponseEntity<IResult<InstaPlaceList>>> SearchPlacesAsync(double latitude, double longitude)
         {
             var result = await _apiLocationProcessor.SearchPlacesAsync(latitude, longitude, _paginationParameters);
 

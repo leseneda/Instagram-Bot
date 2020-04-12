@@ -3,6 +3,7 @@ using MeConecta.Gram.Service;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -22,8 +23,9 @@ namespace MeConecta.Gram.Console
             var accountBase = BaseServiceReadOnly<AccountEntity>.Build();
             var accountData = await accountBase.GetAsync();
             
-            foreach (var account in accountData)
+            foreach (var account in accountData.Where(cmp => cmp.Id == 2))
             {
+                configData.Account = account;
                 bool ret = new Runner().Execute(account.Id, 1, configData).Result;
             }
         }
