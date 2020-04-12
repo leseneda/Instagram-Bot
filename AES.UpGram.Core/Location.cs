@@ -1,0 +1,88 @@
+﻿using InstagramApiSharp;
+using InstagramApiSharp.API.Processors;
+using InstagramApiSharp.Classes;
+using InstagramApiSharp.Classes.Models;
+using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Interface;
+using System.Threading.Tasks;
+
+namespace MeConecta.Gram.Core
+{
+    public class Location : IInstaLocation
+    {
+        static ILocationProcessor _apiLocationProcessor;
+        static PaginationParameters _paginationParameters;
+
+        private Location(ILocationProcessor apiLocationProcessor, ConfigurationEntity configuration)
+        {
+            _apiLocationProcessor = apiLocationProcessor;
+            _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
+        }
+
+        public static IInstaLocation Build(ILocationProcessor apiLocationProcessor, ConfigurationEntity configuration)
+        {
+            return new Location(apiLocationProcessor, configuration);
+        }
+
+        public async Task<ResponseEntity<IResult<InstaLocationShortList>>> SearchLocationAsync(double latitude, double longitude, string search)
+        {
+            var result = await _apiLocationProcessor.SearchLocationAsync(latitude, longitude, search);
+
+            return new ResponseEntity<IResult<InstaLocationShortList>>()
+            {
+                Succeeded = result.Succeeded,
+                Message = result.Info.Message,
+                ResponseData = result
+            };
+        }
+
+        public async Task<ResponseEntity<IResult<InstaPlaceList>>> SearchPlacesAsync(double latitude, double longitude, string search)
+        {
+            var result = await _apiLocationProcessor.SearchPlacesAsync(latitude, longitude, _paginationParameters);
+
+            return new ResponseEntity<IResult<InstaPlaceList>>()
+            {
+                Succeeded = result.Succeeded,
+                Message = result.Info.Message,
+                ResponseData = result
+            };
+        }
+
+        public async Task<ResponseEntity<IResult<InstaUserSearchLocation>>> SearchUserByLocationAsync(double latitude, double longitude, string userName, int counter)
+        {
+            var result = await _apiLocationProcessor.SearchUserByLocationAsync(latitude, longitude, userName, counter);
+
+            return new ResponseEntity<IResult<InstaUserSearchLocation>>()
+            {
+                Succeeded = result.Succeeded,
+                Message = result.Info.Message,
+                ResponseData = result
+            };
+        }
+        
+
+        //public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetRecentLocationListAsync(long locationId)
+        //{
+        //    var result = await _apiLocationProcessor.GetRecentLocationFeedsAsync(locationId, _paginationParameters);
+
+        //    return new ResponseEntity<IResult<InstaSectionMedia>>()
+        //    {
+        //        Succeeded = result.Succeeded,
+        //        Message = result.Info.Message,
+        //        ResponseData = result
+        //    };
+        //}
+
+        //public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetTopLocationListAsync(long locationId)
+        //{
+        //    var result = await _apiLocationProcessor.GetTopLocationFeedsAsync(locationId, _paginationParameters);
+
+        //    return new ResponseEntity<IResult<InstaSectionMedia>>()
+        //    {
+        //        Succeeded = result.Succeeded,
+        //        Message = result.Info.Message,
+        //        ResponseData = result
+        //    };
+        //}
+    }
+}

@@ -9,5 +9,6 @@ namespace MeConecta.Gram.Domain.Interface
         public IInstaMessage Message { get; }
         public IInstaUser User { get; }
         public IInstaHashTag HashTag { get; }
+        public IInstaLocation Location { get; }
     }
 }

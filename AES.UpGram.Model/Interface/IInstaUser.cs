@@ -11,6 +11,6 @@ namespace MeConecta.Gram.Domain.Interface
         Task<ResponseEntity<ResponseFollowerEntity>> RequestFollowersAsync(string userName, string nextMaxId = null);
         Task<ResponseEntity<IList<long>>> UnfollowAsync(long[] followerRequesting);
         Task<ResponseEntity<IResult<InstaUserInfo>>> GetUserAsync(string userName);
-        Task<ResponseEntity<IResult<InstaDiscoverSearchResult>>> GetSearchUser(string search, int counterData);
+        Task<ResponseEntity<IResult<InstaDiscoverSearchResult>>> SearchUser(string search, int counterData);
     }
 }

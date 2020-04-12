@@ -19,7 +19,7 @@ namespace MeConecta.Gram.Core
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static IInstaHashTag Builder(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
+        public static IInstaHashTag Build(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
         {
             return new HashTag(hashtagProcessor, configuration);
         }

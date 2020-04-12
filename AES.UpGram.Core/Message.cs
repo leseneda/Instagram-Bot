@@ -27,7 +27,7 @@ namespace MeConecta.Gram.Core
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static IInstaMessage Builder(IInstaApi apiConnector, ConfigurationEntity configuration)
+        public static IInstaMessage Build(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
             return new Message(apiConnector, configuration);
         }

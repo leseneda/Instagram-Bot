@@ -18,6 +18,7 @@ namespace MeConecta.Gram.Core
         Lazy<IInstaUser> _user { get; }
         Lazy<IInstaMessage> _message { get; }
         Lazy<IInstaHashTag> _hashTag { get; }
+        Lazy<IInstaLocation> _location { get; }
 
         #endregion
 
@@ -26,10 +27,11 @@ namespace MeConecta.Gram.Core
         public IInstaUser User { get { return _user.Value; } }
         public IInstaMessage Message { get { return _message.Value; } }
         public IInstaHashTag HashTag { get { return _hashTag.Value; } }
+        public IInstaLocation Location { get { return _location.Value; } }
 
         #endregion
 
-        public static IInstaConnector Builder(ConfigurationEntity configuration)
+        public static IInstaConnector Build(ConfigurationEntity configuration)
         {
             return new Connector(configuration);
         }
@@ -114,9 +116,10 @@ namespace MeConecta.Gram.Core
                 })
                 .Build();
 
-            _user = new Lazy<IInstaUser>(() => Core.User.Builder(_apiConnector, configuration));
-            _message = new Lazy<IInstaMessage>(() => Core.Message.Builder(_apiConnector, configuration));
-            _hashTag = new Lazy<IInstaHashTag>(() => Core.HashTag.Builder(_apiConnector.HashtagProcessor, configuration));
+            _user = new Lazy<IInstaUser>(() => Core.User.Build(_apiConnector, configuration));
+            _message = new Lazy<IInstaMessage>(() => Core.Message.Build(_apiConnector, configuration));
+            _hashTag = new Lazy<IInstaHashTag>(() => Core.HashTag.Build(_apiConnector.HashtagProcessor, configuration));
+            _location = new Lazy<IInstaLocation>(() => Core.Location.Build(_apiConnector.LocationProcessor, configuration));
         }
 
         #region Session

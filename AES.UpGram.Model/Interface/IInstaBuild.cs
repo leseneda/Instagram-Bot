@@ -2,6 +2,7 @@
 {
     public interface IInstaBuild
     {
-        static IInstaConnector Builder;
+        //static IInstaConnector Builder;
+        static IInstaBuild Builder;
     }
 }

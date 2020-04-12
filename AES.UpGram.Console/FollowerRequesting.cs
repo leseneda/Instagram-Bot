@@ -12,12 +12,12 @@ namespace MeConecta.Gram.Console
         {
             var userResponse = connector.User.GetUserAsync(userNameFrom).Result;
 
-            if (!userResponse.Succeeded)
-            {
-                // Log
-            }
+            //if (!userResponse.Succeeded)
+            //{
+            //    // Log
+            //}
 
-            var basefollower = BaseService<FollowerRequestingEntity>.Builder();
+            var basefollower = BaseService<FollowerRequestingEntity>.Build();
             var follower = basefollower.GetAsync().Result
                 .LastOrDefault(cmp => cmp.AccountId == accountId);
 

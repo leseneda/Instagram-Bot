@@ -23,7 +23,7 @@ namespace MeConecta.Gram.Core
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static IInstaUser Builder(IInstaApi apiConnector, ConfigurationEntity configuration)
+        public static IInstaUser Build(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
             return new User(apiConnector, configuration);
         }
@@ -109,7 +109,7 @@ namespace MeConecta.Gram.Core
             };
         }
 
-        public async Task<ResponseEntity<IResult<InstaDiscoverSearchResult>>> GetSearchUser(string search, int counterData)
+        public async Task<ResponseEntity<IResult<InstaDiscoverSearchResult>>> SearchUser(string search, int counterData)
         {
             var result = await _discoverProcessor.SearchPeopleAsync(search, counterData);
 

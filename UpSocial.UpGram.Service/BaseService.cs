@@ -14,7 +14,7 @@ namespace MeConecta.Gram.Service
         {
         }
 
-        public static IBaseService<T> Builder()
+        public static IBaseService<T> Build()
         {
             _repository = new BaseDapperRepository<T>();
 
