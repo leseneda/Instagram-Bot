@@ -2,13 +2,13 @@
 
 namespace MeConecta.Gram.Domain.Interface
 {
-    public interface IInstaConnector : IInstaBuild
+    public interface IConnector : IBuild
     {
         Task<bool> LoginAsync();
         void LogoutAsync();
-        public IInstaMessage Message { get; }
+        public IMessage Message { get; }
         public IInstaUser User { get; }
-        public IInstaHashTag HashTag { get; }
-        public IInstaLocation Location { get; }
+        public IHashTag HashTag { get; }
+        public ILocation Location { get; }
     }
 }

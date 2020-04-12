@@ -5,7 +5,7 @@ using MeConecta.Gram.Domain.Entity;
 
 namespace MeConecta.Gram.Domain.Interface
 {
-    public interface IInstaMessage : IInstaBuild
+    public interface IMessage : IBuild
     {
         Task<ResponseEntity<IResult<InstaDirectInboxThreadList>>> SendDirectMessage(string userName, string message);
         Task<ResponseEntity<IResult<InstaDirectInboxThreadList>>> SendDirectMessage(string[] usersName, string message);

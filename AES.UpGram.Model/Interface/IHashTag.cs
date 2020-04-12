@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Domain.Interface
 {
-    public interface IInstaHashTag : IInstaBuild
+    public interface IHashTag : IBuild
     {
         Task<ResponseEntity<IResult<InstaSectionMedia>>> GetTopHashtagListAsync(string tagName);
         Task<ResponseEntity<IResult<InstaSectionMedia>>> GetRecentHashtagListAsync(string tagName);

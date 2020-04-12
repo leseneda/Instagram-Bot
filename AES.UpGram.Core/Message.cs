@@ -10,7 +10,7 @@ using MeConecta.Gram.Domain.Interface;
 
 namespace MeConecta.Gram.Core
 {
-    public class Message : IInstaMessage
+    public class Message : IMessage
     {
         #region Field
 
@@ -27,7 +27,7 @@ namespace MeConecta.Gram.Core
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static IInstaMessage Build(IInstaApi apiConnector, ConfigurationEntity configuration)
+        public static IMessage Build(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
             return new Message(apiConnector, configuration);
         }

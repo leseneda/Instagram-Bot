@@ -10,28 +10,28 @@ using MeConecta.Gram.Domain.Interface;
 
 namespace MeConecta.Gram.Core
 {
-    public class Connector : IInstaConnector
+    public class Connector : IConnector
     {
         #region Field
 
         static IInstaApi _apiConnector { get; set; }
         Lazy<IInstaUser> _user { get; }
-        Lazy<IInstaMessage> _message { get; }
-        Lazy<IInstaHashTag> _hashTag { get; }
-        Lazy<IInstaLocation> _location { get; }
+        Lazy<IMessage> _message { get; }
+        Lazy<IHashTag> _hashTag { get; }
+        Lazy<ILocation> _location { get; }
 
         #endregion
 
         #region Property
 
         public IInstaUser User { get { return _user.Value; } }
-        public IInstaMessage Message { get { return _message.Value; } }
-        public IInstaHashTag HashTag { get { return _hashTag.Value; } }
-        public IInstaLocation Location { get { return _location.Value; } }
+        public IMessage Message { get { return _message.Value; } }
+        public IHashTag HashTag { get { return _hashTag.Value; } }
+        public ILocation Location { get { return _location.Value; } }
 
         #endregion
 
-        public static IInstaConnector Build(ConfigurationEntity configuration)
+        public static IConnector Build(ConfigurationEntity configuration)
         {
             return new Connector(configuration);
         }
@@ -117,9 +117,9 @@ namespace MeConecta.Gram.Core
                 .Build();
 
             _user = new Lazy<IInstaUser>(() => Core.User.Build(_apiConnector, configuration));
-            _message = new Lazy<IInstaMessage>(() => Core.Message.Build(_apiConnector, configuration));
-            _hashTag = new Lazy<IInstaHashTag>(() => Core.HashTag.Build(_apiConnector.HashtagProcessor, configuration));
-            _location = new Lazy<IInstaLocation>(() => Core.Location.Build(_apiConnector.LocationProcessor, configuration));
+            _message = new Lazy<IMessage>(() => Core.Message.Build(_apiConnector, configuration));
+            _hashTag = new Lazy<IHashTag>(() => Core.HashTag.Build(_apiConnector.HashtagProcessor, configuration));
+            _location = new Lazy<ILocation>(() => Core.Location.Build(_apiConnector.LocationProcessor, configuration));
         }
 
         #region Session

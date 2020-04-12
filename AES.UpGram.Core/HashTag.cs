@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
-    public class HashTag : IInstaHashTag
+    public class HashTag : IHashTag
     {
         static IHashtagProcessor _hashtagProcessor;
         static PaginationParameters _paginationParameters;
@@ -19,7 +19,7 @@ namespace MeConecta.Gram.Core
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static IInstaHashTag Build(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
+        public static IHashTag Build(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
         {
             return new HashTag(hashtagProcessor, configuration);
         }
