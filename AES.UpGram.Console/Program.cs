@@ -23,7 +23,7 @@ namespace MeConecta.Gram.Console
             var accountBase = BaseServiceReadOnly<AccountEntity>.Build();
             var accountData = await accountBase.GetAsync();
             
-            foreach (var account in accountData.Where(cmp => cmp.Id == 2))
+            foreach (var account in accountData)
             {
                 configData.Account = account;
                 bool ret = new Runner().Execute(account.Id, 1, configData).Result;
