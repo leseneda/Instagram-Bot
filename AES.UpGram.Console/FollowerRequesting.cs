@@ -10,7 +10,7 @@ namespace MeConecta.Gram.Console
     {
         public void Execute(IConnector connector, string userNameFrom, int accountId)
         {
-            var userResponse = connector.User.GetUserAsync(userNameFrom).Result;
+            //var userResponse = connector.User.GetUserAsync(userNameFrom).Result;
 
             //if (!userResponse.Succeeded)
             //{

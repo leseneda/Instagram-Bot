@@ -12,17 +12,16 @@ namespace MeConecta.Gram.Core
 {
     public class Connector : IConnector
     {
-        #region Field
+        readonly IInstaApi _apiConnector;
+        static string _userName;
+        static string _password;
 
-        static IInstaApi _apiConnector { get; set; }
+        #region Property
+
         Lazy<IInstaUser> _user { get; }
         Lazy<IMessage> _message { get; }
         Lazy<IHashTag> _hashTag { get; }
         Lazy<ILocation> _location { get; }
-
-        #endregion
-
-        #region Property
 
         public IInstaUser User { get { return _user.Value; } }
         public IMessage Message { get { return _message.Value; } }
@@ -46,6 +45,12 @@ namespace MeConecta.Gram.Core
 
             if (!_apiConnector.IsUserAuthenticated)
             {
+                _apiConnector.SetUser(new UserSessionData()
+                {
+                    UserName = _userName,
+                    Password = _password,
+                });
+
                 await _apiConnector.SendRequestsBeforeLoginAsync();
                 await Task.Delay(5000);
 
@@ -88,12 +93,14 @@ namespace MeConecta.Gram.Core
             return result;
         }
 
-        public async void LogoutAsync()
+        public async Task<IResult<bool>> LogoutAsync()
         {
-            if (_apiConnector.IsUserAuthenticated)
+            if (!_apiConnector.IsUserAuthenticated)
             {
-                await _apiConnector.LogoutAsync();
+                return Result.Fail<bool>("no user authenticated");
             }
+
+            return await _apiConnector.LogoutAsync();
         }
 
         #endregion
@@ -109,12 +116,10 @@ namespace MeConecta.Gram.Core
                 {
                     FilePath = $"{configuration.Account.Name.ToLower()}.bin"
                 })
-                .SetUser(new UserSessionData()
-                {
-                    UserName = configuration.Account.Name,
-                    Password = configuration.Account.Password,
-                })
                 .Build();
+
+            _userName = configuration.Account.Name;
+            _password = configuration.Account.Password;
 
             _user = new Lazy<IInstaUser>(() => Core.User.Build(_apiConnector, configuration));
             _message = new Lazy<IMessage>(() => Core.Message.Build(_apiConnector, configuration));

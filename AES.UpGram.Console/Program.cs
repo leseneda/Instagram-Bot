@@ -1,11 +1,7 @@
 ﻿using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Service;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Console
@@ -21,13 +17,23 @@ namespace MeConecta.Gram.Console
             var configData = await configBase.GetAsync(1);
 
             var accountBase = BaseServiceReadOnly<AccountEntity>.Build();
-            var accountData = await accountBase.GetAsync();
-            
-            foreach (var account in accountData)
-            {
-                configData.Account = account;
-                bool ret = new Runner().Execute(account.Id, 1, configData).Result;
-            }
+            var accountData = await accountBase.GetAsync(1);
+
+            //var taskList = new List<Task>();
+
+            configData.Account = accountData;
+
+            var ret = new Runner().Execute(accountData.Id, 3, configData).Result;
+
+            //foreach (var account in accountData.Where(cmp => cmp.Id == 1))
+            //{
+            //    configData.Account = account;
+
+            //    Task task = Task.Run(() => new Runner().Execute(account.Id, 1, configData));
+            //    taskList.Add(task);
+            //}
+
+            //Task.WaitAll(taskList.ToArray());
         }
     }
 }
