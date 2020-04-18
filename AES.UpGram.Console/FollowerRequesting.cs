@@ -17,7 +17,7 @@ namespace MeConecta.Gram.Console
             //    // Log
             //}
 
-            var basefollower = BaseService<FollowerRequestingEntity>.Build();
+            var basefollower = BaseService<AccountFollowerRequestEntity>.Build();
             var follower = basefollower.GetAsync().Result
                 .LastOrDefault(cmp => cmp.AccountId == accountId);
 
@@ -27,7 +27,7 @@ namespace MeConecta.Gram.Console
 
             if (result.Succeeded)
             {
-                var followerRequesting = new FollowerRequestingEntity()
+                var followerRequesting = new AccountFollowerRequestEntity()
                 {
                     AccountId = accountId,
                     AccountFollowerId = 1, /// ARRUMA ISSO!!!!
@@ -35,7 +35,7 @@ namespace MeConecta.Gram.Console
                     Message = result.Message,
                     Succeeded = result.Succeeded,
                     ResponseType = "OK",  /// ARRUMA ISSO!!!!
-                    RequestedUserId = JsonSerializer.Serialize(result.ResponseData.RequestedUserId)
+                    FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.RequestedUserId)
                 };
 
                 var response = basefollower.PostAsync(followerRequesting).Result;

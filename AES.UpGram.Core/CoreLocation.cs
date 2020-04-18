@@ -70,29 +70,29 @@ namespace MeConecta.Gram.Core
             };
         }
 
-        //public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetRecentLocationListAsync(long locationId)
-        //{
-        //    var result = await _apiLocationProcessor.GetRecentLocationFeedsAsync(locationId, _paginationParameters);
+        public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetRecentLocationListAsync(long locationId)
+        {
+            var result = await _apiLocationProcessor.GetRecentLocationFeedsAsync(locationId, _paginationParameters);
 
-        //    return new ResponseEntity<IResult<InstaSectionMedia>>()
-        //    {
-        //        Succeeded = result.Succeeded,
-        //        Message = result.Info.Message,
-        //        ResponseData = result
-        //    };
-        //}
+            return new ResponseEntity<IResult<InstaSectionMedia>>()
+            {
+                Succeeded = result.Succeeded,
+                Message = result.Info.Message,
+                ResponseData = result
+            };
+        }
 
-        //public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetTopLocationListAsync(long locationId)
-        //{
-        //    var result = await _apiLocationProcessor.GetTopLocationFeedsAsync(locationId, _paginationParameters);
+        public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetTopLocationListAsync(long locationId)
+        {
+            var result = await _apiLocationProcessor.GetTopLocationFeedsAsync(locationId, _paginationParameters);
 
-        //    return new ResponseEntity<IResult<InstaSectionMedia>>()
-        //    {
-        //        Succeeded = result.Succeeded,
-        //        Message = result.Info.Message,
-        //        ResponseData = result
-        //    };
-        //}
+            return new ResponseEntity<IResult<InstaSectionMedia>>()
+            {
+                Succeeded = result.Succeeded,
+                Message = result.Info.Message,
+                ResponseData = result
+            };
+        }
 
         #endregion
     }

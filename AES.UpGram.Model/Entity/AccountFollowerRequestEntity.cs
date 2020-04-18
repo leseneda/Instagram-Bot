@@ -2,8 +2,8 @@
 
 namespace MeConecta.Gram.Domain.Entity
 {
-    [Table("FollowerRequesting")]
-    public class FollowerRequestingEntity : BaseEntity
+    [Table("AccountFollowerRequest")]
+    public class AccountFollowerRequestEntity : BaseEntity
     {
         public int AccountId { get; set; }
         public long AccountFollowerId { get; set; }
@@ -11,6 +11,6 @@ namespace MeConecta.Gram.Domain.Entity
         public bool Succeeded { get; set; }
         public string Message { get; set; }
         public string ResponseType { get; set; }
-        public string RequestedUserId { get; set; }
+        public string FollowerRequestPk { get; set; }
     }
 }

@@ -11,10 +11,5 @@ namespace MeConecta.Gram.Domain.Entity
 
         [Write(false)]
         public AccountEntity Account { get; set; }
-
-        ConfigurationEntity()
-        {
-            Account = new AccountEntity();
-        }
     }
 }

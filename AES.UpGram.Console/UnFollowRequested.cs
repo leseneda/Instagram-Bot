@@ -11,14 +11,14 @@ namespace MeConecta.Gram.Console
     {
         public void Execute(ICoreConnector connector)
         {
-            var baseFollow = BaseService<FollowerRequestingEntity>.Build();
+            var baseFollow = BaseService<AccountFollowerRequestEntity>.Build();
             var follow = baseFollow.GetAsync().Result.LastOrDefault();
-            var followRequesting = JsonSerializer.Deserialize<IList<long>>(follow.RequestedUserId);
+            var followRequesting = JsonSerializer.Deserialize<IList<long>>(follow.FollowerRequestPk);
             
             var unfollowedUsersFail = connector.User.UnfollowAsync(followRequesting.ToArray()).Result;
             var remainedUsers = followRequesting.Except(unfollowedUsersFail.ResponseData);
 
-            follow.RequestedUserId = (remainedUsers.Count() > 0) ? JsonSerializer.Serialize(remainedUsers) : null;
+            follow.FollowerRequestPk = (remainedUsers.Count() > 0) ? JsonSerializer.Serialize(remainedUsers) : null;
 
             var ret = baseFollow.PutAsync(follow).Result;
         }

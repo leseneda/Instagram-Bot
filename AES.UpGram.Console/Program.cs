@@ -1,5 +1,7 @@
-﻿using MeConecta.Gram.Domain.Entity;
+﻿using MeConecta.Gram.Core;
+using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Service;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Console
@@ -24,8 +26,8 @@ namespace MeConecta.Gram.Console
                 var ret = new Runner().Execute(account.Id, 1, configData).Result;
 
                 if (!ret)
-                { 
-                
+                {
+
                 }
             }
         }

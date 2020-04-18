@@ -16,8 +16,7 @@ namespace MeConecta.Gram.Core
         #region Field
 
         readonly IInstaApi _apiConnector;
-        string _accountName;
-        string _accountPassword;
+        readonly ConfigurationEntity _configuration;
 
         #endregion
 
@@ -48,9 +47,8 @@ namespace MeConecta.Gram.Core
                 })
                 .Build();
 
-            _accountName = configuration.Account.Name;
-            _accountPassword = configuration.Account.Password;
-
+            _configuration = configuration;
+            
             _user = new Lazy<ICoreUser>(() => Core.CoreUser.Build(_apiConnector, configuration));
             _message = new Lazy<ICoreMessage>(() => Core.CoreMessage.Build(_apiConnector, configuration));
             _hashTag = new Lazy<ICoreHashTag>(() => Core.CoreHashTag.Build(_apiConnector.HashtagProcessor, configuration));
@@ -82,8 +80,8 @@ namespace MeConecta.Gram.Core
 
             _apiConnector.SetUser(new UserSessionData()
             {
-                UserName = _accountName,
-                Password = _accountPassword,
+                UserName = _configuration.Account.Name,
+                Password = _configuration.Account.Password,
             });
 
             await _apiConnector.SendRequestsBeforeLoginAsync();
@@ -158,7 +156,7 @@ namespace MeConecta.Gram.Core
 
         void EraseSession()
         {
-            var fullPathFile = @$"{Environment.CurrentDirectory}\{_accountName.ToLower()}.bin";
+            var fullPathFile = @$"{Environment.CurrentDirectory}\{_configuration.Account.Name.ToLower()}.bin";
 
             if (File.Exists(fullPathFile))
             {
