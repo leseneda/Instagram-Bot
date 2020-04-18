@@ -34,9 +34,8 @@ namespace MeConecta.Gram.Service
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var dataString = response.Content.ReadAsStringAsync().Result;
-                    
-                    return JsonConvert.DeserializeObject<IEnumerable<GeocodingEntity>>(dataString);
+                    return JsonConvert
+                        .DeserializeObject<IEnumerable<GeocodingEntity>>(response.Content.ReadAsStringAsync().Result);
                 }
             }
             return null;

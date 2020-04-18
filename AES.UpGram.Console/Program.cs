@@ -8,7 +8,7 @@ namespace MeConecta.Gram.Console
     {
         static async Task Main(string[] args)
         {
-            //var geoCodeService = GeoCodeService.Builder();
+            //var geoCodeService = GeoCodeService.Build();
             //var geoCodeData = geoCodeService.SearchGeoCode("Rua vale de são martinho 14 sintra");
 
             var configBase = BaseServiceReadOnly<ConfigurationEntity>.Build();
