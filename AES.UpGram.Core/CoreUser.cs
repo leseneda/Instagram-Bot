@@ -12,9 +12,15 @@ namespace MeConecta.Gram.Core
 {
     public class CoreUser : ICoreUser
     {
+        #region Field
+
         static IUserProcessor _apiUserProcessor;
         static IDiscoverProcessor _discoverProcessor;
         static PaginationParameters _paginationParameters;
+
+        #endregion
+
+        #region Constructor
 
         private CoreUser(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
@@ -27,6 +33,10 @@ namespace MeConecta.Gram.Core
         {
             return new CoreUser(apiConnector, configuration);
         }
+
+        #endregion
+
+        #region User
 
         public async Task<ResponseEntity<ResponseFollowerEntity>> RequestFollowersAsync(string userName, string nextMaxId = null)
         {
@@ -124,5 +134,7 @@ namespace MeConecta.Gram.Core
                 ResponseData = result
             };
         }
+
+        #endregion
     }
 }

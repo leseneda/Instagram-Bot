@@ -3,10 +3,10 @@ using InstagramApiSharp.API;
 using InstagramApiSharp.API.Processors;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
-using System.Linq;
-using System.Threading.Tasks;
 using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
@@ -20,6 +20,8 @@ namespace MeConecta.Gram.Core
 
         #endregion
 
+        #region Constructor
+
         private CoreMessage(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
             _apiUserProcessor = apiConnector.UserProcessor;
@@ -31,6 +33,8 @@ namespace MeConecta.Gram.Core
         {
             return new CoreMessage(apiConnector, configuration);
         }
+
+        #endregion
 
         #region Messaging
 

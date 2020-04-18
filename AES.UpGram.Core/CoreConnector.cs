@@ -66,9 +66,9 @@ namespace MeConecta.Gram.Core
 
         #region Logging
 
-        public async Task<bool> LoginAsync()
+        public async Task<ResponseEntity<IResult<InstaLoginResult>>> LoginAsync()
         {
-            var result = false;
+            var response = new ResponseEntity<IResult<InstaLoginResult>>();
 
             LoadSession();
 
@@ -76,7 +76,7 @@ namespace MeConecta.Gram.Core
             {
                 if (!await Renew())
                 {
-                    return true;
+                    return response;
                 }
             }
 
@@ -89,19 +89,19 @@ namespace MeConecta.Gram.Core
             await _apiConnector.SendRequestsBeforeLoginAsync();
             await Task.Delay(5000);
 
-            var login = await _apiConnector.LoginAsync();
+            var result = await _apiConnector.LoginAsync();
 
-            if (login.Succeeded)
+            if (result.Succeeded)
             {
                 await _apiConnector.SendRequestsAfterLoginAsync();
 
                 SaveSession();
 
-                result = true;
+                response.ResponseData = result;
             }
             else
             {
-                if (login.Value == InstaLoginResult.ChallengeRequired)
+                if (result.Value == InstaLoginResult.ChallengeRequired)
                 {
                     var challenge = await GetChallenge();
 
@@ -111,7 +111,7 @@ namespace MeConecta.Gram.Core
                     }
                     else
                     {
-
+                        
                     }
                 }
                 else
@@ -120,17 +120,21 @@ namespace MeConecta.Gram.Core
                 }
             }
 
-            return result;
+            return response;
         }
 
-        public async Task<IResult<bool>> LogoutAsync()
+        public async Task<ResponseEntity<IResult<bool>>> LogoutAsync()
         {
-            if (!_apiConnector.IsUserAuthenticated)
+            IResult<bool> result = !_apiConnector.IsUserAuthenticated ? 
+                Result.Fail<bool>("Non authenticated user") : 
+                await _apiConnector.LogoutAsync();
+            
+            return new ResponseEntity<IResult<bool>>()
             {
-                return Result.Fail<bool>("no user authenticated");
-            }
-
-            return await _apiConnector.LogoutAsync();
+                Succeeded = result.Succeeded,
+                Message = result.Info.Message,
+                ResponseData = result
+            };
         }
 
         #endregion

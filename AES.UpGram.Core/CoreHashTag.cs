@@ -10,8 +10,14 @@ namespace MeConecta.Gram.Core
 {
     public class CoreHashTag : ICoreHashTag
     {
+        #region Field
+
         static IHashtagProcessor _hashtagProcessor;
         static PaginationParameters _paginationParameters;
+
+        #endregion
+
+        #region Constructor
 
         private CoreHashTag(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
         {
@@ -23,6 +29,10 @@ namespace MeConecta.Gram.Core
         {
             return new CoreHashTag(hashtagProcessor, configuration);
         }
+
+        #endregion
+
+        #region HashTagning 
 
         public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetTopHashtagListAsync(string tagName)
         {
@@ -47,5 +57,7 @@ namespace MeConecta.Gram.Core
                 ResponseData = result
             };
         }
+
+        #endregion
     }
 }

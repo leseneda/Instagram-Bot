@@ -1,4 +1,5 @@
 ﻿using InstagramApiSharp.Classes;
+using MeConecta.Gram.Domain.Entity;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Domain.Interface
@@ -10,7 +11,7 @@ namespace MeConecta.Gram.Domain.Interface
         public ICoreHashTag HashTag { get; }
         public ICoreLocation Location { get; }
 
-        Task<bool> LoginAsync();
-        Task<IResult<bool>> LogoutAsync();
+        Task<ResponseEntity<IResult<InstaLoginResult>>> LoginAsync();
+        Task<ResponseEntity<IResult<bool>>> LogoutAsync();
     }
 }

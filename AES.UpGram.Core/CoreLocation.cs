@@ -10,8 +10,14 @@ namespace MeConecta.Gram.Core
 {
     public class CoreLocation : ICoreLocation
     {
+        #region Field
+
         static ILocationProcessor _apiLocationProcessor;
         static PaginationParameters _paginationParameters;
+
+        #endregion
+
+        #region Constructor
 
         private CoreLocation(ILocationProcessor apiLocationProcessor, ConfigurationEntity configuration)
         {
@@ -23,6 +29,10 @@ namespace MeConecta.Gram.Core
         {
             return new CoreLocation(apiLocationProcessor, configuration);
         }
+
+        #endregion
+
+        #region Locationing
 
         public async Task<ResponseEntity<IResult<InstaLocationShortList>>> SearchLocationAsync(double latitude, double longitude, string search)
         {
@@ -59,7 +69,6 @@ namespace MeConecta.Gram.Core
                 ResponseData = result
             };
         }
-        
 
         //public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetRecentLocationListAsync(long locationId)
         //{
@@ -84,5 +93,7 @@ namespace MeConecta.Gram.Core
         //        ResponseData = result
         //    };
         //}
+
+        #endregion
     }
 }

@@ -20,7 +20,7 @@ namespace MeConecta.Gram.Console
             var connector = CoreConnector.Build(config);
             var login = await connector.LoginAsync();
 
-            if (login)
+            if (login.Succeeded)
             {
                 switch (choose)
                 {
@@ -52,6 +52,7 @@ namespace MeConecta.Gram.Console
                 }
 
                 //var result = await connector.LogoutAsync();
+                
                 connector = null;
 
                 return true;
