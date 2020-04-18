@@ -10,7 +10,7 @@ namespace MeConecta.Gram.Service
     {
         private static BaseDapperRepository<T> _repository;
 
-        private BaseServiceReadOnly()
+        protected BaseServiceReadOnly()
         {
         }
 

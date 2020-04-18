@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using MeConecta.Gram.Domain.Entity;
+﻿using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
 using MeConecta.Gram.Infra.Data.Repository;
+using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Service
 {
-    public class BaseService<T> : IBaseService<T> where T : BaseEntity
+    public class BaseService<T> : BaseServiceReadOnly<T>, IBaseService<T> where T : BaseEntity
     {
         private static BaseDapperRepository<T> _repository;
 
         private BaseService()
         {
+
         }
 
-        public static IBaseService<T> Build()
+        public static new IBaseService<T> Build()
         {
             _repository = new BaseDapperRepository<T>();
 
@@ -35,19 +35,10 @@ namespace MeConecta.Gram.Service
 
         #region Reading
 
-        public async Task<IEnumerable<T>> GetAsync() => await _repository.SelectAllAsync();
+        //public async Task<IEnumerable<T>> GetAsync() => await _repository.SelectAllAsync();
 
-        public async Task<T> GetAsync(int id) => await _repository.SelectAsync(id);
+        //public async Task<T> GetAsync(int id) => await _repository.SelectAsync(id);
 
         #endregion
-
-
-
-
-
-
-
-
-
     }
 }
