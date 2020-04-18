@@ -17,7 +17,7 @@ namespace MeConecta.Gram.Console
             config.Account.Name = account.Name;
             config.Account.Password = account.Password;
 
-            var connector = Connector.Build(config);
+            var connector = CoreConnector.Build(config);
             var login = await connector.LoginAsync();
 
             if (login)
@@ -34,12 +34,11 @@ namespace MeConecta.Gram.Console
 
                     case 3:
                         var recipients = new string[] { "leseneda" };
-
                         var body = "Olá, Tudo bem?\r\n\r\nMe chamo Carolina e recentemente eu escrevi um eBook com receitas de bolos veganos e sem glúten e publiquei ele na plataforma Hotmart.\r\n Gostaria de saber se você teria interesse em se afiliar e me ajudar com a divulgação 🙏 \r\nSe concordar irá receber 20 % do valor de cada venda realizada 😊 \r\n\r\nBom resto de semana e aguardo a sua resposta 😘";
 
                         foreach (var recipient in recipients)
                         {
-                            var ret = connector.Message.SendDirectMessage(recipient, body).Result;
+                            var ret = await connector.Message.SendDirectMessage(recipient, body);
 
                             if (!ret.Succeeded)
                             {
@@ -52,7 +51,7 @@ namespace MeConecta.Gram.Console
                         break;
                 }
 
-                var result = await connector.LogoutAsync();
+                //var result = await connector.LogoutAsync();
                 connector = null;
 
                 return true;

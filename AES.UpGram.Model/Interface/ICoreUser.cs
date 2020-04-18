@@ -6,7 +6,7 @@ using MeConecta.Gram.Domain.Entity;
 
 namespace MeConecta.Gram.Domain.Interface
 {
-    public interface IInstaUser : IBuild
+    public interface ICoreUser : IBuild
     {
         Task<ResponseEntity<ResponseFollowerEntity>> RequestFollowersAsync(string userName, string nextMaxId = null);
         Task<ResponseEntity<IList<long>>> UnfollowAsync(long[] followerRequesting);

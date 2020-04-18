@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 
 namespace MeConecta.Gram.Service
 {
-    public class GeoCodeService : IGeoCodeService
+    public class GeoCodeService : IGeoCode
     {
         private readonly string _urlEu = "https://eu1.locationiq.com/v1/search.php";
         private readonly string _token = "9db25f38c0462a";

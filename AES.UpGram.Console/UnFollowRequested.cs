@@ -9,7 +9,7 @@ namespace MeConecta.Gram.Console
 {
     public class UnFollowRequested
     {
-        public void Execute(IConnector connector)
+        public void Execute(ICoreConnector connector)
         {
             var baseFollow = BaseService<FollowerRequestingEntity>.Build();
             var follow = baseFollow.GetAsync().Result.LastOrDefault();

@@ -10,22 +10,22 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
-    public class User : IInstaUser
+    public class CoreUser : ICoreUser
     {
         static IUserProcessor _apiUserProcessor;
         static IDiscoverProcessor _discoverProcessor;
         static PaginationParameters _paginationParameters;
 
-        private User(IInstaApi apiConnector, ConfigurationEntity configuration)
+        private CoreUser(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
             _apiUserProcessor = apiConnector.UserProcessor;
             _discoverProcessor = apiConnector.DiscoverProcessor;
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static IInstaUser Build(IInstaApi apiConnector, ConfigurationEntity configuration)
+        public static ICoreUser Build(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
-            return new User(apiConnector, configuration);
+            return new CoreUser(apiConnector, configuration);
         }
 
         public async Task<ResponseEntity<ResponseFollowerEntity>> RequestFollowersAsync(string userName, string nextMaxId = null)

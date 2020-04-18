@@ -2,6 +2,6 @@
 {
     public interface IBuild
     {
-        static IBuild Builder;
+        static IBuild Build;
     }
 }

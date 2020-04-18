@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MeConecta.Gram.Domain.Interface
 {
-    public interface IGeoCodeService
+    public interface IGeoCode
     {
         IEnumerable<GeocodingEntity> SearchGeoCode(string query);
     }

@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
-    public class HashTag : IHashTag
+    public class CoreHashTag : ICoreHashTag
     {
         static IHashtagProcessor _hashtagProcessor;
         static PaginationParameters _paginationParameters;
 
-        private HashTag(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
+        private CoreHashTag(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
         {
             _hashtagProcessor = hashtagProcessor;
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static IHashTag Build(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
+        public static ICoreHashTag Build(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
         {
-            return new HashTag(hashtagProcessor, configuration);
+            return new CoreHashTag(hashtagProcessor, configuration);
         }
 
         public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetTopHashtagListAsync(string tagName)

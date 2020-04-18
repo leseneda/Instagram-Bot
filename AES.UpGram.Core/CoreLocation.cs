@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
-    public class Location : ILocation
+    public class CoreLocation : ICoreLocation
     {
         static ILocationProcessor _apiLocationProcessor;
         static PaginationParameters _paginationParameters;
 
-        private Location(ILocationProcessor apiLocationProcessor, ConfigurationEntity configuration)
+        private CoreLocation(ILocationProcessor apiLocationProcessor, ConfigurationEntity configuration)
         {
             _apiLocationProcessor = apiLocationProcessor;
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static ILocation Build(ILocationProcessor apiLocationProcessor, ConfigurationEntity configuration)
+        public static ICoreLocation Build(ILocationProcessor apiLocationProcessor, ConfigurationEntity configuration)
         {
-            return new Location(apiLocationProcessor, configuration);
+            return new CoreLocation(apiLocationProcessor, configuration);
         }
 
         public async Task<ResponseEntity<IResult<InstaLocationShortList>>> SearchLocationAsync(double latitude, double longitude, string search)
