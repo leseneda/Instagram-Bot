@@ -1,4 +1,5 @@
-﻿using MeConecta.Gram.Domain.Entity;
+﻿using MeConecta.Gram.Core;
+using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
 using System.Linq;
 using System.Text.Json;
@@ -11,20 +12,51 @@ namespace MeConecta.Gram.Service
     {
         #region Field
 
-        static ICoreUser _userCore;
+        static ICoreUser _coreUser;
 
         #endregion
 
         #region Constructor
 
-        private InstaUserService(ICoreUser userCore)
+        private InstaUserService(ConfigurationEntity configuration)
         {
-            _userCore = userCore;
+            var coreConnector = CoreConnector.Build(configuration);
+            var result = coreConnector.LoginAsync().Result;
+
+            _coreUser = result.Succeeded ? coreConnector.User : null;
         }
 
-        public static InstaUserService Build(ICoreUser userCore)
+        private InstaUserService(ICoreUser coreUser)
         {
-            return new InstaUserService(userCore);
+            _coreUser = coreUser;
+        }
+
+        #endregion
+
+        #region Build
+
+        public static InstaUserService Build(ConfigurationEntity configuration)
+        {
+            return new InstaUserService(configuration);
+        }
+
+        public static InstaUserService Build(string accountName)
+        {
+            var serviceConfig = BaseServiceReadOnly<ConfigurationEntity>.Build();
+            var baseConfig = serviceConfig.GetFirst();
+
+            var serviceAccount = BaseServiceReadOnly<AccountEntity>.Build();
+            var baseAccount = serviceAccount
+                .GetFirst(cmp => cmp.Name.ToLower() == accountName.ToLower());
+
+            baseConfig.Account = baseAccount;
+
+            return new InstaUserService(baseConfig);
+        }
+
+        public static InstaUserService Build(ICoreUser coreUser)
+        {
+            return new InstaUserService(coreUser);
         }
 
         #endregion
@@ -33,11 +65,11 @@ namespace MeConecta.Gram.Service
         {
             var serviceRequest = BaseService<AccountFollowerRequestEntity>.Build();
             var baseRequest = serviceRequest.GetWhere(cmp => cmp.IsActive 
-                && cmp.AccountId == _userCore.Account.Id)
+                && cmp.AccountId == _coreUser.Account.Id)
                 .FirstOrDefault();
 
             var followerPk = JsonSerializer.Deserialize<long[]>(baseRequest.FollowerRequestPk);
-            var result = await _userCore.UnfollowAsync(followerPk.ToArray());
+            var result = await _coreUser.UnfollowAsync(followerPk.ToArray());
 
             if (result.Succeeded)
             {
@@ -63,10 +95,10 @@ namespace MeConecta.Gram.Service
         {
             var serviceRequest = BaseService<AccountFollowerRequestEntity>.Build();
             var baseRequest = serviceRequest.GetWhere(cmp => cmp.IsActive
-                && cmp.AccountId == _userCore.Account.Id)
+                && cmp.AccountId == _coreUser.Account.Id)
                 .LastOrDefault();
 
-            var result = await _userCore.FollowAsync(fromAccountName, baseRequest?.FromMaxId ?? string.Empty);
+            var result = await _coreUser.FollowAsync(fromAccountName, baseRequest?.FromMaxId ?? string.Empty);
 
             if (result.Succeeded)
             {
@@ -76,7 +108,7 @@ namespace MeConecta.Gram.Service
                 
                 await serviceRequest.PostAsync(new AccountFollowerRequestEntity()
                 {
-                    AccountId = _userCore.Account.Id,
+                    AccountId = _coreUser.Account.Id,
                     AccountFollowerId = baseRequest.AccountFollowerId,
                     FromMaxId = result.ResponseData.NextMaxId,
                     Message = result.Message,

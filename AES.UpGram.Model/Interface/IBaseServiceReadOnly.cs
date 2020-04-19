@@ -14,8 +14,8 @@ namespace MeConecta.Gram.Domain.Interface
         
         IEnumerable<T> GetWhere(Func<T, bool> predicate);
 
-        T GetFirst(Func<T, bool> predicate);
+        T GetFirst(Func<T, bool> predicate = null);
 
-        T GetLast(Func<T, bool> predicate);
+        T GetLast(Func<T, bool> predicate = null);
     }
 }

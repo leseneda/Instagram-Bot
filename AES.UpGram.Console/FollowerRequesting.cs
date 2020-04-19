@@ -1,15 +1,25 @@
-﻿using MeConecta.Gram.Domain.Interface;
+﻿using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Interface;
 using MeConecta.Gram.Service;
 
 namespace MeConecta.Gram.Console
 {
     public class FollowerRequesting
     {
-        public void Execute(ICoreConnector connector, string userNameFrom, int accountId)
+        public void Execute(ICoreConnector connector, string userNameFrom, int accountId, 
+            ConfigurationEntity config, string accountName)
         {
-            var service = InstaUserService.Build(connector.User);
-            var request = service.FollowAsync(userNameFrom).Result;
-            
+            //var service1 = InstaUserService.Build(connector.User);
+            //var request1 = service1.FollowAsync(userNameFrom).Result;
+
+            //var service2 = InstaUserService.Build(config);
+            //var request2 = service2.FollowAsync(userNameFrom).Result;
+
+            var service3 = InstaUserService.Build(accountName);
+            var request3 = service3.FollowAsync(userNameFrom).Result;
+
+
+
             //var basefollower = BaseService<AccountFollowerRequestEntity>.Build();
             //var follower = basefollower.GetAsync().Result
             //    .LastOrDefault(cmp => cmp.AccountId == accountId);

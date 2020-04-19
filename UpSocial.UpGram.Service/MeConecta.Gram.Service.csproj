@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AES.UpGram.Core\MeConecta.Gram.Core.csproj" />
     <ProjectReference Include="..\AES.UpGram.Model\MeConecta.Gram.Domain.csproj" />
     <ProjectReference Include="..\AES.UpGram.Repository\MeConecta.Gram.Infra.Data.csproj" />
   </ItemGroup>

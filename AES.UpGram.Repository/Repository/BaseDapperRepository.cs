@@ -68,18 +68,22 @@ namespace MeConecta.Gram.Infra.Data.Repository
                 .Where(predicate);
         }
 
-        public T SelectFirst(Func<T, bool> predicate)
+        public T SelectFirst(Func<T, bool> predicate = null)
         {
             using var conn = Connect();
-            
-            return conn.GetAll<T>().FirstOrDefault(predicate);
+
+            return (predicate != null ?
+                conn.GetAll<T>().FirstOrDefault(predicate) :
+                conn.GetAll<T>().FirstOrDefault());
         }
 
-        public T SelectLast(Func<T, bool> predicate)
+        public T SelectLast(Func<T, bool> predicate = null)
         {
             using var conn = Connect();
 
-            return conn.GetAll<T>().LastOrDefault(predicate);
+            return (predicate != null ?
+                conn.GetAll<T>().LastOrDefault(predicate) :
+                conn.GetAll<T>().LastOrDefault());
         }
 
         #endregion

@@ -25,7 +25,7 @@ namespace MeConecta.Gram.Console
                 switch (choose)
                 {
                     case 1:
-                        new FollowerRequesting().Execute(connector, userNameFrom, account.Id);
+                        new FollowerRequesting().Execute(connector, userNameFrom, account.Id, config, config.Account.Name);
                         break;
 
                     case 2:
