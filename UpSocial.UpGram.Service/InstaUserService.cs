@@ -31,33 +31,35 @@ namespace MeConecta.Gram.Service
 
         public async Task<bool> UnfollowAsync()
         {
-            var service = BaseService<AccountFollowerRequestEntity>.Build();
-            var request = service.GetWhere(cmp => cmp.IsActive 
+            var serviceRequest = BaseService<AccountFollowerRequestEntity>.Build();
+            var baseRequest = serviceRequest.GetWhere(cmp => cmp.IsActive 
                 && cmp.AccountId == _userCore.Account.Id)
                 .FirstOrDefault();
 
-            var followerRequestPk = JsonSerializer.Deserialize<long[]>(request.FollowerRequestPk);
-            var result = await _userCore.UnfollowAsync(followerRequestPk.ToArray());
+            var followerPk = JsonSerializer.Deserialize<long[]>(baseRequest.FollowerRequestPk);
+            var result = await _userCore.UnfollowAsync(followerPk.ToArray());
 
             if (result.Succeeded)
             {
-                var followerRemained = followerRequestPk.Except(result.ResponseData);
-                var hasfollowerRemained = (followerRemained.Count() > 0);
+                var followerLeft = followerPk.Except(result.ResponseData);
+                var hasFollowerLeft = (followerLeft.Count() > 0);
 
-                request.FollowerRequestPk = hasfollowerRemained ? JsonSerializer.Serialize(followerRemained) : null;
-                request.IsActive = hasfollowerRemained ? true : false;
+                baseRequest.FollowerRequestPk = hasFollowerLeft ? JsonSerializer.Serialize(followerLeft) : null;
+                baseRequest.IsActive = hasFollowerLeft ? true : false;
 
-                return await service.PutAsync(request);
+                await serviceRequest.PutAsync(baseRequest);
+
+                // Activity log
             }
             else
             {
                 // Activity log
             }
 
-            return false;
+            return result.Succeeded;
         }
 
-        public async Task<long> FollowAsync(string fromAccountName)
+        public async Task<bool> FollowAsync(string fromAccountName)
         {
             var serviceRequest = BaseService<AccountFollowerRequestEntity>.Build();
             var baseRequest = serviceRequest.GetWhere(cmp => cmp.IsActive
@@ -66,46 +68,45 @@ namespace MeConecta.Gram.Service
 
             var result = await _userCore.FollowAsync(fromAccountName, baseRequest?.FromMaxId ?? string.Empty);
 
-            using (var scope = new TransactionScope())
+            if (result.Succeeded)
             {
-                if (result.Succeeded)
+                var hasNextMaxId = !string.IsNullOrWhiteSpace(result.ResponseData.NextMaxId);
+
+                using var scope = new TransactionScope();
+                
+                await serviceRequest.PostAsync(new AccountFollowerRequestEntity()
                 {
-                    var isAllThrough = string.IsNullOrWhiteSpace(result.ResponseData.NextMaxId);
+                    AccountId = _userCore.Account.Id,
+                    AccountFollowerId = baseRequest.AccountFollowerId,
+                    FromMaxId = result.ResponseData.NextMaxId,
+                    Message = result.Message,
+                    Succeeded = result.Succeeded,
+                    ResponseType = "OK",
+                    FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.RequestedUserId),
+                    IsActive = hasNextMaxId ? true : false
+                });
 
-                    await serviceRequest.PostAsync(new AccountFollowerRequestEntity()
-                    {
-                        AccountId = _userCore.Account.Id,
-                        AccountFollowerId = baseRequest.AccountFollowerId,
-                        FromMaxId = result.ResponseData.NextMaxId,
-                        Message = result.Message,
-                        Succeeded = result.Succeeded,
-                        ResponseType = "OK",
-                        FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.RequestedUserId),
-                        IsActive = isAllThrough ? false : true
-                    });
-
-                    if (isAllThrough)
-                    {
-                        var serviceFollower = BaseService<AccountFollowerEntity>.Build();
-                        var baseFollower = await serviceFollower.GetAsync(baseRequest.AccountFollowerId);
-
-                        baseFollower.IsActive = false;
-
-                        await serviceFollower.PutAsync(baseFollower);
-                    }
-                }
-                else
+                if (!hasNextMaxId)
                 {
-                    // Activity log
+                    var serviceFollower = BaseService<AccountFollowerEntity>.Build();
+                    var baseFollower = await serviceFollower.GetAsync(baseRequest.AccountFollowerId);
 
-                    return 0;
+                    baseFollower.IsActive = false;
+
+                    await serviceFollower.PutAsync(baseFollower);
                 }
+
+                // Activity log
 
                 scope.Complete();
             }
-
-            return 1;
+            else
+            {
+                // Activity log
+            }
+                
+            return result.Succeeded;
+            //}
         }
-
     }
 }

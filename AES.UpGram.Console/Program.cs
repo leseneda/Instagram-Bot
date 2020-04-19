@@ -1,6 +1,5 @@
 ﻿using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Service;
-using System;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Console
