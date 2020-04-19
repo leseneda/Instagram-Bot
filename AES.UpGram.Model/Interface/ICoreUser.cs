@@ -8,7 +8,8 @@ namespace MeConecta.Gram.Domain.Interface
 {
     public interface ICoreUser : IBuild
     {
-        Task<ResponseEntity<ResponseFollowerEntity>> RequestFollowersAsync(string userName, string nextMaxId = null);
+        AccountEntity Account { get; }
+        Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null);
         Task<ResponseEntity<IList<long>>> UnfollowAsync(long[] followerRequesting);
         Task<ResponseEntity<IResult<InstaUserInfo>>> GetUserAsync(string userName);
         Task<ResponseEntity<IResult<InstaDiscoverSearchResult>>> SearchUser(string search, int counterData);

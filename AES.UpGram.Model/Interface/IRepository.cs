@@ -10,7 +10,7 @@ namespace MeConecta.Gram.Domain.Interface
 
         Task<bool> UpdateAsync(T entity);
 
-        Task<bool> RemoveAsync(int id);
+        Task<bool> RemoveAsync(long id);
 
         Task<bool> RemoveAsync();
     }

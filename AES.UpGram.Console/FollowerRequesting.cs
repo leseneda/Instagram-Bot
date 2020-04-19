@@ -10,12 +10,25 @@ namespace MeConecta.Gram.Console
     {
         public void Execute(ICoreConnector connector, string userNameFrom, int accountId)
         {
-            //var userResponse = connector.User.GetUserAsync(userNameFrom).Result;
+            var unitOfWork = BasePatternUnitOfWork.Build();
 
-            //if (!userResponse.Succeeded)
-            //{
-            //    // Log
-            //}
+            var configuration = new ConfigurationEntity()
+            {
+                LogLevel = 1,
+                MaxPagesToLoad = 1,
+                RequestDelay = 1,
+            };
+
+            var configuration2 = new ConfigurationEntity()
+            {
+                LogLevel = 2,
+                MaxPagesToLoad = 2,
+                RequestDelay = 2,
+            };
+
+            unitOfWork.Post(configuration);
+            unitOfWork.Post(configuration2);
+            unitOfWork.Commit();
 
             var basefollower = BaseService<AccountFollowerRequestEntity>.Build();
             var follower = basefollower.GetAsync().Result
@@ -23,7 +36,7 @@ namespace MeConecta.Gram.Console
 
             string fromMaxId = follower?.FromMaxId ?? string.Empty;
 
-            var result = connector.User.RequestFollowersAsync(userNameFrom, fromMaxId).Result;
+            var result = connector.User.FollowAsync(userNameFrom, fromMaxId).Result;
 
             if (result.Succeeded)
             {

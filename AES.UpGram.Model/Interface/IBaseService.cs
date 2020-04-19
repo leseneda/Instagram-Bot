@@ -8,7 +8,7 @@ namespace MeConecta.Gram.Domain.Interface
 
         Task<bool> PutAsync(T entity);
 
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(long id);
 
         Task<bool> DeleteAsync();
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Domain.Interface
@@ -7,8 +8,14 @@ namespace MeConecta.Gram.Domain.Interface
     {
         static IBaseService<T> Builder;
 
-        Task<IEnumerable<T>> GetAsync();
+        Task<T> GetAsync(long id);
 
-        Task<T> GetAsync(int id);
+        Task<IEnumerable<T>> GetAsync();
+        
+        IEnumerable<T> GetWhere(Func<T, bool> predicate);
+
+        T GetFirst(Func<T, bool> predicate);
+
+        T GetLast(Func<T, bool> predicate);
     }
 }

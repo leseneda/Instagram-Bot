@@ -20,6 +20,8 @@ namespace MeConecta.Gram.Core
 
         #endregion
 
+        public AccountEntity Account { get; }
+
         #region Constructor
 
         private CoreUser(IInstaApi apiConnector, ConfigurationEntity configuration)
@@ -27,6 +29,8 @@ namespace MeConecta.Gram.Core
             _apiUserProcessor = apiConnector.UserProcessor;
             _discoverProcessor = apiConnector.DiscoverProcessor;
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
+            
+            Account = configuration.Account;
         }
 
         public static ICoreUser Build(IInstaApi apiConnector, ConfigurationEntity configuration)
@@ -38,7 +42,7 @@ namespace MeConecta.Gram.Core
 
         #region User
 
-        public async Task<ResponseEntity<ResponseFollowerEntity>> RequestFollowersAsync(string userName, string nextMaxId = null)
+        public async Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null)
         {
             var param = (!string.IsNullOrEmpty(nextMaxId) ?
                 _paginationParameters.StartFromMaxId(nextMaxId) :
@@ -96,7 +100,7 @@ namespace MeConecta.Gram.Core
 
             IResult<InstaFriendshipFullStatus> user;
 
-            var unfollowedUserFail = new List<long>();
+            var nonUnfollow = new List<long>();
 
             foreach (var userPk in requestedUsersPk)
             {
@@ -104,9 +108,11 @@ namespace MeConecta.Gram.Core
 
                 if (!user.Succeeded)
                 {
-                    unfollowedUserFail.Add(userPk);
+                    nonUnfollow.Add(userPk);
                 }
             }
+
+            responseBase.ResponseData = nonUnfollow;
 
             return responseBase;
         }
@@ -123,7 +129,7 @@ namespace MeConecta.Gram.Core
             };
         }
 
-        public async Task<ResponseEntity<IResult<InstaDiscoverSearchResult>>> SearchUser(string search, int counterData)
+        public async Task<ResponseEntity<IResult<InstaDiscoverSearchResult>>> SearchUser(string search, int counterData = 50)
         {
             var result = await _discoverProcessor.SearchPeopleAsync(search, counterData);
 

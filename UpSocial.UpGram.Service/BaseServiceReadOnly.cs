@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using MeConecta.Gram.Domain.Entity;
+﻿using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
 using MeConecta.Gram.Infra.Data.Repository;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Service
 {
@@ -10,8 +11,13 @@ namespace MeConecta.Gram.Service
     {
         private static BaseDapperRepository<T> _repository;
 
-        protected BaseServiceReadOnly()
+        private BaseServiceReadOnly()
         {
+        }
+
+        protected BaseServiceReadOnly(BaseDapperRepository<T> repository)
+        {
+            _repository = repository;
         }
 
         public static IBaseServiceReadOnly<T> Build()
@@ -23,7 +29,12 @@ namespace MeConecta.Gram.Service
 
         public async Task<IEnumerable<T>> GetAsync() => await _repository.SelectAllAsync();
 
-        public async Task<T> GetAsync(int id) => await _repository.SelectAsync(id);
+        public async Task<T> GetAsync(long id) => await _repository.SelectAsync(id);
 
+        public T GetFirst(Func<T, bool> predicate) => _repository.SelectFirst(predicate);
+
+        public T GetLast(Func<T, bool> predicate) => _repository.SelectLast(predicate);
+
+        public IEnumerable<T> GetWhere(Func<T, bool> predicate) => _repository.SelectWhere(predicate);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
 using MeConecta.Gram.Infra.Data.Repository;
+using System;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Service
@@ -9,9 +10,8 @@ namespace MeConecta.Gram.Service
     {
         private static BaseDapperRepository<T> _repository;
 
-        private BaseService()
+        private BaseService() : base(_repository)
         {
-
         }
 
         public static new IBaseService<T> Build()
@@ -25,19 +25,16 @@ namespace MeConecta.Gram.Service
 
         public async Task<long> PostAsync(T entity) => await _repository.InsertAsync(entity);
 
-        public async Task<bool> PutAsync(T entity) => await _repository.UpdateAsync(entity);
+        public async Task<bool> PutAsync(T entity) 
+        {
+            entity.UpdatedOn = DateTime.Now;
 
-        public async Task<bool> DeleteAsync(int id) => await _repository.RemoveAsync(id);
+            return await _repository.UpdateAsync(entity);
+        } 
+
+        public async Task<bool> DeleteAsync(long id) => await _repository.RemoveAsync(id);
 
         public async Task<bool> DeleteAsync() => await _repository.RemoveAsync();
-
-        #endregion
-
-        #region Reading
-
-        //public async Task<IEnumerable<T>> GetAsync() => await _repository.SelectAllAsync();
-
-        //public async Task<T> GetAsync(int id) => await _repository.SelectAsync(id);
 
         #endregion
     }

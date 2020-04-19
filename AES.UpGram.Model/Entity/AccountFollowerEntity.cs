@@ -7,6 +7,6 @@ namespace MeConecta.Gram.Domain.Entity
     {
         public int AccountId { get; set; }
         public string UserName { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

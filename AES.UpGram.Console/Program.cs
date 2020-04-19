@@ -1,7 +1,6 @@
-﻿using MeConecta.Gram.Core;
-using MeConecta.Gram.Domain.Entity;
+﻿using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Service;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Console
@@ -17,7 +16,7 @@ namespace MeConecta.Gram.Console
             var configData = await configBase.GetAsync(1);
 
             var accountBase = BaseServiceReadOnly<AccountEntity>.Build();
-            var accountData = await accountBase.GetAsync();
+            var accountData = accountBase.GetAsync().Result;
 
             foreach (var account in accountData)
             {

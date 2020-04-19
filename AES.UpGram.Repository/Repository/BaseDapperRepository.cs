@@ -1,8 +1,10 @@
 ﻿using Dapper.Contrib.Extensions;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Infra.Data.Repository
 {
@@ -24,7 +26,7 @@ namespace MeConecta.Gram.Infra.Data.Repository
             return await conn.UpdateAsync(entity);
         }
 
-        public async Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(long id)
         {
             using var conn = Connect();
 
@@ -44,7 +46,7 @@ namespace MeConecta.Gram.Infra.Data.Repository
 
         #region Reading
 
-        public async Task<T> SelectAsync(int id)
+        public async Task<T> SelectAsync(long id)
         {
             using var conn = Connect();
 
@@ -56,6 +58,28 @@ namespace MeConecta.Gram.Infra.Data.Repository
             using var conn = Connect();
 
             return await conn.GetAllAsync<T>();
+        }
+
+        public IEnumerable<T> SelectWhere(Func<T, bool> predicate)
+        {
+            using var conn = Connect();
+
+            return conn.GetAll<T>()
+                .Where(predicate);
+        }
+
+        public T SelectFirst(Func<T, bool> predicate)
+        {
+            using var conn = Connect();
+            
+            return conn.GetAll<T>().FirstOrDefault(predicate);
+        }
+
+        public T SelectLast(Func<T, bool> predicate)
+        {
+            using var conn = Connect();
+
+            return conn.GetAll<T>().LastOrDefault(predicate);
         }
 
         #endregion
