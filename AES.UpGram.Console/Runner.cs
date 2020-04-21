@@ -34,7 +34,7 @@ namespace MeConecta.Gram.Console
 
                     case 3:
                         var recipients = new string[] { "leseneda" };
-                        var body = "Olá, Tudo bem?\r\n\r\nMe chamo Carolina e recentemente eu escrevi um eBook com receitas de bolos veganos e sem glúten e publiquei ele na plataforma Hotmart.\r\n Gostaria de saber se você teria interesse em se afiliar e me ajudar com a divulgação 🙏 \r\nSe concordar irá receber 20 % do valor de cada venda realizada 😊 \r\n\r\nBom resto de semana e aguardo a sua resposta 😘";
+                        var body = "Olá, Tudo bem?\r\n\r\nMe chamo Carolina e recentemente eu escrevi um eBook com receitas de bolos veganos e sem glúten e gostaria de saber se você teria interesse em fazer uma troca de divulgação.\r\n Eu faço a propaganda dos seus produtos e você me ajuda com a propaganda do eBook 🙏 \r\n\r\nBom resto de semana e aguardo a sua resposta 😘";
 
                         foreach (var recipient in recipients)
                         {

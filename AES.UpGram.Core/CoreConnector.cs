@@ -187,7 +187,7 @@ namespace MeConecta.Gram.Core
             {
                 if (challenge.Value.SubmitPhoneRequired)
                 {
-                    var result = await _apiConnector.SubmitPhoneNumberForChallengeRequireAsync("numero do telefone da conta...");
+                    var result = await _apiConnector.SubmitPhoneNumberForChallengeRequireAsync(_configuration.Account.PhoneNumber);
 
                     if (result.Succeeded)
                     {
@@ -202,15 +202,33 @@ namespace MeConecta.Gram.Core
                 {
                     if (challenge.Value.StepData != null)
                     {
-                        if (!string.IsNullOrEmpty(challenge.Value.StepData.PhoneNumber))
-                        {
-
-                        }
-
                         if (!string.IsNullOrEmpty(challenge.Value.StepData.Email))
                         {
+                            var result = await _apiConnector.RequestVerifyCodeToEmailForChallengeRequireAsync();
 
+                            if (result.Succeeded)
+                            {
+
+                            }
+                            else 
+                            { 
+                            
+                            }
                         }
+                        else if (!string.IsNullOrEmpty(challenge.Value.StepData.PhoneNumber))
+                        {
+                            var result = await _apiConnector.RequestVerifyCodeToSMSForChallengeRequireAsync();
+
+                            if (result.Succeeded)
+                            {
+
+                            }
+                            else
+                            {
+
+                            }
+                        }
+
                     }
                 }
             }

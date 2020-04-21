@@ -11,7 +11,7 @@ namespace MeConecta.Gram.Console
     {
         public void Execute(ICoreConnector connector)
         {
-            var baseFollow = BaseService<AccountFollowerRequestEntity>.Build();
+            var baseFollow = BaseService<FollowerRequestEntity>.Build();
             var follow = baseFollow.GetAsync().Result.LastOrDefault();
             var followRequesting = JsonSerializer.Deserialize<IList<long>>(follow.FollowerRequestPk);
             

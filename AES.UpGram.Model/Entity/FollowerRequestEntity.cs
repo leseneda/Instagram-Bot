@@ -2,8 +2,8 @@
 
 namespace MeConecta.Gram.Domain.Entity
 {
-    [Table("AccountFollowerRequest")]
-    public class AccountFollowerRequestEntity : BaseEntity
+    [Table("FollowerRequest")]
+    public class FollowerRequestEntity : BaseEntity
     {
         public int AccountId { get; set; }
         public long AccountFollowerId { get; set; }
