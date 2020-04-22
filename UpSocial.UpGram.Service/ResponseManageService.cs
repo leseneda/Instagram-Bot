@@ -7,14 +7,26 @@ namespace MeConecta.Gram.Service
 {
     public static class ResponseManageService
     {
+        static readonly sbyte maxCount = 5;
+        static sbyte counter = 0;
+
         public static bool NonTroubleResponse(ResponseType responseType) 
         {
-            return Enum.GetValues(typeof(ResponseTypeNonTroubleEnum))
+            if (counter == maxCount)
+            {
+                return false;
+            }
+
+            var isNonTrouble = Enum.GetValues(typeof(ResponseTypeNonTroubleEnum))
                 .Cast<ResponseTypeNonTroubleEnum>()
-                .Any(item => (int)item == (int)responseType);
+                .Any(item => (short)item == (short)responseType);
+
+            if (isNonTrouble)
+            {
+                counter++;
+            }
+
+            return (counter == maxCount) ? false : isNonTrouble;
         }
-
-
-
     }
 }
