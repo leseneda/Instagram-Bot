@@ -71,32 +71,33 @@ namespace MeConecta.Gram.Service
                 var hasNextMaxId = !string.IsNullOrWhiteSpace(result.ResponseData.NextMaxId);
 
                 using var scope = new TransactionScope();
-                
-                await serviceRequest.PostAsync(new FollowerRequestEntity()
                 {
-                    AccountId = _coreUser.Account.Id,
-                    AccountFollowerId = baseRequest.AccountFollowerId,
-                    FromMaxId = result.ResponseData.NextMaxId,
-                    Message = result.Message,
-                    Succeeded = result.Succeeded,
-                    ResponseType = "OK",
-                    FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.RequestedUserId),
-                    IsActive = hasNextMaxId ? true : false
-                });
+                    await serviceRequest.PostAsync(new FollowerRequestEntity()
+                    {
+                        AccountId = _coreUser.Account.Id,
+                        AccountFollowerId = baseRequest.AccountFollowerId,
+                        FromMaxId = result.ResponseData.NextMaxId,
+                        Message = result.Message,
+                        Succeeded = result.Succeeded,
+                        ResponseType = "OK",
+                        FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.RequestedUserId),
+                        IsActive = hasNextMaxId ? true : false
+                    });
 
-                if (!hasNextMaxId)
-                {
-                    var serviceFollower = BaseService<AccountUserNameEntity>.Build();
-                    var baseFollower = await serviceFollower.GetAsync(baseRequest.AccountFollowerId);
+                    if (!hasNextMaxId)
+                    {
+                        var serviceFollower = BaseService<AccountUserNameEntity>.Build();
+                        var baseFollower = await serviceFollower.GetAsync(baseRequest.AccountFollowerId);
 
-                    baseFollower.IsActive = false;
+                        baseFollower.IsActive = false;
 
-                    await serviceFollower.PutAsync(baseFollower);
+                        await serviceFollower.PutAsync(baseFollower);
+                    }
+
+                    // Activity log
+
+                    scope.Complete();
                 }
-
-                // Activity log
-
-                scope.Complete();
             }
             else
             {

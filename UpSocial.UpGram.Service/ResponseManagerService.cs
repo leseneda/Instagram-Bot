@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace MeConecta.Gram.Service
 {
-    public static class ResponseManageService
+    public static class ResponseManagerService
     {
         static readonly sbyte maxCount = 5;
         static sbyte counter = 0;

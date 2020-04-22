@@ -75,7 +75,7 @@ namespace MeConecta.Gram.Core
                     }
                     else
                     {
-                        if (ResponseManageService.NonTroubleResponse(request.Info.ResponseType))
+                        if (ResponseManagerService.NonTroubleResponse(request.Info.ResponseType))
                         {
                             continue;
                         }
