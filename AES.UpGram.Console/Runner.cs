@@ -10,14 +10,14 @@ namespace MeConecta.Gram.Console
     {
         public async Task<bool> Execute(int accountId, int choose, ConfigurationEntity config)
         {
-            var account = await BaseServiceReadOnly<AccountEntity>.Build().GetAsync(accountId);
-            var userNameFrom = (await BaseServiceReadOnly<AccountUserNameEntity>.Build()
+            var account = await BaseReadOnlyService<AccountEntity>.Build().GetAsync(accountId);
+            var userNameFrom = (await BaseReadOnlyService<AccountUserNameEntity>.Build()
                 .GetAsync()).FirstOrDefault(cmp => cmp.AccountId == accountId && cmp.IsActive).UserName;
 
             config.Account.Name = account.Name;
             config.Account.Password = account.Password;
 
-            var connector = CoreConnector.Build(config);
+            var connector = ConnectorCore.Build(config);
             var login = await connector.LoginAsync();
 
             if (login.Succeeded)

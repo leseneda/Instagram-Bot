@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Service
 {
-    public class BaseServiceReadOnly<T> : IBaseServiceReadOnly<T> where T : BaseEntity
+    public class BaseReadOnlyService<T> : IBaseServiceReadOnly<T> where T : BaseEntity
     {
         private static BaseDapperRepository<T> _repository;
 
-        private BaseServiceReadOnly()
+        private BaseReadOnlyService()
         {
         }
 
-        protected BaseServiceReadOnly(BaseDapperRepository<T> repository)
+        protected BaseReadOnlyService(BaseDapperRepository<T> repository)
         {
             _repository = repository;
         }
@@ -24,7 +24,7 @@ namespace MeConecta.Gram.Service
         {
             _repository = new BaseDapperRepository<T>();
 
-            return new BaseServiceReadOnly<T>();
+            return new BaseReadOnlyService<T>();
         }
 
         public async Task<IEnumerable<T>> GetAsync() => await _repository.SelectAllAsync();

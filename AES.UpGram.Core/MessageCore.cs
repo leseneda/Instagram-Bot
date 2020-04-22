@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
-    public class CoreMessage : ICoreMessage
+    public class MessageCore : ICoreMessage
     {
         #region Field
 
@@ -22,7 +22,7 @@ namespace MeConecta.Gram.Core
 
         #region Constructor
 
-        private CoreMessage(IInstaApi apiConnector, ConfigurationEntity configuration)
+        private MessageCore(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
             _apiUserProcessor = apiConnector.UserProcessor;
             _apiMessagingProcessor = apiConnector.MessagingProcessor;
@@ -31,7 +31,7 @@ namespace MeConecta.Gram.Core
 
         public static ICoreMessage Build(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
-            return new CoreMessage(apiConnector, configuration);
+            return new MessageCore(apiConnector, configuration);
         }
 
         #endregion

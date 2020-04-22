@@ -5,12 +5,13 @@ using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
+using MeConecta.Gram.Service;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
-    public class CoreUser : ICoreUser
+    public class UserCore : ICoreUser
     {
         #region Field
 
@@ -24,7 +25,7 @@ namespace MeConecta.Gram.Core
 
         #region Constructor
 
-        private CoreUser(IInstaApi apiConnector, ConfigurationEntity configuration)
+        private UserCore(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
             _apiUserProcessor = apiConnector.UserProcessor;
             _discoverProcessor = apiConnector.DiscoverProcessor;
@@ -35,7 +36,7 @@ namespace MeConecta.Gram.Core
 
         public static ICoreUser Build(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
-            return new CoreUser(apiConnector, configuration);
+            return new UserCore(apiConnector, configuration);
         }
 
         #endregion
@@ -74,6 +75,11 @@ namespace MeConecta.Gram.Core
                     }
                     else
                     {
+                        if (ResponseManageService.NonTroubleResponse(request.Info.ResponseType))
+                        {
+                            continue;
+                        }
+
                         responseFollow.NextMaxId = nextMaxId;
 
                         responseBase.Succeeded = request.Succeeded;

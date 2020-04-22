@@ -1,4 +1,5 @@
-﻿using MeConecta.Gram.Domain.Entity;
+﻿using InstagramApiSharp.Classes;
+using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Service;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,10 +13,10 @@ namespace MeConecta.Gram.Console
             //var geoCodeService = GeoCodeService.Build();
             //var geoCodeData = geoCodeService.SearchGeoCode("Rua vale de são martinho 14 sintra");
 
-            var configBase = BaseServiceReadOnly<ConfigurationEntity>.Build();
+            var configBase = BaseReadOnlyService<ConfigurationEntity>.Build();
             var configData = await configBase.GetAsync(1);
 
-            var accountBase = BaseServiceReadOnly<AccountEntity>.Build();
+            var accountBase = BaseReadOnlyService<AccountEntity>.Build();
             var accountData = accountBase.GetAsync().Result;
 
             foreach (var account in accountData)

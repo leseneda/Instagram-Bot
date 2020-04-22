@@ -11,7 +11,7 @@ using System.IO;
 
 namespace MeConecta.Gram.Core
 {
-    public class CoreConnector : ICoreConnector
+    public class ConnectorCore : ICoreConnector
     {
         #region Field
 
@@ -36,7 +36,7 @@ namespace MeConecta.Gram.Core
 
         #region Constructor
 
-        private CoreConnector(ConfigurationEntity configuration)
+        private ConnectorCore(ConfigurationEntity configuration)
         {
             _apiConnector = InstaApiBuilder.CreateBuilder()
                 .UseLogger(new DebugLogger((LogLevel)configuration.LogLevel))
@@ -49,15 +49,15 @@ namespace MeConecta.Gram.Core
 
             _configuration = configuration;
             
-            _user = new Lazy<ICoreUser>(() => Core.CoreUser.Build(_apiConnector, configuration));
-            _message = new Lazy<ICoreMessage>(() => Core.CoreMessage.Build(_apiConnector, configuration));
-            _hashTag = new Lazy<ICoreHashTag>(() => Core.CoreHashTag.Build(_apiConnector.HashtagProcessor, configuration));
-            _location = new Lazy<ICoreLocation>(() => Core.CoreLocation.Build(_apiConnector.LocationProcessor, configuration));
+            _user = new Lazy<ICoreUser>(() => Core.UserCore.Build(_apiConnector, configuration));
+            _message = new Lazy<ICoreMessage>(() => Core.MessageCore.Build(_apiConnector, configuration));
+            _hashTag = new Lazy<ICoreHashTag>(() => Core.HashTagCore.Build(_apiConnector.HashtagProcessor, configuration));
+            _location = new Lazy<ICoreLocation>(() => Core.LocationCore.Build(_apiConnector.LocationProcessor, configuration));
         }
 
         public static ICoreConnector Build(ConfigurationEntity configuration)
         {
-            return new CoreConnector(configuration);
+            return new ConnectorCore(configuration);
         }
 
         #endregion

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Service
 {
-    public class BaseService<T> : BaseServiceReadOnly<T>, IBaseService<T> where T : BaseEntity
+    public class BaseService<T> : BaseReadOnlyService<T>, IBaseService<T> where T : BaseEntity
     {
         private static BaseDapperRepository<T> _repository;
 
