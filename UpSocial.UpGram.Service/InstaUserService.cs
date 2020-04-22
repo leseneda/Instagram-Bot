@@ -86,7 +86,7 @@ namespace MeConecta.Gram.Service
 
                 if (!hasNextMaxId)
                 {
-                    var serviceFollower = BaseService<AccountFollowerEntity>.Build();
+                    var serviceFollower = BaseService<AccountUserNameEntity>.Build();
                     var baseFollower = await serviceFollower.GetAsync(baseRequest.AccountFollowerId);
 
                     baseFollower.IsActive = false;

@@ -11,7 +11,7 @@ namespace MeConecta.Gram.Console
         public async Task<bool> Execute(int accountId, int choose, ConfigurationEntity config)
         {
             var account = await BaseServiceReadOnly<AccountEntity>.Build().GetAsync(accountId);
-            var userNameFrom = (await BaseServiceReadOnly<AccountFollowerEntity>.Build()
+            var userNameFrom = (await BaseServiceReadOnly<AccountUserNameEntity>.Build()
                 .GetAsync()).FirstOrDefault(cmp => cmp.AccountId == accountId && cmp.IsActive).UserName;
 
             config.Account.Name = account.Name;
