@@ -84,14 +84,18 @@ namespace MeConecta.Gram.Core
                 Password = _configuration.Account.Password,
             });
 
-            await _apiConnector.SendRequestsBeforeLoginAsync();
-            await Task.Delay(5000);
+            await _apiConnector.SendRequestsBeforeLoginAsync()
+                .ConfigureAwait(false);
+            await Task.Delay(5000)
+                .ConfigureAwait(false);
 
-            var result = await _apiConnector.LoginAsync();
+            var result = await _apiConnector.LoginAsync()
+                .ConfigureAwait(false);
 
             if (result.Succeeded)
             {
-                await _apiConnector.SendRequestsAfterLoginAsync();
+                await _apiConnector.SendRequestsAfterLoginAsync()
+                    .ConfigureAwait(false);
 
                 SaveSession();
 
@@ -101,7 +105,8 @@ namespace MeConecta.Gram.Core
             {
                 if (result.Value == InstaLoginResult.ChallengeRequired)
                 {
-                    var challenge = await GetChallenge();
+                    var challenge = await GetChallenge()
+                        .ConfigureAwait(false);
 
                     if (challenge.Succeeded)
                     {
@@ -125,7 +130,8 @@ namespace MeConecta.Gram.Core
         {
             IResult<bool> result = !_apiConnector.IsUserAuthenticated ? 
                 Result.Fail<bool>("Non authenticated user") : 
-                await _apiConnector.LogoutAsync();
+                await _apiConnector.LogoutAsync()
+                    .ConfigureAwait(false);
             
             return new ResponseEntity<IResult<bool>>()
             {
@@ -181,13 +187,15 @@ namespace MeConecta.Gram.Core
 
         async Task<IResult<InstaChallengeRequireVerifyMethod>> GetChallenge()
         {
-            var challenge = await _apiConnector.GetChallengeRequireVerifyMethodAsync();
+            var challenge = await _apiConnector.GetChallengeRequireVerifyMethodAsync()
+                .ConfigureAwait(false);
 
             if (challenge.Succeeded)
             {
                 if (challenge.Value.SubmitPhoneRequired)
                 {
-                    var result = await _apiConnector.SubmitPhoneNumberForChallengeRequireAsync(_configuration.Account.PhoneNumber);
+                    var result = await _apiConnector.SubmitPhoneNumberForChallengeRequireAsync(_configuration.Account.PhoneNumber)
+                        .ConfigureAwait(false);
 
                     if (result.Succeeded)
                     {
@@ -204,7 +212,8 @@ namespace MeConecta.Gram.Core
                     {
                         if (!string.IsNullOrEmpty(challenge.Value.StepData.Email))
                         {
-                            var result = await _apiConnector.RequestVerifyCodeToEmailForChallengeRequireAsync();
+                            var result = await _apiConnector.RequestVerifyCodeToEmailForChallengeRequireAsync()
+                                .ConfigureAwait(false);
 
                             if (result.Succeeded)
                             {
@@ -217,7 +226,8 @@ namespace MeConecta.Gram.Core
                         }
                         else if (!string.IsNullOrEmpty(challenge.Value.StepData.PhoneNumber))
                         {
-                            var result = await _apiConnector.RequestVerifyCodeToSMSForChallengeRequireAsync();
+                            var result = await _apiConnector.RequestVerifyCodeToSMSForChallengeRequireAsync()
+                                .ConfigureAwait(false);
 
                             if (result.Succeeded)
                             {

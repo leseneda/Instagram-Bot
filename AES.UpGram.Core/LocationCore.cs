@@ -36,7 +36,8 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<InstaLocationShortList>>> SearchLocationAsync(double latitude, double longitude, string search)
         {
-            var result = await _apiLocationProcessor.SearchLocationAsync(latitude, longitude, search);
+            var result = await _apiLocationProcessor.SearchLocationAsync(latitude, longitude, search)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaLocationShortList>>()
             {
@@ -48,7 +49,8 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<InstaPlaceList>>> SearchPlacesAsync(double latitude, double longitude)
         {
-            var result = await _apiLocationProcessor.SearchPlacesAsync(latitude, longitude, _paginationParameters);
+            var result = await _apiLocationProcessor.SearchPlacesAsync(latitude, longitude, _paginationParameters)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaPlaceList>>()
             {
@@ -60,7 +62,8 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<InstaUserSearchLocation>>> SearchUserByLocationAsync(double latitude, double longitude, string userName, int counter)
         {
-            var result = await _apiLocationProcessor.SearchUserByLocationAsync(latitude, longitude, userName, counter);
+            var result = await _apiLocationProcessor.SearchUserByLocationAsync(latitude, longitude, userName, counter)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaUserSearchLocation>>()
             {
@@ -72,7 +75,8 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetRecentLocationListAsync(long locationId)
         {
-            var result = await _apiLocationProcessor.GetRecentLocationFeedsAsync(locationId, _paginationParameters);
+            var result = await _apiLocationProcessor.GetRecentLocationFeedsAsync(locationId, _paginationParameters)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaSectionMedia>>()
             {
@@ -84,7 +88,8 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetTopLocationListAsync(long locationId)
         {
-            var result = await _apiLocationProcessor.GetTopLocationFeedsAsync(locationId, _paginationParameters);
+            var result = await _apiLocationProcessor.GetTopLocationFeedsAsync(locationId, _paginationParameters)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaSectionMedia>>()
             {

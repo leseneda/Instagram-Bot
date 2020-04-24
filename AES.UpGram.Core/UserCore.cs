@@ -49,7 +49,8 @@ namespace MeConecta.Gram.Core
                 _paginationParameters.StartFromMaxId(nextMaxId) :
                 _paginationParameters);
 
-            var result = await _apiUserProcessor.GetUserFollowersAsync(userName, param);
+            var result = await _apiUserProcessor.GetUserFollowersAsync(userName, param)
+                .ConfigureAwait(false);
             
             var responseBase = new ResponseEntity<ResponseFollowerEntity>()
             {
@@ -67,7 +68,8 @@ namespace MeConecta.Gram.Core
 
                 foreach (var user in users)
                 {
-                    request = await _apiUserProcessor.FollowUserAsync(user.Pk);
+                    request = await _apiUserProcessor.FollowUserAsync(user.Pk)
+                        .ConfigureAwait(false);
 
                     if (request.Succeeded)
                     {
@@ -110,7 +112,8 @@ namespace MeConecta.Gram.Core
 
             foreach (var userPk in requestedUsersPk)
             {
-                user = await _apiUserProcessor.UnFollowUserAsync(userPk);
+                user = await _apiUserProcessor.UnFollowUserAsync(userPk)
+                    .ConfigureAwait(false);
 
                 if (!user.Succeeded)
                 {
@@ -125,7 +128,8 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<InstaUserInfo>>> GetUserAsync(string userName)
         {
-            var result = await _apiUserProcessor.GetUserInfoByUsernameAsync(userName);
+            var result = await _apiUserProcessor.GetUserInfoByUsernameAsync(userName)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaUserInfo>>()
             {
@@ -137,7 +141,8 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<InstaDiscoverSearchResult>>> SearchUser(string search, int counterData = 50)
         {
-            var result = await _discoverProcessor.SearchPeopleAsync(search, counterData);
+            var result = await _discoverProcessor.SearchPeopleAsync(search, counterData)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaDiscoverSearchResult>>()
             {

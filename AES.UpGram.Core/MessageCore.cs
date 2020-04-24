@@ -40,13 +40,15 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<InstaDirectInboxThreadList>>> SendDirectMessage(string userName, string message)
         {
-            var user = await _apiUserProcessor.GetUserAsync(userName);
+            var user = await _apiUserProcessor.GetUserAsync(userName)
+                .ConfigureAwait(false);
 
             var userPk = (user?.Succeeded ?? false) ?
                 user?.Value?.Pk.ToString() ?? string.Empty :
                 string.Empty;
 
-            var result = await _apiMessagingProcessor.SendDirectTextAsync(userPk, null, message);
+            var result = await _apiMessagingProcessor.SendDirectTextAsync(userPk, null, message)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaDirectInboxThreadList>>()
             {
@@ -63,14 +65,16 @@ namespace MeConecta.Gram.Core
 
             foreach (var userName in usersName)
             {
-                user = await _apiUserProcessor.GetUserAsync(userName);
+                user = await _apiUserProcessor.GetUserAsync(userName)
+                    .ConfigureAwait(false);
 
                 recipients = (user?.Succeeded ?? false) ?
                     string.Concat(recipients, user?.Value?.Pk.ToString() ?? string.Empty, ",") :
                     recipients;
             }
 
-            var result = await _apiMessagingProcessor.SendDirectTextAsync(recipients, null, message);
+            var result = await _apiMessagingProcessor.SendDirectTextAsync(recipients, null, message)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaDirectInboxThreadList>>()
             {
@@ -82,11 +86,13 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<bool>>> SendDirectMessageLink(string userName, string link, string message)
         {
-            var inbox = await _apiMessagingProcessor.GetDirectInboxAsync(_paginationParameters);
+            var inbox = await _apiMessagingProcessor.GetDirectInboxAsync(_paginationParameters)
+                .ConfigureAwait(false);
             var thread = inbox.Value.Inbox.Threads
                 .FirstOrDefault(u => u.Users.FirstOrDefault().UserName.ToLower() == userName.ToLower());
 
-            var result = await _apiMessagingProcessor.SendDirectLinkAsync(message, link, thread?.ThreadId);
+            var result = await _apiMessagingProcessor.SendDirectLinkAsync(message, link, thread?.ThreadId)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<bool>>()
             {

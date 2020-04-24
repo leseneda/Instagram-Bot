@@ -36,7 +36,8 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetTopHashtagListAsync(string tagName)
         {
-            var result = await _hashtagProcessor.GetTopHashtagMediaListAsync(tagName, _paginationParameters);
+            var result = await _hashtagProcessor.GetTopHashtagMediaListAsync(tagName, _paginationParameters)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaSectionMedia>>()
             {
@@ -48,7 +49,8 @@ namespace MeConecta.Gram.Core
 
         public async Task<ResponseEntity<IResult<InstaSectionMedia>>> GetRecentHashtagListAsync(string tagName)
         {
-            var result = await _hashtagProcessor.GetRecentHashtagMediaListAsync(tagName, _paginationParameters);
+            var result = await _hashtagProcessor.GetRecentHashtagMediaListAsync(tagName, _paginationParameters)
+                .ConfigureAwait(false);
 
             return new ResponseEntity<IResult<InstaSectionMedia>>()
             {

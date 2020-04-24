@@ -64,13 +64,14 @@ namespace MeConecta.Gram.Service
             var baseRequest = serviceRequest.GetLast(cmp => cmp.IsActive
                 && cmp.AccountId == _coreUser.Account.Id);
 
-            var result = await _coreUser.FollowAsync(fromAccountName, baseRequest.FromMaxId ?? string.Empty);
+            var result = await _coreUser.FollowAsync(fromAccountName, baseRequest.FromMaxId ?? string.Empty)
+                .ConfigureAwait(false);
 
             if (result.Succeeded)
             {
                 var hasNextMaxId = !string.IsNullOrWhiteSpace(result.ResponseData.NextMaxId);
 
-                using var scope = new TransactionScope();
+                using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
                 {
                     await serviceRequest.PostAsync(new FollowerRequestEntity()
                     {
@@ -82,7 +83,8 @@ namespace MeConecta.Gram.Service
                         ResponseType = "OK",
                         FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.RequestedUserId),
                         IsActive = hasNextMaxId ? true : false
-                    });
+                    })
+                        .ConfigureAwait(false);
 
                     if (!hasNextMaxId)
                     {
@@ -91,7 +93,8 @@ namespace MeConecta.Gram.Service
 
                         baseFollower.IsActive = false;
 
-                        await serviceFollower.PutAsync(baseFollower);
+                        await serviceFollower.PutAsync(baseFollower)
+                            .ConfigureAwait(false);
                     }
 
                     // Activity log
