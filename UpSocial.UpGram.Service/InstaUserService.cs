@@ -36,7 +36,8 @@ namespace MeConecta.Gram.Service
                 && cmp.AccountId == _coreUser.Account.Id);
 
             var followerPk = JsonSerializer.Deserialize<long[]>(baseRequest.FollowerRequestPk);
-            var result = await _coreUser.UnfollowAsync(followerPk.ToArray());
+            var result = await _coreUser.UnfollowAsync(followerPk.ToArray())
+                .ConfigureAwait(false) ;
 
             if (result.Succeeded)
             {
@@ -46,7 +47,8 @@ namespace MeConecta.Gram.Service
                 baseRequest.FollowerRequestPk = hasFollowerLeft ? JsonSerializer.Serialize(followerLeft) : null;
                 baseRequest.IsActive = hasFollowerLeft ? true : false;
 
-                await serviceRequest.PutAsync(baseRequest);
+                await serviceRequest.PutAsync(baseRequest)
+                    .ConfigureAwait(false);
 
                 // Activity log
             }
@@ -89,7 +91,8 @@ namespace MeConecta.Gram.Service
                     if (!hasNextMaxId)
                     {
                         var serviceFollower = BaseService<AccountUserNameEntity>.Build();
-                        var baseFollower = await serviceFollower.GetAsync(baseRequest.AccountFollowerId);
+                        var baseFollower = await serviceFollower.GetAsync(baseRequest.AccountFollowerId)
+                            .ConfigureAwait(false);
 
                         baseFollower.IsActive = false;
 
