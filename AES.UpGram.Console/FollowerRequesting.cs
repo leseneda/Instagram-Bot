@@ -6,7 +6,7 @@ namespace MeConecta.Gram.Console
 {
     public class FollowerRequesting
     {
-        public void Execute(ICoreConnector connector, string userNameFrom, int accountId, 
+        public void Execute(ICoreConnector connector, string userNameFrom, long accountId, 
             ConfigurationEntity config, string accountName)
         {
             var service = InstaUserService.Build(connector.User);

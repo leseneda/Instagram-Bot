@@ -11,5 +11,6 @@ namespace MeConecta.Gram.Domain.Entity
 
         public IList<long> RequestedUserId { get; set; } 
         public string NextMaxId { get; set; }
+        public string ResponseType { get; set; }
     }
 }

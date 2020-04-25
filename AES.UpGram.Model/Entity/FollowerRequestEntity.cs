@@ -5,7 +5,7 @@ namespace MeConecta.Gram.Domain.Entity
     [Table("FollowerRequest")]
     public class FollowerRequestEntity : BaseEntity
     {
-        public int AccountId { get; set; }
+        public long AccountId { get; set; }
         public long AccountFollowerId { get; set; }
         public string FromMaxId { get; set; }
         public string Message { get; set; }

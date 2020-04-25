@@ -50,8 +50,6 @@ namespace MeConecta.Gram.Service
 
                 await serviceRequest.PutAsync(baseRequest)
                     .ConfigureAwait(false);
-
-                // Activity log
             }
             else
             {
@@ -60,9 +58,21 @@ namespace MeConecta.Gram.Service
 
                 await serviceRequest.PutAsync(baseRequest)
                     .ConfigureAwait(false);
-
-                // Activity log : baseRequest.Message
             }
+
+            var serviceLog = BaseService<ActivityLogEntity>.Build();
+            
+            await serviceLog.PutAsync(new ActivityLogEntity()
+            {
+                Type = "Unfollow",
+                FollowerRequestId = baseRequest.Id,
+                Message = result.Message,
+                ResponseType = baseRequest.IsActive ? 
+                    "It is not be able to unfollow" : 
+                    "Reached maximum attempts to unfollow",
+                Succeeded = result.Succeeded
+            })
+                .ConfigureAwait(false);
 
             return result.Succeeded;
         }
@@ -107,16 +117,22 @@ namespace MeConecta.Gram.Service
                             .ConfigureAwait(false);
                     }
 
-                    // Activity log
-
                     scope.Complete();
                 }
             }
-            else
+
+            var serviceLog = BaseService<ActivityLogEntity>.Build();
+
+            await serviceLog.PutAsync(new ActivityLogEntity()
             {
-                // Activity log
-            }
-                
+                Type = "ToFollow",
+                FollowerRequestId = baseRequest.Id,
+                Message = result.Message,
+                ResponseType = result.ResponseData.ResponseType,
+                Succeeded = result.Succeeded
+            })
+                .ConfigureAwait(false);
+
             return result.Succeeded;
         }
     }

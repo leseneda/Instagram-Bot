@@ -8,7 +8,7 @@ namespace MeConecta.Gram.Console
 {
     public class Runner
     {
-        public async Task<bool> Execute(int accountId, int choose, ConfigurationEntity config)
+        public async Task<bool> Execute(long accountId, int choose, ConfigurationEntity config)
         {
             var account = await BaseReadOnlyService<AccountEntity>.Build().GetAsync(accountId);
             var userNameFrom = (await BaseReadOnlyService<AccountUserNameEntity>.Build()

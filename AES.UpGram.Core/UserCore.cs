@@ -83,6 +83,7 @@ namespace MeConecta.Gram.Core
                         }
 
                         responseFollow.NextMaxId = nextMaxId;
+                        responseFollow.ResponseType = request.Info.ResponseType.ToString();
 
                         responseBase.Succeeded = request.Succeeded;
                         responseBase.Message = request.Info.Message;
