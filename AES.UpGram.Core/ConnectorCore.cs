@@ -72,7 +72,7 @@ namespace MeConecta.Gram.Core
 
             if (_apiConnector.IsUserAuthenticated)
             {
-                if (!await Renew())
+                if (!await IsToRenew())
                 {
                     return response;
                 }
@@ -172,7 +172,7 @@ namespace MeConecta.Gram.Core
 
         #endregion
 
-        async Task<bool> Renew()
+        async Task<bool> IsToRenew()
         {
             var request = await _apiConnector.UserProcessor.GetCurrentUserAsync();
             var renew = (!request.Succeeded && (request.Info.ResponseType == ResponseType.LoginRequired));
