@@ -12,6 +12,7 @@ namespace MeConecta.Gram.Service
         #region Field
 
         static ICoreUser _coreUser;
+        readonly sbyte _amountAttemptUnfollowing = 3;
 
         #endregion
 
@@ -54,7 +55,13 @@ namespace MeConecta.Gram.Service
             }
             else
             {
-                // Activity log
+                baseRequest.IsActive = !(_amountAttemptUnfollowing == (baseRequest.AmountAttemptUnfollowing + 1));
+                baseRequest.AmountAttemptUnfollowing++;
+
+                await serviceRequest.PutAsync(baseRequest)
+                    .ConfigureAwait(false);
+
+                // Activity log : baseRequest.Message
             }
 
             return result.Succeeded;
@@ -81,10 +88,10 @@ namespace MeConecta.Gram.Service
                         AccountFollowerId = baseRequest.AccountFollowerId,
                         FromMaxId = result.ResponseData.NextMaxId,
                         Message = result.Message,
-                        Succeeded = result.Succeeded,
                         ResponseType = "OK",
                         FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.RequestedUserId),
-                        IsActive = hasNextMaxId ? true : false
+                        AmountAttemptUnfollowing = 0,
+                        IsActive = hasNextMaxId ? true : false,
                     })
                         .ConfigureAwait(false);
 
@@ -111,7 +118,6 @@ namespace MeConecta.Gram.Service
             }
                 
             return result.Succeeded;
-            //}
         }
     }
 }

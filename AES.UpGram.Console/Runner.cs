@@ -51,8 +51,6 @@ namespace MeConecta.Gram.Console
                         break;
                 }
 
-                //var result = await connector.LogoutAsync();
-                
                 connector = null;
 
                 return true;

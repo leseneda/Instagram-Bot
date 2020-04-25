@@ -8,10 +8,10 @@ namespace MeConecta.Gram.Domain.Entity
         public int AccountId { get; set; }
         public long AccountFollowerId { get; set; }
         public string FromMaxId { get; set; }
-        public bool Succeeded { get; set; }
         public string Message { get; set; }
         public string ResponseType { get; set; }
         public string FollowerRequestPk { get; set; }
+        public byte AmountAttemptUnfollowing { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

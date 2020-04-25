@@ -118,6 +118,9 @@ namespace MeConecta.Gram.Core
                 if (!user.Succeeded)
                 {
                     nonUnfollow.Add(userPk);
+                    
+                    responseBase.Succeeded = user.Succeeded;
+                    responseBase.Message = user.Info.Message;
                 }
             }
 
