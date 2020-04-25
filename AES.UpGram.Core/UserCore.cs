@@ -92,7 +92,10 @@ namespace MeConecta.Gram.Core
                         return responseBase;
                     }
                 }
+                
                 responseFollow.NextMaxId = users?.NextMaxId ?? string.Empty;
+                responseFollow.ResponseType = result.Info.ResponseType.ToString();
+
                 responseBase.ResponseData = responseFollow;
             }
             else
