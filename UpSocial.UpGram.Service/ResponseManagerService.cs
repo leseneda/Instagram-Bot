@@ -17,8 +17,8 @@ namespace MeConecta.Gram.Service
                 return false;
             }
 
-            var isNonTrouble = Enum.GetValues(typeof(ResponseTypeNonTroubleEnum))
-                .Cast<ResponseTypeNonTroubleEnum>()
+            var isNonTrouble = Enum.GetValues(typeof(ResponseTypePreserveActionEnum))
+                .Cast<ResponseTypePreserveActionEnum>()
                 .Any(item => (short)item == (short)responseType);
 
             if (isNonTrouble)

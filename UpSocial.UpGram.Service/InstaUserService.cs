@@ -1,4 +1,5 @@
 ﻿using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Enum;
 using MeConecta.Gram.Domain.Interface;
 using System.Linq;
 using System.Text.Json;
@@ -64,8 +65,8 @@ namespace MeConecta.Gram.Service
             
             await serviceLog.PutAsync(new ActivityLogEntity()
             {
-                Type = "Unfollow",
-                FollowerRequestId = baseRequest.Id,
+                ActivityType = ActivityTypeEnum.Unfollow.Id,
+                TableId = baseRequest.Id,
                 Message = result.Message,
                 ResponseType = baseRequest.IsActive ? 
                     "It is not be able to unfollow" : 
@@ -95,7 +96,7 @@ namespace MeConecta.Gram.Service
                     await serviceRequest.PostAsync(new FollowerRequestEntity()
                     {
                         AccountId = _coreUser.Account.Id,
-                        AccountFollowerId = baseRequest.AccountFollowerId,
+                        AccountUserNameId = baseRequest.AccountUserNameId,
                         FromMaxId = result.ResponseData.NextMaxId,
                         Message = result.Message,
                         ResponseType = "OK",
@@ -108,7 +109,7 @@ namespace MeConecta.Gram.Service
                     if (!hasNextMaxId)
                     {
                         var serviceFollower = BaseService<AccountUserNameEntity>.Build();
-                        var baseFollower = await serviceFollower.GetAsync(baseRequest.AccountFollowerId)
+                        var baseFollower = await serviceFollower.GetAsync(baseRequest.AccountUserNameId)
                             .ConfigureAwait(false);
 
                         baseFollower.IsActive = false;
@@ -125,8 +126,8 @@ namespace MeConecta.Gram.Service
 
             await serviceLog.PutAsync(new ActivityLogEntity()
             {
-                Type = "ToFollow",
-                FollowerRequestId = baseRequest.Id,
+                ActivityType = ActivityTypeEnum.FollowerByAccountName.Id,
+                TableId = baseRequest.Id,
                 Message = result.Message,
                 ResponseType = result.ResponseData.ResponseType,
                 Succeeded = result.Succeeded

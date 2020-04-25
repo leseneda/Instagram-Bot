@@ -18,11 +18,11 @@ namespace MeConecta.Gram.Console
             var accountBase = BaseReadOnlyService<AccountEntity>.Build();
             var accountData = accountBase.GetAsync().Result;
 
-            foreach (var account in accountData.Where(cmp => cmp.Id == 1))
+            foreach (var account in accountData)
             {
                 configData.Account = account;
 
-                var ret = new Runner().Execute(account.Id, 2, configData).Result;
+                var ret = new Runner().Execute(account.Id, 1, configData).Result;
 
                 if (!ret)
                 {

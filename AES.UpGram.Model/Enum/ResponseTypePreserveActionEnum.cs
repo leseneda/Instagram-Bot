@@ -1,6 +1,6 @@
 ﻿namespace MeConecta.Gram.Domain.Enum
 {
-    public enum ResponseTypeNonTroubleEnum
+    public enum ResponseTypePreserveActionEnum
     {
         Unknown = 0,
         WrongRequest = 6,

@@ -242,6 +242,7 @@ namespace MeConecta.Gram.Core
                     }
                 }
             }
+            
             return challenge;
         }
 
