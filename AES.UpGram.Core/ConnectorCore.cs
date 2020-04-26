@@ -84,18 +84,14 @@ namespace MeConecta.Gram.Core
                 Password = _configuration.Account.Password,
             });
 
-            await _apiConnector.SendRequestsBeforeLoginAsync()
-                .ConfigureAwait(false);
-            await Task.Delay(5000)
-                .ConfigureAwait(false);
+            await _apiConnector.SendRequestsBeforeLoginAsync().ConfigureAwait(false);
+            await Task.Delay(_configuration.RequestDelay * 1000).ConfigureAwait(false);
 
-            var result = await _apiConnector.LoginAsync()
-                .ConfigureAwait(false);
+            var result = await _apiConnector.LoginAsync().ConfigureAwait(false);
 
             if (result.Succeeded)
             {
-                await _apiConnector.SendRequestsAfterLoginAsync()
-                    .ConfigureAwait(false);
+                await _apiConnector.SendRequestsAfterLoginAsync().ConfigureAwait(false);
 
                 SaveSession();
 
@@ -105,8 +101,7 @@ namespace MeConecta.Gram.Core
             {
                 if (result.Value == InstaLoginResult.ChallengeRequired)
                 {
-                    var challenge = await GetChallenge()
-                        .ConfigureAwait(false);
+                    var challenge = await GetChallenge().ConfigureAwait(false);
 
                     if (challenge.Succeeded)
                     {
