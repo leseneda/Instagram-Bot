@@ -1,6 +1,8 @@
 ﻿using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Service;
+using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Console
@@ -11,6 +13,12 @@ namespace MeConecta.Gram.Console
         {
             //var geoCodeService = GeoCodeService.Build();
             //var geoCodeData = geoCodeService.SearchGeoCode("Rua vale de são martinho 14 sintra");
+
+            //AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+            //{
+            //    // Global handler exception
+            //    //Debug.WriteLine(eventArgs.Exception.ToString());
+            //};
 
             var configBase = BaseReadOnlyService<ConfigurationEntity>.Build();
             var configData = await configBase.GetAsync(1);
