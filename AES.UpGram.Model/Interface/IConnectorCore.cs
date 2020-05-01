@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Domain.Interface
 {
-    public interface IConnectorCore : IBuild
+    public interface IConnectorCore
     {
         public IMessageCore Message { get; }
         public IUserCore User { get; }

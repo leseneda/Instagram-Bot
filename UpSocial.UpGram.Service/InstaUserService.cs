@@ -8,7 +8,7 @@ using System.Transactions;
 
 namespace MeConecta.Gram.Service
 {
-    public class InstaUserService : IBuild
+    public class InstaUserService : IInstaUserService
     {
         #region Field
 
@@ -30,7 +30,7 @@ namespace MeConecta.Gram.Service
             _accountUserNameService = BaseService<AccountUserNameEntity>.Build();
         }
 
-        public static InstaUserService Build(IUserCore coreUser)
+        public static IInstaUserService Build(IUserCore coreUser)
         {
             return new InstaUserService(coreUser);
         }
