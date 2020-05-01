@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
-    public class HashTagCore : ICoreHashTag
+    public class HashTagCore : IHashTagCore
     {
         #region Field
 
@@ -25,7 +25,7 @@ namespace MeConecta.Gram.Core
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static ICoreHashTag Build(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
+        public static IHashTagCore Build(IHashtagProcessor hashtagProcessor, ConfigurationEntity configuration)
         {
             return new HashTagCore(hashtagProcessor, configuration);
         }

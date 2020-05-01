@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Domain.Interface
 {
-    public interface ICoreConnector : IBuild
+    public interface IConnectorCore : IBuild
     {
-        public ICoreMessage Message { get; }
-        public ICoreUser User { get; }
-        public ICoreHashTag HashTag { get; }
-        public ICoreLocation Location { get; }
+        public IMessageCore Message { get; }
+        public IUserCore User { get; }
+        public IHashTagCore HashTag { get; }
+        public ILocationCore Location { get; }
 
         Task<ResponseEntity<IResult<InstaLoginResult>>> LoginAsync();
         Task<ResponseEntity<IResult<bool>>> LogoutAsync();

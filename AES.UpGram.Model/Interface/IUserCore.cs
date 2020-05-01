@@ -6,7 +6,7 @@ using MeConecta.Gram.Domain.Entity;
 
 namespace MeConecta.Gram.Domain.Interface
 {
-    public interface ICoreUser : IBuild
+    public interface IUserCore : IBuild
     {
         AccountEntity Account { get; }
         Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null);

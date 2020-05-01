@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
-    public class UserCore : ICoreUser
+    public class UserCore : IUserCore
     {
         #region Field
 
@@ -34,7 +34,7 @@ namespace MeConecta.Gram.Core
             Account = configuration.Account;
         }
 
-        public static ICoreUser Build(IInstaApi apiConnector, ConfigurationEntity configuration)
+        public static IUserCore Build(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
             return new UserCore(apiConnector, configuration);
         }

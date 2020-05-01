@@ -5,7 +5,7 @@ namespace MeConecta.Gram.Console
 {
     public class UnFollowRequested
     {
-        public void Execute(ICoreConnector connector)
+        public void Execute(IConnectorCore connector)
         {
             var service = InstaUserService.Build(connector.User);
             var request = service.UnfollowAsync().Result;

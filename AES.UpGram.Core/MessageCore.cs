@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
-    public class MessageCore : ICoreMessage
+    public class MessageCore : IMessageCore
     {
         #region Field
 
@@ -29,7 +29,7 @@ namespace MeConecta.Gram.Core
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static ICoreMessage Build(IInstaApi apiConnector, ConfigurationEntity configuration)
+        public static IMessageCore Build(IInstaApi apiConnector, ConfigurationEntity configuration)
         {
             return new MessageCore(apiConnector, configuration);
         }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
 {
-    public class LocationCore : ICoreLocation
+    public class LocationCore : ILocationCore
     {
         #region Field
 
@@ -25,7 +25,7 @@ namespace MeConecta.Gram.Core
             _paginationParameters = PaginationParameters.MaxPagesToLoad(configuration.MaxPagesToLoad);
         }
 
-        public static ICoreLocation Build(ILocationProcessor apiLocationProcessor, ConfigurationEntity configuration)
+        public static ILocationCore Build(ILocationProcessor apiLocationProcessor, ConfigurationEntity configuration)
         {
             return new LocationCore(apiLocationProcessor, configuration);
         }

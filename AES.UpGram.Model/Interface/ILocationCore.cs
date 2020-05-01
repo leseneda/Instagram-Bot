@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Domain.Interface
 {
-    public interface ICoreLocation : IBuild
+    public interface ILocationCore : IBuild
     {
         Task<ResponseEntity<IResult<InstaLocationShortList>>> SearchLocationAsync(double latitude, double longitude, string search);
         Task<ResponseEntity<IResult<InstaPlaceList>>> SearchPlacesAsync(double latitude, double longitude);
