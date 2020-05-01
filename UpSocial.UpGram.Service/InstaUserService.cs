@@ -12,20 +12,22 @@ namespace MeConecta.Gram.Service
     {
         #region Field
 
-        static IUserCore _coreUser;
+        static IUserCore _userCore;
         readonly sbyte _amountAttemptUnfollowing = 3;
         readonly IBaseService<FollowerRequestEntity> _followerRequestService;
         readonly IBaseService<ActivityLogEntity> _activityLogService;
+        readonly IBaseService<AccountUserNameEntity> _accountUserNameService;
 
         #endregion
 
         #region Constructor
 
-        private InstaUserService(IUserCore coreUser)
+        private InstaUserService(IUserCore userCore)
         {
-            _coreUser = coreUser;
+            _userCore = userCore;
             _followerRequestService = BaseService<FollowerRequestEntity>.Build();
             _activityLogService = BaseService<ActivityLogEntity>.Build();
+            _accountUserNameService = BaseService<AccountUserNameEntity>.Build();
         }
 
         public static InstaUserService Build(IUserCore coreUser)
@@ -39,38 +41,40 @@ namespace MeConecta.Gram.Service
 
         public async Task<bool> UnfollowAsync()
         {
-            var baseRequest = _followerRequestService.GetFirst(cmp => cmp.IsActive
-                && cmp.AccountId == _coreUser.Account.Id);
-            var followerPk = JsonSerializer.Deserialize<long[]>(baseRequest.FollowerRequestPk);
-            var result = await _coreUser.UnfollowAsync(followerPk.ToArray())
+            var followerRequestBase = _followerRequestService.GetFirst(cmp => cmp.IsActive
+                && cmp.AccountId == _userCore.Account.Id);
+            
+            var followersRequest = JsonSerializer.Deserialize<long[]>(followerRequestBase.FollowerRequestPk);
+            
+            var result = await _userCore.UnfollowAsync(followersRequest.ToArray())
                 .ConfigureAwait(false);
 
             if (result.Succeeded)
             {
-                var followerLeft = followerPk.Except(result.ResponseData);
+                var followerLeft = followersRequest.Except(result.ResponseData);
                 var hasFollowerLeft = (followerLeft.Count() > 0);
 
-                baseRequest.FollowerRequestPk = hasFollowerLeft ? JsonSerializer.Serialize(followerLeft) : null;
-                baseRequest.IsActive = hasFollowerLeft ? true : false;
+                followerRequestBase.FollowerRequestPk = hasFollowerLeft ? JsonSerializer.Serialize(followerLeft) : null;
+                followerRequestBase.IsActive = hasFollowerLeft ? true : false;
 
-                await _followerRequestService.PutAsync(baseRequest)
+                await _followerRequestService.PutAsync(followerRequestBase)
                     .ConfigureAwait(false);
             }
             else
             {
-                baseRequest.IsActive = !(_amountAttemptUnfollowing == (baseRequest.AmountAttemptUnfollowing + 1));
-                baseRequest.AmountAttemptUnfollowing++;
+                followerRequestBase.IsActive = !(_amountAttemptUnfollowing == (followerRequestBase.AmountAttemptUnfollowing + 1));
+                followerRequestBase.AmountAttemptUnfollowing++;
 
-                await _followerRequestService.PutAsync(baseRequest)
+                await _followerRequestService.PutAsync(followerRequestBase)
                     .ConfigureAwait(false);
             }
 
             await _activityLogService.PostAsync(new ActivityLogEntity()
             {
                 ActivityType = ActivityTypeEnum.Unfollow.Id,
-                TableId = baseRequest.Id,
+                TableId = followerRequestBase.Id,
                 Message = result.Message,
-                ResponseType = baseRequest.IsActive ?
+                ResponseType = followerRequestBase.IsActive ?
                     "It is not be able to unfollow" :
                     "Reached maximum attempts to unfollow",
                 Succeeded = result.Succeeded
@@ -82,10 +86,10 @@ namespace MeConecta.Gram.Service
 
         public async Task<bool> FollowAsync(string fromAccountName)
         {
-            var baseRequest = _followerRequestService.GetLast(cmp => cmp.IsActive
-                && cmp.AccountId == _coreUser.Account.Id);
+            var followerRequestBase = _followerRequestService.GetLast(cmp => cmp.IsActive
+                && cmp.AccountId == _userCore.Account.Id);
 
-            var result = await _coreUser.FollowAsync(fromAccountName, baseRequest.FromMaxId ?? string.Empty)
+            var result = await _userCore.FollowAsync(fromAccountName, followerRequestBase.FromMaxId ?? string.Empty)
                 .ConfigureAwait(false);
 
             if (result.Succeeded)
@@ -96,8 +100,8 @@ namespace MeConecta.Gram.Service
                 {
                     await _followerRequestService.PostAsync(new FollowerRequestEntity()
                     {
-                        AccountId = _coreUser.Account.Id,
-                        AccountUserNameId = baseRequest.AccountUserNameId,
+                        AccountId = _userCore.Account.Id,
+                        AccountUserNameId = followerRequestBase.AccountUserNameId,
                         FromMaxId = result.ResponseData.NextMaxId,
                         Message = result.Message,
                         ResponseType = "OK",
@@ -109,13 +113,12 @@ namespace MeConecta.Gram.Service
 
                     if (!hasNextMaxId)
                     {
-                        var serviceFollower = BaseService<AccountUserNameEntity>.Build();
-                        var baseFollower = await serviceFollower.GetAsync(baseRequest.AccountUserNameId)
+                        var accountUserNameBase = await _accountUserNameService.GetAsync(followerRequestBase.AccountUserNameId)
                             .ConfigureAwait(false);
 
-                        baseFollower.IsActive = false;
+                        accountUserNameBase.IsActive = false;
 
-                        await serviceFollower.PutAsync(baseFollower)
+                        await _accountUserNameService.PutAsync(accountUserNameBase)
                             .ConfigureAwait(false);
                     }
 
@@ -126,7 +129,7 @@ namespace MeConecta.Gram.Service
             await _activityLogService.PostAsync(new ActivityLogEntity()
             {
                 ActivityType = ActivityTypeEnum.FollowerByAccountName.Id,
-                TableId = baseRequest.Id,
+                TableId = followerRequestBase.Id,
                 Message = result.Message,
                 ResponseType = result.ResponseData.ResponseType,
                 Succeeded = result.Succeeded
