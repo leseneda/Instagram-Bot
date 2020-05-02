@@ -10,17 +10,20 @@ namespace MeConecta.Gram.Service
 {
     public class GeoCodeService : IGeoCode
     {
-        private readonly string _urlEu = "https://eu1.locationiq.com/v1/search.php";
-        private readonly string _token = "9db25f38c0462a";
+        static IGeoCode _geoCode;
+        readonly string _urlEu = "https://eu1.locationiq.com/v1/search.php";
+        readonly string _token = "9db25f38c0462a";
 
         private GeoCodeService()
         { 
         
         }
 
-        public static GeoCodeService Build()
+        public static IGeoCode Build()
         {
-            return new GeoCodeService();
+            _geoCode ??= new GeoCodeService();
+
+            return _geoCode;
         }
 
         public IEnumerable<GeocodingEntity> SearchGeoCode(string query)
