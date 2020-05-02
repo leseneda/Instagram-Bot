@@ -32,7 +32,7 @@ namespace MeConecta.Gram.Console
             {
                 configData.Account = account;
 
-                var ret = new Runner().Execute(account.Id, 1, configData).Result;
+                var ret = new Runner().Execute(account.Id, 2, configData).Result;
 
                 if (!ret)
                 {
