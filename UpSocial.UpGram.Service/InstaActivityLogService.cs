@@ -1,4 +1,5 @@
 ﻿using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Enum;
 using MeConecta.Gram.Domain.Interface;
 using System.Threading.Tasks;
 
@@ -6,8 +7,14 @@ namespace MeConecta.Gram.Service
 {
     public class InstaActivityLogService : IInstaActivityLogService
     {
+        #region Field
+
         static readonly IBaseService<ActivityLogEntity> _activityLogService = BaseService<ActivityLogEntity>.Build();
         static IInstaActivityLogService _activityLogInstance;
+
+        #endregion
+
+        #region Constructor
 
         public static IInstaActivityLogService Build()
         {
@@ -15,6 +22,10 @@ namespace MeConecta.Gram.Service
 
             return _activityLogInstance;
         }
+
+        #endregion
+
+        #region Public
 
         public static async Task<bool> Input(ActivityLogEntity activityLog)
         {
@@ -39,12 +50,24 @@ namespace MeConecta.Gram.Service
 
             if (activityLogBase != null)
             {
+                if (activityLogBase.Succeeded)
+                {
+                    var xx = activityLogBase.ActivityType;
 
+                    //ActivityTypeEnum
+
+                }
+                else
+                {
+
+                }
 
                 return true;
             }
 
             return false;
         }
+
+        #endregion
     }
 }

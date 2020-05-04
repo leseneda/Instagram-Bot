@@ -12,10 +12,9 @@ namespace MeConecta.Gram.Service
     {
         #region Field
 
-        static IUserCore _userCore;
+        readonly IUserCore _userCore;
         readonly sbyte _amountAttemptUnfollowing = 3;
         readonly IBaseService<FollowerRequestEntity> _followerRequestService;
-        readonly IBaseService<ActivityLogEntity> _activityLogService;
         readonly IBaseService<AccountUserNameEntity> _accountUserNameService;
 
         #endregion
@@ -26,7 +25,6 @@ namespace MeConecta.Gram.Service
         {
             _userCore = userCore;
             _followerRequestService = BaseService<FollowerRequestEntity>.Build();
-            _activityLogService = BaseService<ActivityLogEntity>.Build();
             _accountUserNameService = BaseService<AccountUserNameEntity>.Build();
         }
 
@@ -42,20 +40,18 @@ namespace MeConecta.Gram.Service
         public async Task<bool> UnfollowAsync()
         {
             var followerRequestBase = _followerRequestService.GetFirst(cmp => cmp.IsActive 
-            && cmp.AccountId == _userCore.Account.Id);
+                && cmp.AccountId == _userCore.Account.Id);
             
             var followersRequest = JsonSerializer.Deserialize<long[]>(followerRequestBase.FollowerRequestPk);
-            
             var result = await _userCore.UnfollowAsync(followersRequest.ToArray())
                 .ConfigureAwait(false);
 
+            followerRequestBase.FollowerRequestPk = (result.ResponseData.Count() > 0) ? 
+                JsonSerializer.Serialize(result.ResponseData) : null;
+
             if (result.Succeeded)
             {
-                var followerLeft = followersRequest.Except(result.ResponseData);
-                var hasFollowerLeft = (followerLeft.Count() > 0);
-
-                followerRequestBase.FollowerRequestPk = hasFollowerLeft ? JsonSerializer.Serialize(followerLeft) : null;
-                followerRequestBase.IsActive = hasFollowerLeft ? true : false;
+                followerRequestBase.IsActive = false;
 
                 await _followerRequestService.PutAsync(followerRequestBase)
                     .ConfigureAwait(false);
