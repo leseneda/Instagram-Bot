@@ -9,6 +9,8 @@ namespace MeConecta.Gram.Console
         public void Execute(IConnectorCore connector, string userNameFrom, long accountId, 
             ConfigurationEntity config, string accountName)
         {
+            //var activity = InstaActivityLogService.Build();
+            //activity.SetNextActivity(accountId);
             var service = InstaUserService.Build(connector.User);
             var request = service.FollowAsync(userNameFrom).Result;
 

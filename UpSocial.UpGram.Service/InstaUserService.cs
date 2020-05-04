@@ -41,8 +41,8 @@ namespace MeConecta.Gram.Service
 
         public async Task<bool> UnfollowAsync()
         {
-            var followerRequestBase = _followerRequestService.GetFirst(cmp => cmp.IsActive
-                && cmp.AccountId == _userCore.Account.Id);
+            var followerRequestBase = _followerRequestService.GetFirst(cmp => cmp.IsActive 
+            && cmp.AccountId == _userCore.Account.Id);
             
             var followersRequest = JsonSerializer.Deserialize<long[]>(followerRequestBase.FollowerRequestPk);
             
@@ -69,18 +69,20 @@ namespace MeConecta.Gram.Service
                     .ConfigureAwait(false);
             }
 
-            await _activityLogService.PostAsync(new ActivityLogEntity()
+            await InstaActivityLogService.Input(new ActivityLogEntity()
             {
                 ActivityType = ActivityTypeEnum.Unfollow.Id,
-                TableId = followerRequestBase.Id,
+                ActivityId = followerRequestBase.Id,
                 Message = result.Message,
+                AccountId = followerRequestBase.AccountId,
                 ResponseType = followerRequestBase.IsActive ?
                     "It is not be able to unfollow" :
                     "Reached maximum attempts to unfollow",
                 Succeeded = result.Succeeded
+
             })
                 .ConfigureAwait(false);
-
+            
             return result.Succeeded;
         }
 
@@ -126,10 +128,11 @@ namespace MeConecta.Gram.Service
                 }
             }
 
-            await _activityLogService.PostAsync(new ActivityLogEntity()
+            await InstaActivityLogService.Input(new ActivityLogEntity()
             {
                 ActivityType = ActivityTypeEnum.FollowerByAccountName.Id,
-                TableId = followerRequestBase.Id,
+                ActivityId = followerRequestBase.Id,
+                AccountId = followerRequestBase.AccountId,
                 Message = result.Message,
                 ResponseType = result.ResponseData.ResponseType,
                 Succeeded = result.Succeeded

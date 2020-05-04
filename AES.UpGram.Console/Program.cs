@@ -1,4 +1,5 @@
 ﻿using MeConecta.Gram.Domain.Entity;
+using MeConecta.Gram.Domain.Enum;
 using MeConecta.Gram.Service;
 using System;
 using System.Collections;
@@ -32,7 +33,7 @@ namespace MeConecta.Gram.Console
             {
                 configData.Account = account;
 
-                var ret = new Runner().Execute(account.Id, 2, configData).Result;
+                var ret = new Runner().Execute(account.Id, 1, configData).Result;
 
                 if (!ret)
                 {
