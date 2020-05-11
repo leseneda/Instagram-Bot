@@ -111,8 +111,10 @@ namespace MeConecta.Gram.Service
 
                     if (!hasNextMaxId)
                     {
-                        var accountUserNameBase = await _accountUserNameService.GetAsync(followerRequestBase.AccountUserNameId)
-                            .ConfigureAwait(false);
+                        //########## AO ENTRAR AQUI TEM QUE MUDAR OS DADOS AO INSERIR NO aCTIVITYlOG PARA QUE ELE ENTENDA QUE ACABOU A LISTA A SEGUIR
+
+                        var accountUserNameBase = _accountUserNameService.GetFirst(item => item.AccountId == _userCore.Account.Id
+                            && item.Id == followerRequestBase.AccountUserNameId);
 
                         accountUserNameBase.IsActive = false;
 

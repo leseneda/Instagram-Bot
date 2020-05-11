@@ -1,6 +1,8 @@
-﻿using MeConecta.Gram.Domain.Entity;
+﻿using InstagramApiSharp.Classes;
+using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Enum;
 using MeConecta.Gram.Domain.Interface;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Service
@@ -54,11 +56,17 @@ namespace MeConecta.Gram.Service
                 {
                     var xx = activityLogBase.ActivityType;
 
-                    //ActivityTypeEnum
+                    var xxx = Enumeration.GetAll<ActivityTypeEnum>().FirstOrDefault(item => item.Id == activityLogBase.ActivityType);
 
                 }
                 else
                 {
+                    ResponseType responseType = (ResponseType)System.Enum.Parse(typeof(ResponseType), activityLogBase.ResponseType);
+
+                    
+
+                    //enum Colors { Red, Green, Blue }
+                    //Colors color = (Colors)System.Enum.Parse(typeof(Colors), "Green");
 
                 }
 
