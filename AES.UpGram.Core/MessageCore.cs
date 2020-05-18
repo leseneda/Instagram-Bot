@@ -54,6 +54,7 @@ namespace MeConecta.Gram.Core
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,
+                ResponseType = result.Info.ResponseType,
                 ResponseData = result
             };
         }
@@ -80,6 +81,7 @@ namespace MeConecta.Gram.Core
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,
+                ResponseType = result.Info.ResponseType,
                 ResponseData = result
             };
         }
@@ -98,6 +100,7 @@ namespace MeConecta.Gram.Core
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,
+                ResponseType = result.Info.ResponseType,
                 ResponseData = result
             };
         }

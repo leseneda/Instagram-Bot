@@ -87,6 +87,7 @@ namespace MeConecta.Gram.Core
 
                         responseBase.Succeeded = request.Succeeded;
                         responseBase.Message = request.Info.Message;
+                        responseBase.ResponseType = request.Info.ResponseType,
                         responseBase.ResponseData = responseFollow;
 
                         return responseBase;
@@ -125,6 +126,7 @@ namespace MeConecta.Gram.Core
                     
                     responseBase.Succeeded = user.Succeeded;
                     responseBase.Message = user.Info.Message;
+                    responseBase.ResponseType = user.Info.ResponseType;
                 }
             }
 
@@ -142,6 +144,7 @@ namespace MeConecta.Gram.Core
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,
+                ResponseType = result.Info.ResponseType,
                 ResponseData = result
             };
         }
@@ -155,6 +158,7 @@ namespace MeConecta.Gram.Core
             {
                 Succeeded = result.Succeeded,
                 Message = result.Info.Message,
+                ResponseType = result.Info.ResponseType,
                 ResponseData = result
             };
         }

@@ -1,4 +1,5 @@
-﻿using MeConecta.Gram.Domain.Entity;
+﻿using InstagramApiSharp.Classes;
+using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Enum;
 using MeConecta.Gram.Domain.Interface;
 using System.Linq;
@@ -60,6 +61,8 @@ namespace MeConecta.Gram.Service
             {
                 followerRequestBase.IsActive = !(_amountAttemptUnfollowing == (followerRequestBase.AmountAttemptUnfollowing + 1));
                 followerRequestBase.AmountAttemptUnfollowing++;
+                followerRequestBase.Message = result.Message;
+                followerRequestBase.ResponseType = result.ResponseType.ToString();
 
                 await _followerRequestService.PutAsync(followerRequestBase)
                     .ConfigureAwait(false);

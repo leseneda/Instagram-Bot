@@ -14,11 +14,6 @@ namespace MeConecta.Gram.Console
             var accountUserName = BaseReadOnlyService<AccountUserNameEntity>.Build()
                 .GetFirst(cmp => cmp.AccountId == accountId && cmp.IsActive)?.UserName;
 
-            if (accountUserName == null)
-            {
-                return true;
-            }
-
             config.Account.Name = account.Name;
             config.Account.Password = account.Password;
 
