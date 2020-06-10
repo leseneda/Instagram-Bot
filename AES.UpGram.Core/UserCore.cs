@@ -87,7 +87,7 @@ namespace MeConecta.Gram.Core
 
                         responseBase.Succeeded = request.Succeeded;
                         responseBase.Message = request.Info.Message;
-                        responseBase.ResponseType = request.Info.ResponseType,
+                        responseBase.ResponseType = request.Info.ResponseType;
                         responseBase.ResponseData = responseFollow;
 
                         return responseBase;
