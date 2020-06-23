@@ -6,13 +6,10 @@ namespace MeConecta.Gram.Console
 {
     public class FollowerRequesting
     {
-        public void Execute(IConnectorCore connector, string userNameFrom, long accountId, 
-            ConfigurationEntity config, string accountName)
+        public void Execute(IConnectorCore connector, long accountUserNameId)
         {
-            //var activity = InstaActivityLogService.Build();
-            //activity.SetNextActivity(accountId);
             var service = InstaUserService.Build(connector.User);
-            var request = service.FollowAsync(userNameFrom).Result;
+            var request = service.FollowAsync(accountUserNameId).Result;
 
             if (!request)
             { 

@@ -85,12 +85,21 @@ namespace MeConecta.Gram.Service
             return result.Succeeded;
         }
 
-        public async Task<bool> FollowAsync(string fromAccountName)
+        public async Task<bool> FollowAsync(long AccountUserNameId)
         {
             var followerRequestBase = _followerRequestService.GetLast(cmp => cmp.IsActive
                 && cmp.AccountId == _userCore.Account.Id);
 
-            var result = await _userCore.FollowAsync(fromAccountName, followerRequestBase.FromMaxId ?? string.Empty)
+            var accountUserNameBase = await _accountUserNameService.GetAsync(AccountUserNameId);
+
+            if (accountUserNameBase == null)
+            {
+                // erro
+            }
+
+            long activityId = 0;
+
+            var result = await _userCore.FollowAsync(accountUserNameBase.UserName, followerRequestBase?.FromMaxId ?? string.Empty)
                 .ConfigureAwait(false);
 
             if (result.Succeeded)
@@ -99,10 +108,10 @@ namespace MeConecta.Gram.Service
 
                 using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
                 {
-                    await _followerRequestService.PostAsync(new FollowerRequestEntity()
+                    activityId = await _followerRequestService.PostAsync(new FollowerRequestEntity()
                     {
                         AccountId = _userCore.Account.Id,
-                        AccountUserNameId = followerRequestBase.AccountUserNameId,
+                        AccountUserNameId = accountUserNameBase.Id,
                         FromMaxId = result.ResponseData.NextMaxId,
                         Message = result.Message,
                         ResponseType = "OK",
@@ -115,10 +124,6 @@ namespace MeConecta.Gram.Service
                     if (!hasNextMaxId)
                     {
                         //########## AO ENTRAR AQUI TEM QUE MUDAR OS DADOS AO INSERIR NO aCTIVITYlOG PARA QUE ELE ENTENDA QUE ACABOU A LISTA A SEGUIR
-
-                        var accountUserNameBase = _accountUserNameService.GetFirst(item => item.AccountId == _userCore.Account.Id
-                            && item.Id == followerRequestBase.AccountUserNameId);
-
                         accountUserNameBase.IsActive = false;
 
                         await _accountUserNameService.PutAsync(accountUserNameBase)
@@ -132,8 +137,8 @@ namespace MeConecta.Gram.Service
             await InstaActivityLogService.Input(new ActivityLogEntity()
             {
                 ActivityType = ActivityTypeEnum.FollowerByAccountName.Id,
-                ActivityId = followerRequestBase.Id,
-                AccountId = followerRequestBase.AccountId,
+                ActivityId = activityId, //followerRequestBase.Id,  // CASO NAO TENHA ????
+                AccountId = _userCore.Account.Id,
                 Message = result.Message,
                 ResponseType = result.ResponseData.ResponseType,
                 Succeeded = result.Succeeded

@@ -11,8 +11,8 @@ namespace MeConecta.Gram.Console
         public async Task<bool> Execute(long accountId, int choose, ConfigurationEntity config)
         {
             var account = await BaseReadOnlyService<AccountEntity>.Build().GetAsync(accountId);
-            var accountUserName = BaseReadOnlyService<AccountUserNameEntity>.Build()
-                .GetFirst(cmp => cmp.AccountId == accountId && cmp.IsActive)?.UserName;
+            var accountUserNameId = BaseReadOnlyService<AccountUserNameEntity>.Build()
+                .GetFirst(cmp => cmp.AccountId == accountId && cmp.IsActive).Id;
 
             config.Account.Name = account.Name;
             config.Account.Password = account.Password;
@@ -25,7 +25,7 @@ namespace MeConecta.Gram.Console
                 switch (choose)
                 {
                     case 1:
-                        new FollowerRequesting().Execute(connector, accountUserName, account.Id, config, config.Account.Name);
+                        new FollowerRequesting().Execute(connector, accountUserNameId);
                         break;
 
                     case 2:

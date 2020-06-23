@@ -5,6 +5,6 @@ namespace MeConecta.Gram.Domain.Interface
     public interface IInstaUserService
     {
         Task<bool> UnfollowAsync();
-        Task<bool> FollowAsync(string fromAccountName);
+        Task<bool> FollowAsync(long AccountUserNameId);
     }
 }
