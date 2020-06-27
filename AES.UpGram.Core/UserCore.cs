@@ -90,7 +90,6 @@ namespace MeConecta.Gram.Core
                         }
 
                         responseFollow.NextMaxId = nextMaxId;
-                        responseFollow.ResponseType = request.Info.ResponseType.ToString();
                         responseFollow.FollowerRemainPk.AddRange(usersPk.Except(responseFollow.FollowerRequestPk));
 
                         responseBase.Succeeded = (followerRemainPk == null); // Force to add the new data
@@ -103,7 +102,6 @@ namespace MeConecta.Gram.Core
                 }
                 
                 responseFollow.NextMaxId = newNextMaxId;
-                responseFollow.ResponseType = "OK";
 
                 responseBase.ResponseData = responseFollow;
             }

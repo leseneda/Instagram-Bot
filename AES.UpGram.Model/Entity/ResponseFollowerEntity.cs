@@ -13,6 +13,5 @@ namespace MeConecta.Gram.Domain.Entity
         public IList<long> FollowerRequestPk { get; set; }
         public List<long> FollowerRemainPk { get; set; }
         public string NextMaxId { get; set; }
-        public string ResponseType { get; set; }
     }
 }

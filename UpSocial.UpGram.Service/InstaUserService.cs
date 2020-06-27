@@ -109,25 +109,19 @@ namespace MeConecta.Gram.Service
             var result = await _userCore.FollowAsync(accountUserNameBase.UserName, followerRequestBase?.FromMaxId ?? string.Empty, followerRemainPk)
                 .ConfigureAwait(false);
 
-            var message = string.Empty;
-            var responseType = string.Empty;
-
             if (result.Succeeded)
             {
                 var hasNextMaxId = !string.IsNullOrWhiteSpace(result.ResponseData.NextMaxId);
 
                 using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
                 {
-                    message = result.Message;
-                    responseType = result.ResponseType.ToString();
-
                     activityId = await _followerRequestService.PostAsync(new FollowerRequestEntity()
                     {
                         AccountId = _userCore.Account.Id,
                         AccountUserNameId = accountUserNameBase.Id,
                         FromMaxId = result.ResponseData.NextMaxId,
-                        Message = message,
-                        ResponseType = responseType,
+                        Message = result.Message,
+                        ResponseType = result.ResponseType.ToString(),
                         FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.FollowerRequestPk),
                         FollowerRemainPk = JsonSerializer.Serialize(result.ResponseData.FollowerRemainPk),
                         AmountAttemptUnfollowing = 0,
@@ -151,12 +145,9 @@ namespace MeConecta.Gram.Service
             {
                 if (result.ResponseData.FollowerRemainPk.Count() > 0)
                 {
-                    message = result.Message;
-                    responseType = result.ResponseType.ToString();
-
                     followerRequestBase.FollowerRemainPk = JsonSerializer.Serialize(result.ResponseData.FollowerRemainPk);
-                    followerRequestBase.Message = message;
-                    followerRequestBase.ResponseType = responseType;
+                    followerRequestBase.Message = result.Message;
+                    followerRequestBase.ResponseType = result.ResponseType.ToString();
 
                     await _followerRequestService.PutAsync(followerRequestBase)
                         .ConfigureAwait(false);
@@ -171,7 +162,7 @@ namespace MeConecta.Gram.Service
                 ActivityId = activityId,
                 AccountId = _userCore.Account.Id,
                 Message = result.Message,
-                ResponseType = result.ResponseData.ResponseType,
+                ResponseType = result.ResponseType.ToString(),
                 Succeeded = result.Succeeded
             })
                 .ConfigureAwait(false);
