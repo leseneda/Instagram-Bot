@@ -9,7 +9,7 @@ namespace MeConecta.Gram.Domain.Interface
     public interface IUserCore
     {
         AccountEntity Account { get; }
-        Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null);
+        Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null, IEnumerable<long> FollowerRemainPk = null);
         Task<ResponseEntity<IList<long>>> UnfollowAsync(long[] followerRequesting);
         Task<ResponseEntity<IResult<InstaUserInfo>>> GetUserAsync(string userName);
         Task<ResponseEntity<IResult<InstaDiscoverSearchResult>>> SearchUser(string search, int counterData);

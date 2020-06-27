@@ -7,6 +7,7 @@ using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Interface;
 using MeConecta.Gram.Service;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MeConecta.Gram.Core
@@ -43,37 +44,43 @@ namespace MeConecta.Gram.Core
 
         #region User
 
-        public async Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null)
+        public async Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null, IEnumerable<long> followerRemainPk = null)
         {
-            var param = (!string.IsNullOrEmpty(nextMaxId) ?
-                _paginationParameters.StartFromMaxId(nextMaxId) :
-                _paginationParameters);
+            var responseBase = new ResponseEntity<ResponseFollowerEntity>();
+            var usersPk = followerRemainPk;
+            var newNextMaxId = string.Empty;
 
-            var result = await _apiUserProcessor.GetUserFollowersAsync(userName, param)
-                .ConfigureAwait(false);
-            
-            var responseBase = new ResponseEntity<ResponseFollowerEntity>()
+            if (usersPk == null)
             {
-                Succeeded = result.Succeeded,
-                Message = result.Info.Message,
-            };
+                var param = (!string.IsNullOrEmpty(nextMaxId) ?
+                    _paginationParameters.StartFromMaxId(nextMaxId) :
+                    _paginationParameters);
+
+                var result = await _apiUserProcessor.GetUserFollowersAsync(userName, param)
+                    .ConfigureAwait(false);
+
+                usersPk = result.Value
+                    .Select(cmp => cmp.Pk);
+
+                responseBase.Succeeded = result.Succeeded;
+                responseBase.Message = result.Info.Message;
+                newNextMaxId = result.Succeeded ? result.Value?.NextMaxId : newNextMaxId;
+            }
 
             var responseFollow = new ResponseFollowerEntity();
 
-            if (result.Succeeded)
+            if (responseBase.Succeeded)
             {
-                var users = result.Value;
-                
                 IResult<InstaFriendshipFullStatus> request;
 
-                foreach (var user in users)
+                foreach (var userPk in usersPk)
                 {
-                    request = await _apiUserProcessor.FollowUserAsync(user.Pk)
+                    request = await _apiUserProcessor.FollowUserAsync(userPk)
                         .ConfigureAwait(false);
 
                     if (request.Succeeded)
                     {
-                        responseFollow.RequestedUserId.Add(user.Pk);
+                        responseFollow.FollowerRequestPk.Add(userPk);
                     }
                     else
                     {
@@ -84,8 +91,9 @@ namespace MeConecta.Gram.Core
 
                         responseFollow.NextMaxId = nextMaxId;
                         responseFollow.ResponseType = request.Info.ResponseType.ToString();
+                        responseFollow.FollowerRemainPk.AddRange(usersPk.Except(responseFollow.FollowerRequestPk));
 
-                        //responseBase.Succeeded = request.Succeeded; DEVE SER MESMO ASSIM TRUE
+                        responseBase.Succeeded = (followerRemainPk == null); // Force to add the new data
                         responseBase.Message = request.Info.Message;
                         responseBase.ResponseType = request.Info.ResponseType;
                         responseBase.ResponseData = responseFollow;
@@ -94,8 +102,8 @@ namespace MeConecta.Gram.Core
                     }
                 }
                 
-                responseFollow.NextMaxId = users?.NextMaxId;
-                responseFollow.ResponseType = result.Info.ResponseType.ToString();
+                responseFollow.NextMaxId = newNextMaxId;
+                responseFollow.ResponseType = "OK";
 
                 responseBase.ResponseData = responseFollow;
             }

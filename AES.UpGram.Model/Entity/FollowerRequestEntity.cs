@@ -11,6 +11,7 @@ namespace MeConecta.Gram.Domain.Entity
         public string Message { get; set; }
         public string ResponseType { get; set; }
         public string FollowerRequestPk { get; set; }
+        public string FollowerRemainPk { get; set; }
         public byte AmountAttemptUnfollowing { get; set; }
         public bool IsActive { get; set; } = true;
     }

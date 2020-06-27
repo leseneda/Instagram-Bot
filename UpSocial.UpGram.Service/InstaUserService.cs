@@ -2,6 +2,8 @@
 using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Enum;
 using MeConecta.Gram.Domain.Interface;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -40,7 +42,7 @@ namespace MeConecta.Gram.Service
 
         public async Task<bool> UnfollowAsync()
         {
-            var followerRequestBase = _followerRequestService.GetFirst(cmp => cmp.IsActive 
+            var followerRequestBase = _followerRequestService.GetFirst(cmp => cmp.IsActive
                 && cmp.AccountId == _userCore.Account.Id);
             
             var followersRequest = JsonSerializer.Deserialize<long[]>(followerRequestBase.FollowerRequestPk);
@@ -90,7 +92,8 @@ namespace MeConecta.Gram.Service
             var followerRequestBase = _followerRequestService.GetLast(cmp => cmp.IsActive
                 && cmp.AccountId == _userCore.Account.Id);
 
-            var accountUserNameBase = await _accountUserNameService.GetAsync(AccountUserNameId);
+            var accountUserNameBase = _accountUserNameService.GetFirst(cmp => cmp.IsActive
+                && cmp.Id == AccountUserNameId);
 
             if (accountUserNameBase == null)
             {
@@ -99,8 +102,15 @@ namespace MeConecta.Gram.Service
 
             long activityId = 0;
 
-            var result = await _userCore.FollowAsync(accountUserNameBase.UserName, followerRequestBase?.FromMaxId ?? string.Empty)
+            var followerRemainPk = !string.IsNullOrEmpty(followerRequestBase?.FollowerRemainPk) ?
+                JsonSerializer.Deserialize<long[]>(followerRequestBase?.FollowerRemainPk) :
+                null;
+
+            var result = await _userCore.FollowAsync(accountUserNameBase.UserName, followerRequestBase?.FromMaxId ?? string.Empty, followerRemainPk)
                 .ConfigureAwait(false);
+
+            var message = string.Empty;
+            var responseType = string.Empty;
 
             if (result.Succeeded)
             {
@@ -108,16 +118,20 @@ namespace MeConecta.Gram.Service
 
                 using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
                 {
+                    message = result.Message;
+                    responseType = result.ResponseType.ToString();
+
                     activityId = await _followerRequestService.PostAsync(new FollowerRequestEntity()
                     {
                         AccountId = _userCore.Account.Id,
                         AccountUserNameId = accountUserNameBase.Id,
                         FromMaxId = result.ResponseData.NextMaxId,
-                        Message = result.Message,
-                        ResponseType = "OK",
-                        FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.RequestedUserId),
+                        Message = message,
+                        ResponseType = responseType,
+                        FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.FollowerRequestPk),
+                        FollowerRemainPk = JsonSerializer.Serialize(result.ResponseData.FollowerRemainPk),
                         AmountAttemptUnfollowing = 0,
-                        IsActive = hasNextMaxId ? true : false,
+                        IsActive = hasNextMaxId,
                     })
                         .ConfigureAwait(false);
 
@@ -133,11 +147,28 @@ namespace MeConecta.Gram.Service
                     scope.Complete();
                 }
             }
+            else
+            {
+                if (result.ResponseData.FollowerRemainPk.Count() > 0)
+                {
+                    message = result.Message;
+                    responseType = result.ResponseType.ToString();
+
+                    followerRequestBase.FollowerRemainPk = JsonSerializer.Serialize(result.ResponseData.FollowerRemainPk);
+                    followerRequestBase.Message = message;
+                    followerRequestBase.ResponseType = responseType;
+
+                    await _followerRequestService.PutAsync(followerRequestBase)
+                        .ConfigureAwait(false);
+
+                    activityId = followerRequestBase.Id;
+                }
+            }
 
             await InstaActivityLogService.Input(new ActivityLogEntity()
             {
                 ActivityType = ActivityTypeEnum.FollowerByAccountName.Id,
-                ActivityId = activityId, //followerRequestBase.Id,  // CASO NAO TENHA ????
+                ActivityId = activityId,
                 AccountId = _userCore.Account.Id,
                 Message = result.Message,
                 ResponseType = result.ResponseData.ResponseType,
