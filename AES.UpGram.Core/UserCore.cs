@@ -91,6 +91,7 @@ namespace MeConecta.Gram.Core
 
                         responseFollow.NextMaxId = nextMaxId;
                         responseFollow.FollowerRemainPk.AddRange(usersPk.Except(responseFollow.FollowerRequestPk));
+                        responseFollow.FollowerRequestPk = responseFollow.FollowerRequestPk.Count() > 0 ? responseFollow.FollowerRequestPk : null;
 
                         responseBase.Succeeded = (followerRemainPk == null); // Force to add the new data
                         responseBase.Message = request.Info.Message;
@@ -100,7 +101,8 @@ namespace MeConecta.Gram.Core
                         return responseBase;
                     }
                 }
-                
+
+                responseFollow.FollowerRemainPk = null;
                 responseFollow.NextMaxId = newNextMaxId;
 
                 responseBase.ResponseData = responseFollow;

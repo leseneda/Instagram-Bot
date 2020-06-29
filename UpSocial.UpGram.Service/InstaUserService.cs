@@ -46,6 +46,7 @@ namespace MeConecta.Gram.Service
                 && cmp.AccountId == _userCore.Account.Id);
             
             var followersRequest = JsonSerializer.Deserialize<long[]>(followerRequestBase.FollowerRequestPk);
+            
             var result = await _userCore.UnfollowAsync(followersRequest.ToArray())
                 .ConfigureAwait(false);
 
@@ -102,11 +103,15 @@ namespace MeConecta.Gram.Service
 
             long activityId = 0;
 
-            var followerRemainPk = !string.IsNullOrEmpty(followerRequestBase?.FollowerRemainPk) ?
-                JsonSerializer.Deserialize<long[]>(followerRequestBase?.FollowerRemainPk) :
+            var followerRemainPkBase = !string.IsNullOrEmpty(followerRequestBase?.FollowerRemainPk) ?
+                JsonSerializer.Deserialize<IList<long>>(followerRequestBase?.FollowerRemainPk) :
                 null;
 
-            var result = await _userCore.FollowAsync(accountUserNameBase.UserName, followerRequestBase?.FromMaxId ?? string.Empty, followerRemainPk)
+            var followerRequestPkBase = !string.IsNullOrEmpty(followerRequestBase?.FollowerRequestPk) ?
+                JsonSerializer.Deserialize<IEnumerable<long>>(followerRequestBase?.FollowerRequestPk) :
+                null;
+
+            var result = await _userCore.FollowAsync(accountUserNameBase.UserName, followerRequestBase?.FromMaxId ?? string.Empty, followerRemainPkBase)
                 .ConfigureAwait(false);
 
             if (result.Succeeded)
@@ -122,8 +127,8 @@ namespace MeConecta.Gram.Service
                         FromMaxId = result.ResponseData.NextMaxId,
                         Message = result.Message,
                         ResponseType = result.ResponseType.ToString(),
-                        FollowerRequestPk = JsonSerializer.Serialize(result.ResponseData.FollowerRequestPk),
-                        FollowerRemainPk = JsonSerializer.Serialize(result.ResponseData.FollowerRemainPk),
+                        FollowerRequestPk = result.ResponseData.FollowerRequestPk != null ? JsonSerializer.Serialize(result.ResponseData.FollowerRequestPk) : null,
+                        FollowerRemainPk = result.ResponseData.FollowerRemainPk != null ? JsonSerializer.Serialize(result.ResponseData.FollowerRemainPk) : null,
                         AmountAttemptUnfollowing = 0,
                         IsActive = hasNextMaxId,
                     })
@@ -145,9 +150,15 @@ namespace MeConecta.Gram.Service
             {
                 if (result.ResponseData.FollowerRemainPk.Count() > 0)
                 {
-                    followerRequestBase.FollowerRemainPk = JsonSerializer.Serialize(result.ResponseData.FollowerRemainPk);
+                    followerRequestPkBase = followerRequestPkBase != null ? 
+                        followerRequestPkBase.Union(result.ResponseData.FollowerRequestPk) :
+                        result.ResponseData.FollowerRequestPk;
+
                     followerRequestBase.Message = result.Message;
                     followerRequestBase.ResponseType = result.ResponseType.ToString();
+                    followerRequestBase.FollowerRequestPk = JsonSerializer.Serialize(followerRequestPkBase);
+                    followerRequestBase.FollowerRemainPk = result.ResponseData.FollowerRemainPk != null ? 
+                        JsonSerializer.Serialize(result.ResponseData.FollowerRemainPk) : null;
 
                     await _followerRequestService.PutAsync(followerRequestBase)
                         .ConfigureAwait(false);

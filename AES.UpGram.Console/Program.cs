@@ -24,7 +24,7 @@ namespace MeConecta.Gram.Console
             var accountBase = BaseReadOnlyService<AccountEntity>.Build();
             var accountData = accountBase.GetAsync().Result;
 
-            foreach (var account in accountData.Where(cmp => cmp.Id == 4))
+            foreach (var account in accountData.Where(cmp => cmp.Id == 5))
             {
                 configData.Account = account;
 

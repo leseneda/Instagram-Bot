@@ -10,7 +10,8 @@ namespace MeConecta.Gram.Console
     {
         public async Task<bool> Execute(long accountId, int choose, ConfigurationEntity config)
         {
-            var account = await BaseReadOnlyService<AccountEntity>.Build().GetAsync(accountId);
+            var account = await BaseReadOnlyService<AccountEntity>.Build()
+                .GetAsync(accountId);
 
             config.Account.Name = account.Name;
             config.Account.Password = account.Password;
