@@ -14,15 +14,15 @@ namespace MeConecta.Gram.Core
 {
     public class UserCore : IUserCore
     {
-        #region Field
+        #region Field & Property
 
         static IUserProcessor _apiUserProcessor;
         static IDiscoverProcessor _discoverProcessor;
         static PaginationParameters _paginationParameters;
+        
+        public AccountEntity Account { get; }
 
         #endregion
-
-        public AccountEntity Account { get; }
 
         #region Constructor
 
