@@ -1,8 +1,6 @@
-﻿using InstagramApiSharp.Classes;
-using MeConecta.Gram.Domain.Entity;
+﻿using MeConecta.Gram.Domain.Entity;
 using MeConecta.Gram.Domain.Enum;
 using MeConecta.Gram.Domain.Interface;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -39,18 +37,17 @@ namespace MeConecta.Gram.Service
         #endregion
 
         #region Public
-
         public async Task<bool> UnfollowAsync()
         {
             var followerRequestBase = _followerRequestService.GetFirst(cmp => cmp.IsActive
                 && cmp.AccountId == _userCore.Account.Id);
-            
+
             var followersRequest = JsonSerializer.Deserialize<long[]>(followerRequestBase.FollowerRequestPk);
-            
+
             var result = await _userCore.UnfollowAsync(followersRequest.ToArray())
                 .ConfigureAwait(false);
 
-            followerRequestBase.FollowerRequestPk = (result.ResponseData.Count() > 0) ? 
+            followerRequestBase.FollowerRequestPk = (result.ResponseData.Count() > 0) ?
                 JsonSerializer.Serialize(result.ResponseData) : null;
 
             if (result.Succeeded)
@@ -84,7 +81,7 @@ namespace MeConecta.Gram.Service
 
             })
                 .ConfigureAwait(false);
-            
+
             return result.Succeeded;
         }
 
@@ -111,8 +108,14 @@ namespace MeConecta.Gram.Service
                 JsonSerializer.Deserialize<IEnumerable<long>>(followerRequestBase?.FollowerRequestPk) :
                 null;
 
-            var result = await _userCore.FollowAsync(accountUserNameBase.UserName, followerRequestBase?.FromMaxId ?? string.Empty, followerRemainPkBase)
+            var result = await (followerRemainPkBase == null ?
+                _userCore.FollowAsync(accountUserNameBase.UserName, followerRequestBase?.FromMaxId ?? string.Empty) :
+                _userCore.FollowAsync(followerRemainPkBase))
                 .ConfigureAwait(false);
+
+            var fromMaxId = !string.IsNullOrEmpty(result.ResponseData?.NextMaxId) ?
+                result.ResponseData?.NextMaxId :
+                followerRequestBase?.FromMaxId ?? string.Empty;
 
             if (result.Succeeded)
             {
@@ -124,11 +127,11 @@ namespace MeConecta.Gram.Service
                     {
                         AccountId = _userCore.Account.Id,
                         AccountUserNameId = accountUserNameBase.Id,
-                        FromMaxId = result.ResponseData.NextMaxId,
+                        FromMaxId = fromMaxId,
                         Message = result.Message,
                         ResponseType = result.ResponseType.ToString(),
-                        FollowerRequestPk = result.ResponseData.FollowerRequestPk != null ? JsonSerializer.Serialize(result.ResponseData.FollowerRequestPk) : null,
-                        FollowerRemainPk = result.ResponseData.FollowerRemainPk != null ? JsonSerializer.Serialize(result.ResponseData.FollowerRemainPk) : null,
+                        FollowerRequestPk = result.ResponseData?.FollowerRequestPk != null ? JsonSerializer.Serialize(result.ResponseData.FollowerRequestPk) : null,
+                        FollowerRemainPk = result.ResponseData?.FollowerRemainPk != null ? JsonSerializer.Serialize(result.ResponseData.FollowerRemainPk) : null,
                         AmountAttemptUnfollowing = 0,
                         IsActive = hasNextMaxId,
                     })
@@ -146,7 +149,7 @@ namespace MeConecta.Gram.Service
                     scope.Complete();
                 }
             }
-            else
+            else // REVER
             {
                 if (result.ResponseData.FollowerRemainPk.Count() > 0)
                 {

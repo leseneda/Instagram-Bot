@@ -44,75 +44,83 @@ namespace MeConecta.Gram.Core
 
         #region User
 
-        public async Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null, IEnumerable<long> followerRemainPk = null)
+        private async Task<IResult<InstaUserShortList>> GetFollowersAsync(string userName, string nextMaxId = null)
+        {
+            var param = (!string.IsNullOrEmpty(nextMaxId) ?
+                _paginationParameters.StartFromMaxId(nextMaxId) :
+                _paginationParameters);
+
+            return await _apiUserProcessor.GetUserFollowersAsync(userName, param)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(IEnumerable<long> followersPk)
         {
             var responseBase = new ResponseEntity<ResponseFollowerEntity>();
-            var usersPk = followerRemainPk;
-            var newNextMaxId = string.Empty;
+            var responseFollow = new ResponseFollowerEntity();
+            IResult<InstaFriendshipFullStatus> request;
 
-            if (usersPk == null)
+            foreach (var followerPk in followersPk)
             {
-                var param = (!string.IsNullOrEmpty(nextMaxId) ?
-                    _paginationParameters.StartFromMaxId(nextMaxId) :
-                    _paginationParameters);
-
-                var result = await _apiUserProcessor.GetUserFollowersAsync(userName, param)
+                request = await _apiUserProcessor.FollowUserAsync(followerPk)
                     .ConfigureAwait(false);
 
-                usersPk = result.Value
-                    .Select(cmp => cmp.Pk);
-
-                responseBase.Succeeded = result.Succeeded;
-                responseBase.Message = result.Info.Message;
-                newNextMaxId = result.Succeeded ? result.Value?.NextMaxId : newNextMaxId;
-            }
-
-            var responseFollow = new ResponseFollowerEntity();
-
-            if (responseBase.Succeeded)
-            {
-                IResult<InstaFriendshipFullStatus> request;
-
-                foreach (var userPk in usersPk)
+                if (request.Succeeded)
                 {
-                    request = await _apiUserProcessor.FollowUserAsync(userPk)
-                        .ConfigureAwait(false);
-
-                    if (request.Succeeded)
+                    responseFollow.FollowerRequestPk.Add(followerPk);
+                }
+                else
+                {
+                    if (ResponseManagerService.NonTroubleResponse(request.Info.ResponseType))
                     {
-                        responseFollow.FollowerRequestPk.Add(userPk);
+                        continue;
                     }
-                    else
-                    {
-                        if (ResponseManagerService.NonTroubleResponse(request.Info.ResponseType))
-                        {
-                            continue;
-                        }
 
-                        responseFollow.NextMaxId = nextMaxId;
-                        responseFollow.FollowerRemainPk.AddRange(usersPk.Except(responseFollow.FollowerRequestPk));
-                        responseFollow.FollowerRequestPk = responseFollow.FollowerRequestPk.Count() > 0 ? responseFollow.FollowerRequestPk : null;
+                    responseFollow.NextMaxId = null;
+                    responseFollow.FollowerRemainPk.AddRange(followersPk.Except(responseFollow.FollowerRequestPk));
+                    responseFollow.FollowerRequestPk = responseFollow.FollowerRequestPk.Count() > 0 ? responseFollow.FollowerRequestPk : null;
 
-                        responseBase.Succeeded = (followerRemainPk == null); // Force to add the new data
-                        responseBase.Message = request.Info.Message;
-                        responseBase.ResponseType = request.Info.ResponseType;
-                        responseBase.ResponseData = responseFollow;
+                    responseBase.Succeeded = request.Succeeded;
+                    responseBase.Message = request.Info.Message;
+                    responseBase.ResponseType = request.Info.ResponseType;
+                    responseBase.ResponseData = responseFollow;
 
-                        return responseBase;
-                    }
+                    return responseBase;
                 }
 
-                responseFollow.FollowerRemainPk = null;
-                responseFollow.NextMaxId = newNextMaxId;
+            }
 
-                responseBase.ResponseData = responseFollow;
+            responseFollow.FollowerRemainPk = responseFollow.FollowerRemainPk.Any() ? responseFollow.FollowerRemainPk : null;
+            responseBase.ResponseData = responseFollow;
+
+            return responseBase;
+        }
+
+        public async Task<ResponseEntity<ResponseFollowerEntity>> FollowAsync(string userName, string nextMaxId = null)
+        {
+            var result = await GetFollowersAsync(userName, nextMaxId);
+
+            if (result.Succeeded)
+            {
+                var usersPk = result.Value
+                    .Select(cmp => cmp.Pk);
+
+                var response = await FollowAsync(usersPk);
+
+                response.ResponseData.NextMaxId = result.Succeeded ? result.Value?.NextMaxId : nextMaxId;
+
+                return response;
             }
             else
             {
-
+                return new ResponseEntity<ResponseFollowerEntity>()
+                {
+                    Succeeded = result.Succeeded,
+                    Message = result.Info.Message,
+                    ResponseData = null,
+                    ResponseType = result.Info.ResponseType,
+                };
             }
-
-            return responseBase;
         }
 
         public async Task<ResponseEntity<IList<long>>> UnfollowAsync(long[] requestedUsersPk)
@@ -131,7 +139,7 @@ namespace MeConecta.Gram.Core
                 if (!user.Succeeded)
                 {
                     nonUnfollow.Add(userPk);
-                    
+
                     responseBase.Succeeded = user.Succeeded;
                     responseBase.Message = user.Info.Message;
                     responseBase.ResponseType = user.Info.ResponseType;
